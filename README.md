@@ -30,8 +30,8 @@ cd CheckersGame
 mvn package
 ```
 
-2. Execute the project .jar file:
+2. Run the application:
 
 ```
-java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.CheckersGame
+mvn clean javafx:run
 ```
