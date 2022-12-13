@@ -6,8 +6,6 @@ package com.PWr.app.Model;
 
 // This is a factory class
 public abstract class GameVersion {
-    protected String initColor;
-
     protected int boardSize;
     protected int pawnLines;
     protected int[][] board;

@@ -20,9 +20,9 @@ public class GameModel {
                 break;
             }
 
-            case "German": {
-                System.out.println("German version has been selected");
-                this.version = new GermanVersion();
+            case "Russian": {
+                System.out.println("Russian version has been selected");
+                this.version = new RussianVersion();
                 break;
             }
 
