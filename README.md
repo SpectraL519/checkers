@@ -1,6 +1,10 @@
 # Checkers - WIP
 Game of checkers in 3 different variants
 
+* [Polish](https://pl.wikipedia.org/wiki/Warcaby_polskie)
+* German
+* Spanish
+
 <br />
 
 ### Project setup
