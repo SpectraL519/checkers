@@ -1,9 +1,12 @@
 # Checkers - WIP
-Game of checkers in 3 different variants
+Game of checkers in 3 different variants:
 
-* [Polish](https://pl.wikipedia.org/wiki/Warcaby_polskie)
-* German
-* Canadian
+**Table: Checkers game versions**
+| Lp. | Version  | Board size | Obliagtion of taking pawns |
+| :-: | :------: | :--------: | :------------------------: |
+| 1   | Polish   | 10 x 10    | Best                       |
+| 2   | Canadian | 12 x 12    | Best                       |
+| 3   | Russian  | 8 x 8      | Any                        | 
 
 <br />
 
