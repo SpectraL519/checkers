@@ -23,8 +23,6 @@ public class GameVersionTest {
 
         model.setVersion("Polish");
         assertThat(model.getVersion(), instanceOf(PolishVersion.class));
-        model.initPawns();
-        model.displayPawns();
 
         model.setVersion("Russian");
         assertThat(model.getVersion(), instanceOf(RussianVersion.class));

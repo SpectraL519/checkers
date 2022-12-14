@@ -25,20 +25,19 @@ public class CheckMoveTest {
         model.setVersion("Russian");
         assertThat(model.getVersion(), instanceOf(RussianVersion.class));
         model.initPawns();
-        model.displayPawns();
-
+        
         System.out.println();
-
+        
         System.out.println("Move 1");
+        model.displayPawns();
         assertEquals(model.movePawn(5, 2, 4, 1), 1);
+        
+        System.out.println("\nMove 2");
         model.displayPawns();
-
-        System.out.println("Move 2");
         assertEquals(model.movePawn(4, 1, 3, 0), 1);
-        model.displayPawns();
 
-        System.out.println("Move 3");
-        assertEquals(model.movePawn(3, 0, 2, -1), -1);
+        System.out.println("\nMove 3");
         model.displayPawns();
+        assertEquals(model.movePawn(3, 0, 2, -1), -2);
     }
 }
