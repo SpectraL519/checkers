@@ -10,4 +10,11 @@ public class PolishVersion extends GameVersion {
         this.pawnLines = 4;
         this.board = new int[this.boardSize][this.boardSize];
     }
+
+
+
+    @Override
+    public int checkMove (int xCurr, int yCurr, int xMov, int yMov) {
+        return 0;
+    }
 }
