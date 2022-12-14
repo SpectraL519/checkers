@@ -24,20 +24,24 @@ public class CheckMoveTest {
 
         model.setVersion("Russian");
         assertThat(model.getVersion(), instanceOf(RussianVersion.class));
-        model.initPawns();
+        model.initBoard();
         
-        System.out.println();
-        
-        System.out.println("Move 1");
-        model.displayPawns();
-        assertEquals(model.movePawn(5, 2, 4, 1), 1);
-        
-        System.out.println("\nMove 2");
-        model.displayPawns();
-        assertEquals(model.movePawn(4, 1, 3, 0), 1);
+        System.out.println("Mocking a situation");
+        model.displayBoard();
+        assertEquals(model.movePawn(2, 5, 3, 4), 1);
+        model.displayBoard();
+        assertEquals(model.movePawn(3, 4, 4, 3), 1);
+        model.displayBoard();
+        assertEquals(model.movePawn(1, 6, 2, 5), 1);
+        model.displayBoard();
+        assertEquals(model.movePawn(5, 2, 3, 4), 2);
+        model.displayBoard();
+        assertEquals(model.movePawn(3, 4, 1, 6), 1);
+        model.displayBoard();
 
-        System.out.println("\nMove 3");
-        model.displayPawns();
-        assertEquals(model.movePawn(3, 0, 2, -1), -2);
+        System.out.printf("\nBoard after mock:\n");
+        model.displayBoard();
+
+        // Other movement tests
     }
 }

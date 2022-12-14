@@ -1,10 +1,11 @@
 package com.PWr.app.Model;
 
+import com.PWr.app.Model.Boards.Board;
 
 
 
 
-// public class GameModel extends Observable ???
+
 public class GameModel {
     private GameVersion version;
 
@@ -47,14 +48,20 @@ public class GameModel {
 
 
 
-    public void initPawns () {
-        this.version.initPawns();
+    public void initBoard () {
+        this.version.initBoard();
     }
 
 
 
-    public void displayPawns () {
-        this.version.displayPawns();
+    public void displayBoard () {
+        this.version.displayBoard();
+    }
+
+
+
+    public Board getBoard () {
+        return this.version.getBoard();
     }
 
 
