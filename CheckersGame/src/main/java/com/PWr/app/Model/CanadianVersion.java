@@ -1,20 +1,13 @@
 package com.PWr.app.Model;
 
+import com.PWr.app.Model.Boards.*;
+
 
 
 
 
 public class CanadianVersion extends GameVersion {
     public CanadianVersion () {
-        this.boardSize = 12;
-        this.pawnLines = 5;
-        this.board = new int[this.boardSize][this.boardSize];
-    }
-
-
-
-    @Override
-    public int checkMove (int xCurr, int yCurr, int xMov, int yMov) {
-        return 0;
+        this.board = new CanadianBoard();
     }
 }
