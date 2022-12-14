@@ -56,4 +56,10 @@ public class GameModel {
     public void displayPawns () {
         this.version.displayPawns();
     }
+
+
+
+    public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
+        return this.version.movePawn(rCurr, cCurr, rMov, cMov);
+    }
 }
