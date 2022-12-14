@@ -58,7 +58,7 @@ public abstract class GameVersion {
 
 
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
-        // -1: move NOT ok - genereal errrors
+        // < 0: move NOT ok - genereal errrors
         // 0: move NOT ok - not optimal take
         // 1: move ok but no further move is allowed
         // 2: move ok and furhter moves allowed
@@ -66,6 +66,7 @@ public abstract class GameVersion {
         int check = this.checkMove(rCurr, cCurr, rMov, cMov);
         if (check > 0) {
             if (pawnToQueen(rCurr, cCurr, rMov, cMov)) {
+                System.out.println("Pawn changed to queen");
                 this.board[rMov][cMov] = this.board[rCurr][cCurr] * 10;
             }
             else {
@@ -73,6 +74,7 @@ public abstract class GameVersion {
             }
 
             this.board[rCurr][cCurr] = 0;
+            System.out.println("Pawn moved");
         }
 
         return check;
@@ -89,15 +91,15 @@ public abstract class GameVersion {
             return false;
         }
 
-        if (longestPawnMove(rMov, cMov) > 0) {
-            return false;
-        }
+        // if (longestPawnMove(rMov, cMov) > 0) {
+        //     return false;
+        // }
 
-        if (this.board[cCurr][rCurr] == 1 && cMov == this.boardSize - 1) {
+        if (this.board[rCurr][cCurr] == 1 && rMov == this.boardSize - 1) {
             return true;
         }
 
-        if (this.board[cCurr][rCurr] == 2 && cMov == 0) {
+        if (this.board[rCurr][cCurr] == 2 && rMov == 0) {
             return true;
         }
 
@@ -131,31 +133,43 @@ public abstract class GameVersion {
 
 
     // Separate this method to correctPawnStep and correctQueenStep
-    protected int[] correctStep (int rCurr, int cCurr, int rMov, int cMov, boolean queen) {
-        int stepX = rMov - rCurr;
-        int stepY = cMov - cCurr;
-        int[] step = {stepX, stepY};
-        
-        stepX = Math.abs(stepX);
-        stepY = Math.abs(stepY);
+    protected int[] correctPawnStep (int rCurr, int cCurr, int rMov, int cMov) {
+        int stepR = rMov - rCurr;
+        int stepC = cMov - cCurr;
+        int[] step = {stepR, stepC};
 
-        if (stepX == stepY) {
-            if (queen) {
-                return step;
-            }
+        // Check for backward movement
+        if (this.board[rCurr][cCurr] == 1 && stepR > 0) {
+            return null;
+        } 
+        if (this.board[rCurr][cCurr] == 2 && stepR < 0) {
+            return null;
+        } 
 
-            if (stepX > 2) {
-                step[0] = 0;
-                step[1] = 0;
-                return step;
-            }
-
+        // Check for correct step size (1 or 2)
+        stepR = Math.abs(stepR);
+        stepC = Math.abs(stepC);
+        if (stepR == stepC && stepR <= 2) {
             return step;
         }
 
-        step[0] = 0;
-        step[1] = 0;
-        return step;
+        return null;
+    }
+
+
+
+    protected int[] correctQueenStep (int rCurr, int cCurr, int rMov, int cMov) {
+        int stepR = rMov - rCurr;
+        int stepC = cMov - cCurr;
+        int[] step = {stepR, stepC};
+
+        stepR = Math.abs(stepR);
+        stepC = Math.abs(stepC);
+        if (stepR == stepC) {
+            return step;
+        }
+
+        return null;
     }
 
 
