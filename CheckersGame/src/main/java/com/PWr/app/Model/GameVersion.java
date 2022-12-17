@@ -1,6 +1,7 @@
 package com.PWr.app.Model;
 
 import com.PWr.app.Model.Boards.*;
+import com.PWr.app.Model.States.GameState;
 
 
 
@@ -26,6 +27,12 @@ public class GameVersion {
 
     public Board getBoard () {
         return this.board;
+    }
+
+
+
+    public GameState getState () {
+        return this.board.getState();
     }
 
 
