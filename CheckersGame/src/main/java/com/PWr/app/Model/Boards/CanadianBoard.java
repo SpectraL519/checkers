@@ -15,6 +15,11 @@ public class CanadianBoard extends Board {
 
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
+        // Russian +
+        // if (1 + this.longestPawnMove(rMov, cMov, this.board.clone()) < this.longestPawnMove(rCurr, cCurr, this.board.clone())) {
+        //     return 0;
+        // }
+
         return -1;
     }
 }

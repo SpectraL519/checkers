@@ -11,7 +11,13 @@ public abstract class Board {
     protected int size;
     protected int pawnLines;
     protected int[][] fields;
+    protected int whitePawns;
+    protected int blackPawns;
     protected GameStateBahaviour state;
+
+
+
+    protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
 
     
 
@@ -29,6 +35,7 @@ public abstract class Board {
             int startPos = (r + 1) % 2;
             for (int c = startPos; c < this.size; c += 2) {
                 this.fields[r][c] = 1;
+                this.whitePawns++;
             }
         }
         
@@ -37,6 +44,7 @@ public abstract class Board {
             int startPos = (r + 1) % 2;
             for (int c = startPos; c < this.size; c += 2) {
                 this.fields[r][c] = 2;
+                this.blackPawns++;
             }
         }
 
@@ -52,6 +60,8 @@ public abstract class Board {
 
 
     public void display () {
+        System.out.printf("White pawns: %d\n", this.whitePawns);
+        System.out.printf("Black pawns: %d\n", this.blackPawns);
         for (int r = 0; r < this.size; r++) {
             System.out.printf("%d: ", r);
             for (int c = 0; c < this.size; c++) {
@@ -91,14 +101,13 @@ public abstract class Board {
             if (check == 1) {
                 this.state = this.state.switchPlayer();
             }
+            else if (check == 10 || check == 20) {
+                this.state = this.state.endGame();
+            }
         }
 
         return check;
     }
-
-
-
-    protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
 
 
 

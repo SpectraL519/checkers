@@ -12,6 +12,9 @@ public class RussianBoard extends Board implements Cloneable {
         this.pawnLines = 3;
         this.fields = new int[this.size][this.size];
 
+        this.whitePawns = 0;
+        this.blackPawns = 0;
+
         this.state = GameState.RESTING.getStateBahaviour();
     }
 
@@ -42,25 +45,29 @@ public class RussianBoard extends Board implements Cloneable {
     // Czy odpowiedni kolor piona sie rusza
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
+        // Check if the game has started
+        if (this.state.getState() == GameState.RESTING) {
+            return -1;
+        }
         // Check if Curr is on the board
         if (!this.isOnBoard(rCurr, cCurr)) {
-            return -1;
+            return -2;
         }
         
         // Check if Mov is on the board
         if (!this.isOnBoard(rMov, cMov)) {
-            return -2;
+            return -3;
         }
 
         // Check player
         if (!this.checkPlayer(rCurr, cCurr)) {
-            return -3;
+            return -4;
         }
 
         // Check if there is a pawn on Mov
         if (this.fields[rMov][cMov] > 0) {
             System.out.println("Pawn on mov");
-            return -4;
+            return -5;
         }
 
 
@@ -73,21 +80,32 @@ public class RussianBoard extends Board implements Cloneable {
 
         int[] step = this.checkPawnStep(rCurr, cCurr, rMov, cMov);
         if (step == null) {
-            return -5;
+            return -6;
         }
 
         if (Math.abs(step[0]) == 2) {
             System.out.println("Take!");
             // Take pawn
-            this.fields[rCurr + (step[0] / 2)][cCurr + (step[1] / 2)] = 0;
+            if (this.state.getState() == GameState.WHITE) {
+                this.blackPawns--;
+                this.fields[rCurr + (step[0] / 2)][cCurr + (step[1] / 2)] = 0;
+
+                // White wins
+                if (this.blackPawns == 0) {
+                    return 10;
+                }
+            }
+            else if (this.state.getState() == GameState.BLACK) {
+                this.whitePawns--;
+                this.fields[rCurr + (step[0] / 2)][cCurr + (step[1] / 2)] = 0;
+
+                // Black wins
+                if (this.whitePawns == 0) {
+                    return 20;
+                }
+            }
 
             // Check for further movement possibilities
-
-            // This is for the polish and canadian versions
-            // if (1 + this.longestPawnMove(rMov, cMov, this.board.clone()) < this.longestPawnMove(rCurr, cCurr, this.board.clone())) {
-            //     return 0;
-            // }
-            
             try {
                 if (this.longestPawnMove(rMov, cMov, this) > 0) {
                     System.out.println("OK: more moves possible");
@@ -107,7 +125,7 @@ public class RussianBoard extends Board implements Cloneable {
             for (int i = 0; i < this.size; i++) {
                 for (int j = 0; j < this.size; j++) {
                     if (this.checkPlayer(i, j) && this.longestPawnMove(i, j, this) > 0) {
-                        return -6; // Not taking an enemy pawn when it's possible
+                        return -7; // Not taking an enemy pawn when it's possible
                     }
                 }
             }

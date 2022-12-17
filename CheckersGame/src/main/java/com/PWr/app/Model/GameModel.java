@@ -1,5 +1,6 @@
 package com.PWr.app.Model;
 
+import com.PWr.app.Model.Versions.*;
 import com.PWr.app.Model.Boards.Board;
 import com.PWr.app.Model.States.GameState;
 
@@ -75,5 +76,17 @@ public class GameModel {
 
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
         return this.version.movePawn(rCurr, cCurr, rMov, cMov);
+    }
+
+
+
+    public void endGame () {
+        this.version = null;
+    }
+
+
+
+    public void restartGame () {
+        this.version.reset();
     }
 }
