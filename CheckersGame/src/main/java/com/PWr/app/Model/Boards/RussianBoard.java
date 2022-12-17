@@ -1,5 +1,7 @@
 package com.PWr.app.Model.Boards;
 
+import com.PWr.app.Model.States.GameState;
+
 
 
 
@@ -9,6 +11,8 @@ public class RussianBoard extends Board implements Cloneable {
         this.size = 8;
         this.pawnLines = 3;
         this.fields = new int[this.size][this.size];
+
+        this.state = GameState.RESTING.getStateBahaviour();
     }
 
 
@@ -48,8 +52,8 @@ public class RussianBoard extends Board implements Cloneable {
             return -2;
         }
 
-        // Check if there is a pawn on Curr
-        if (this.fields[rCurr][cCurr] == 0) {
+        // Check player
+        if (!this.checkPlayer(rCurr, cCurr)) {
             return -3;
         }
 
@@ -81,7 +85,7 @@ public class RussianBoard extends Board implements Cloneable {
 
             // This is for the polish and canadian versions
             // if (1 + this.longestPawnMove(rMov, cMov, this.board.clone()) < this.longestPawnMove(rCurr, cCurr, this.board.clone())) {
-            //     return -6;
+            //     return 0;
             // }
             
             try {
@@ -96,6 +100,20 @@ public class RussianBoard extends Board implements Cloneable {
             catch (CloneNotSupportedException e) {
                 System.out.println("Clone error!");
             }
+        }
+
+        // Check if there is any take possible on the board
+        try {
+            for (int i = 0; i < this.size; i++) {
+                for (int j = 0; j < this.size; j++) {
+                    if (this.checkPlayer(i, j) && this.longestPawnMove(i, j, this) > 0) {
+                        return -6; // Not taking an enemy pawn when it's possible
+                    }
+                }
+            }
+        }
+        catch (CloneNotSupportedException e) {
+            System.out.println("Clone error!");
         }
 
         System.out.println("OK: no more moves possible");

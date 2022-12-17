@@ -1,5 +1,7 @@
 package com.PWr.app.Model.Boards;
 
+import com.PWr.app.Model.States.*;
+
 
 
 
@@ -9,6 +11,7 @@ public abstract class Board {
     protected int size;
     protected int pawnLines;
     protected int[][] fields;
+    protected GameStateBahaviour state;
 
     
 
@@ -36,6 +39,14 @@ public abstract class Board {
                 this.fields[r][c] = 2;
             }
         }
+
+        this.state = this.state.startGame();
+    }
+
+
+
+    public GameState getState () {
+        return this.state.getState();
     }
 
 
@@ -57,11 +68,6 @@ public abstract class Board {
 
 
 
-    public int getField(int r, int c) {
-        return this.fields[r][c];
-    }
-
-
 
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
         // < 0: move NOT ok - genereal errrors
@@ -81,6 +87,10 @@ public abstract class Board {
 
             this.fields[rCurr][cCurr] = 0;
             System.out.printf("Pawn moved: (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
+
+            if (check == 1) {
+                this.state = this.state.switchPlayer();
+            }
         }
 
         return check;
@@ -89,24 +99,24 @@ public abstract class Board {
 
 
     protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
-    
-    
-    
-    protected boolean pawnToQueen (int rCurr, int cCurr, int rMov, int cMov) {
-        if (isQueen(rCurr, cCurr)) {
+
+
+
+    protected boolean checkPlayer (int rCurr, int cCurr) {
+        if (this.fields[rCurr][cCurr] == 1) {
+            if (this.state.getState() == GameState.WHITE) {
+                return true;
+            }
+
             return false;
         }
 
-        // if (this.longestPawnMove(rMov, cMov) > 0) {
-        //     return false;
-        // }
+        if (this.fields[rCurr][cCurr] == 2) {
+            if (this.state.getState() == GameState.BLACK) {
+                return true;
+            }
 
-        if (this.fields[rCurr][cCurr] == 1 && rMov == this.size - 1) {
-            return true;
-        }
-
-        if (this.fields[rCurr][cCurr] == 2 && rMov == 0) {
-            return true;
+            return false;
         }
 
         return false;
@@ -115,21 +125,11 @@ public abstract class Board {
 
 
     protected boolean isOnBoard (int r, int c) {
-        if (r < 0 || c >= this.size) {
+        if (r < 0 || r >= this.size) {
             return false;
         }
 
-        if (r < 0 || c >= this.size) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-
-    protected boolean isQueen (int rCurr, int cCurr) {
-        if ((this.fields[rCurr][cCurr] / 10) == 0) {
+        if (c < 0 || c >= this.size) {
             return false;
         }
 
@@ -253,6 +253,38 @@ public abstract class Board {
         }
 
         return maxLength;
+    }
+
+
+
+    protected boolean pawnToQueen (int rCurr, int cCurr, int rMov, int cMov) {
+        if (isQueen(rCurr, cCurr)) {
+            return false;
+        }
+
+        // if (this.longestPawnMove(rMov, cMov) > 0) {
+        //     return false;
+        // }
+
+        if (this.fields[rCurr][cCurr] == 1 && rMov == this.size - 1) {
+            return true;
+        }
+
+        if (this.fields[rCurr][cCurr] == 2 && rMov == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    protected boolean isQueen (int rCurr, int cCurr) {
+        if ((this.fields[rCurr][cCurr] / 10) == 0) {
+            return false;
+        }
+
+        return true;
     }
 
 
