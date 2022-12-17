@@ -1,4 +1,4 @@
-package com.PWr.app.Model;
+package com.PWr.app.Model.Versions;
 
 import com.PWr.app.Model.Boards.*;
 import com.PWr.app.Model.States.GameState;
@@ -8,7 +8,7 @@ import com.PWr.app.Model.States.GameState;
 
 
 // This is a factory class
-public class GameVersion {
+public abstract class GameVersion {
     protected Board board;
 
 
@@ -45,4 +45,8 @@ public class GameVersion {
 
         return this.board.movePawn(rCurr, cCurr, rMov, cMov);
     }
+
+
+
+    public abstract void reset ();
 }

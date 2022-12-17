@@ -1,6 +1,7 @@
 package com.PWr.app;
 
-import com.PWr.app.Model.*;
+import com.PWr.app.Model.GameModel;
+import com.PWr.app.Model.Versions.*;
 
 import org.junit.Test;
 
