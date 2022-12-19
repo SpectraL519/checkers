@@ -49,4 +49,10 @@ public abstract class GameVersion {
 
 
     public abstract void reset ();
+
+
+
+    public void mockEndgame (String player) {
+        this.board.mockEndgame(player);
+    }
 }

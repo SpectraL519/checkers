@@ -36,6 +36,34 @@ public class RussianBoard extends Board implements Cloneable {
 
 
 
+    @Override
+    public void mockEndgame (String player) {
+        this.fields = new int[this.size][this.size];
+        this.fields[4][3] = 1;
+        this.fields[3][4] = 2;
+        this.whitePawns = 1;
+        this.blackPawns = 1;
+
+        switch (player) {
+            case "White": {
+                this.state = GameState.WHITE.getStateBahaviour();
+                break;
+            }
+
+            case "Black": {
+                this.state = GameState.BLACK.getStateBahaviour();
+                break;
+            }
+
+            default: {
+                System.out.println("Invalid player");
+                break;
+            }
+        }
+    }
+
+
+
     // Czy curr i mov sa na planszy
     // Czy na curr jest pion
     // Czy na mov nie ma piona
@@ -108,15 +136,13 @@ public class RussianBoard extends Board implements Cloneable {
             // Check for further movement possibilities
             try {
                 if (this.longestPawnMove(rMov, cMov, this) > 0) {
-                    System.out.println("OK: more moves possible");
                     return 2;
                 }
-    
-                System.out.println("OK: no more moves possible");
                 return 1;
             }
             catch (CloneNotSupportedException e) {
                 System.out.println("Clone error!");
+                return -8;
             }
         }
 
@@ -132,9 +158,9 @@ public class RussianBoard extends Board implements Cloneable {
         }
         catch (CloneNotSupportedException e) {
             System.out.println("Clone error!");
+            return -8;
         }
 
-        System.out.println("OK: no more moves possible");
         return 1;
     }
 }

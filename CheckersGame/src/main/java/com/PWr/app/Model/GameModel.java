@@ -75,7 +75,13 @@ public class GameModel {
 
 
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
-        return this.version.movePawn(rCurr, cCurr, rMov, cMov);
+        int status = this.version.movePawn(rCurr, cCurr, rMov, cMov);
+        
+        if (status == 10 || status == 20) {
+            this.endGame();
+        }
+
+        return status;
     }
 
 
@@ -88,5 +94,11 @@ public class GameModel {
 
     public void restartGame () {
         this.version.reset();
+    }
+
+
+
+    public void mockEndgame (String player) {
+        this.version.mockEndgame(player);
     }
 }

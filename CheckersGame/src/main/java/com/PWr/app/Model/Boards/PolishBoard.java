@@ -22,5 +22,10 @@ public class PolishBoard extends Board {
         
         return -1;
     }
+
+
+
+    @Override
+    public void mockEndgame (String player) {}
 }
 

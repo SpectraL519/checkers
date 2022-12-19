@@ -22,4 +22,9 @@ public class CanadianBoard extends Board {
 
         return -1;
     }
+
+
+
+    @Override
+    public void mockEndgame (String player) {}
 }

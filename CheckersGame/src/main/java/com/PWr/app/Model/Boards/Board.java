@@ -18,6 +18,7 @@ public abstract class Board {
 
 
     protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
+    public abstract void mockEndgame (String player);
 
     
 
@@ -35,7 +36,6 @@ public abstract class Board {
             int startPos = (r + 1) % 2;
             for (int c = startPos; c < this.size; c += 2) {
                 this.fields[r][c] = 1;
-                this.whitePawns++;
             }
         }
         
@@ -44,9 +44,11 @@ public abstract class Board {
             int startPos = (r + 1) % 2;
             for (int c = startPos; c < this.size; c += 2) {
                 this.fields[r][c] = 2;
-                this.blackPawns++;
             }
         }
+
+        this.whitePawns = this.pawnLines * this.size / 2;
+        this.blackPawns = this.whitePawns;
 
         this.state = this.state.startGame();
     }
@@ -87,7 +89,7 @@ public abstract class Board {
 
         int check = this.checkMove(rCurr, cCurr, rMov, cMov);
         if (check > 0) {
-            if (this.pawnToQueen(rCurr, cCurr, rMov, cMov)) {
+            if (this.pawnToQueen(rCurr, cCurr, rMov)) {
                 System.out.println("Pawn changed to queen");
                 this.fields[rMov][cMov] = this.fields[rCurr][cCurr] * 10;
             }
@@ -98,11 +100,83 @@ public abstract class Board {
             this.fields[rCurr][cCurr] = 0;
             System.out.printf("Pawn moved: (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
 
-            if (check == 1) {
-                this.state = this.state.switchPlayer();
+            switch (check) {
+                case 1: {
+                    this.state = this.state.switchPlayer();
+                    break;
+                }
+
+                case 2: {
+                    break;
+                }
+
+                case 10: {
+                    System.out.println("White wins!");
+                    this.display();
+                    this.state = this.state.endGame();
+                    break;
+                }
+
+                case 20: {
+                    System.out.println("Black wins!");
+                    this.display();
+                    this.state = this.state.endGame();
+                    break;
+                }
+
+                default: {
+                    System.out.println("Error: unknown flag - game ended!");
+                    this.state = this.state.endGame();
+                    break;
+                }
             }
-            else if (check == 10 || check == 20) {
-                this.state = this.state.endGame();
+        }
+        else {
+            switch (check) {
+                case 0: {
+                    System.out.println("Error: Not optimal take!");
+                    break;
+                }
+
+                case -1: {
+                    System.out.println("Error: The game has not started yet!");
+                    break;
+                }
+
+                case -2: {
+                    System.out.printf("Error: The selected Current position (%d,%d) is not on the board!\n", rCurr, cCurr);
+                    break;
+                }
+
+                case -3: {
+                    System.out.printf("Error: The selected Movement position (%d,%d) is not on the board!\n", rMov, cMov);
+                    break;
+                }
+
+                case -4: {
+                    System.out.println("Error: Invalid position selected for the current player:" + this.state.getState() + "!");
+                    break;
+                }
+
+                case -5: {
+                    System.out.printf("Error: There is a pawn on the `Movement` position (%d,%d)\n", rMov, cMov);
+                    break;
+                }
+
+                case -6: {
+                    System.out.printf("Error: Invalid step (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
+                    break;
+                }
+
+                case -7: {
+                    System.out.println("Error: Not taking an enemy pawn when it is possible!");
+                    break;
+                }
+
+                default: {
+                    System.out.println("Error: Unknown");
+                    break;
+                }
             }
         }
 
@@ -266,7 +340,7 @@ public abstract class Board {
 
 
 
-    protected boolean pawnToQueen (int rCurr, int cCurr, int rMov, int cMov) {
+    protected boolean pawnToQueen (int rCurr, int cCurr, int rMov) {
         if (isQueen(rCurr, cCurr)) {
             return false;
         }
