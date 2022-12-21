@@ -1,6 +1,7 @@
 package com.PWr.app;
 
-import com.PWr.app.Model.*;
+import com.PWr.app.Model.GameModel;
+import com.PWr.app.Model.Versions.*;
 
 import org.junit.Test;
 
@@ -23,11 +24,9 @@ public class GameVersionTest {
 
         model.setVersion("Polish");
         assertThat(model.getVersion(), instanceOf(PolishVersion.class));
-        model.initPawns();
-        model.displayPawns();
 
-        model.setVersion("German");
-        assertThat(model.getVersion(), instanceOf(GermanVersion.class));
+        model.setVersion("Russian");
+        assertThat(model.getVersion(), instanceOf(RussianVersion.class));
 
         model.setVersion("Canadian");
         assertThat(model.getVersion(), instanceOf(CanadianVersion.class));

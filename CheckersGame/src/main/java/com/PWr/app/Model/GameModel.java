@@ -1,10 +1,13 @@
 package com.PWr.app.Model;
 
+import com.PWr.app.Model.Versions.*;
+import com.PWr.app.Model.Boards.Board;
+import com.PWr.app.Model.States.GameState;
 
 
 
 
-// public class GameModel extends Observable ???
+
 public class GameModel {
     private GameVersion version;
 
@@ -20,9 +23,9 @@ public class GameModel {
                 break;
             }
 
-            case "German": {
-                System.out.println("German version has been selected");
-                this.version = new GermanVersion();
+            case "Russian": {
+                System.out.println("Russian version has been selected");
+                this.version = new RussianVersion();
                 break;
             }
 
@@ -47,13 +50,55 @@ public class GameModel {
 
 
 
-    public void initPawns () {
-        this.version.initPawns();
+    public void initBoard () {
+        this.version.initBoard();
     }
 
 
 
-    public void displayPawns () {
-        this.version.displayPawns();
+    public void displayBoard () {
+        this.version.displayBoard();
+    }
+
+
+
+    public Board getBoard () {
+        return this.version.getBoard();
+    }
+
+
+
+    public GameState getState () {
+        return this.getBoard().getState();
+    }
+
+
+
+    public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
+        int status = this.version.movePawn(rCurr, cCurr, rMov, cMov);
+        
+        if (status == 10 || status == 20) {
+            this.endGame();
+        }
+
+        return status;
+    }
+
+
+
+    public void endGame () {
+        this.version = null;
+    }
+
+
+
+    public void restartGame () {
+        this.version.reset();
+    }
+
+
+
+    public void mockEndgame (String player) {
+        this.version.mockEndgame(player);
     }
 }
