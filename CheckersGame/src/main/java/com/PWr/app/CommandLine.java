@@ -13,10 +13,6 @@ final class CommandLine {
     private GameModel model;
 
     private String command;
-    private int rCurr;
-    private int cCurr;
-    private int rMov;
-    private int cMov;
 
 
 
@@ -24,6 +20,8 @@ final class CommandLine {
         this.stdInScanner = new Scanner(System.in);
         this.model = model;
     }
+
+
 
     public void getCommand () {
         System.out.print("cmd: ");
@@ -70,7 +68,7 @@ final class CommandLine {
 
                 int status = this.model.movePawn(rCurr, cCurr, rMov, cMov);
 
-                if (status / 10 == 0) {
+                if (status > 0 && status / 10 == 0) {
                     this.model.displayBoard();
                     System.out.println();
                 }
