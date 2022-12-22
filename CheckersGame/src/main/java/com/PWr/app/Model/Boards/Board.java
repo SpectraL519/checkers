@@ -101,6 +101,8 @@ public abstract class Board {
             System.out.printf("Pawn moved: (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
 
             switch (check) {
+                // TODO:
+                // Printing messages via getMessage(check) method
                 case 1: {
                     this.state = this.state.switchPlayer();
                     break;
@@ -120,6 +122,7 @@ public abstract class Board {
                 case 20: {
                     System.out.println("Black wins!");
                     this.display();
+                    System.out.println();
                     this.state = this.state.endGame();
                     break;
                 }
@@ -154,7 +157,7 @@ public abstract class Board {
                 }
 
                 case -4: {
-                    System.out.println("Error: Invalid position selected for the current player:" + this.state.getState() + "!");
+                    System.out.println("Error: Invalid position selected for the current player: " + this.state.getState() + "!");
                     break;
                 }
 
