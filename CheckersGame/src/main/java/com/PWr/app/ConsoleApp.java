@@ -21,5 +21,3 @@ public class ConsoleApp {
         }
     }
 }
-
-// java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.ConsoleApp

@@ -37,8 +37,18 @@ cd CheckersGame
 mvn package
 ```
 
+<br />
+
 2. Run the application:
 
-```
-mvn clean javafx:run
-```
+    * The console application:
+
+    ```
+    java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.ConsoleApp
+    ```
+
+    * The GUI application:
+
+    ```
+    mvn clean javafx:run
+    ```
