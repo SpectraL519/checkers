@@ -108,6 +108,14 @@ final class CommandLine {
                 System.out.println();
                 break;
             }
+
+            case "mockQueenTake": {
+                System.out.println("Mocking a queen taking situation...");
+                this.model.mockQueenTake();
+                this.model.displayBoard();
+                System.out.println();
+                break;
+            }
             
             case "exit": {
                 this.stdInScanner.close();

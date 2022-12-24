@@ -105,5 +105,10 @@ public class CheckMoveTest {
         model.mockEndgame("Black");
         model.displayBoard();
         assertEquals(model.movePawn(3, 4, 5, 2), 20);
+
+        
+
+        // TODO
+        // Add queen movement chacks
     }
 }

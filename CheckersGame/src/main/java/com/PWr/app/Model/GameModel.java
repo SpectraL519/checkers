@@ -101,4 +101,10 @@ public class GameModel {
     public void mockEndgame (String player) {
         this.version.mockEndgame(player);
     }
+
+
+
+    public void mockQueenTake () {
+        this.version.mockQueenTake();
+    }
 }

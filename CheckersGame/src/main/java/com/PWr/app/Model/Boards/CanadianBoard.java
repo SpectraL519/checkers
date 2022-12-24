@@ -27,4 +27,9 @@ public class CanadianBoard extends Board {
 
     @Override
     public void mockEndgame (String player) {}
+
+
+
+    @Override
+    public void mockQueenTake () {}
 }

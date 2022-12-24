@@ -64,6 +64,22 @@ public class RussianBoard extends Board implements Cloneable {
 
 
 
+    @Override
+    public void mockQueenTake () {
+        this.fields = new int[this.size][this.size];
+
+        this.fields[6][1] = 10;
+        this.fields[4][3] = 2;
+        this.fields[1][2] = 2;
+
+        this.blackPawns = 2;
+        this.whitePawns = 1;
+
+        this.state = GameState.WHITE.getStateBahaviour();
+    }
+
+
+
     // Czy curr i mov sa na planszy
     // Czy na curr jest pion
     // Czy na mov nie ma piona
@@ -71,6 +87,9 @@ public class RussianBoard extends Board implements Cloneable {
     // std::pion - Jesli skok = 2 => Czy na mov - 1 jest pion przeciwnika
     // std::pion - Czy rusza sie do tyluy bez bicia
     // Czy odpowiedni kolor piona sie rusza
+    /* (non-Javadoc)
+     * @see com.PWr.app.Model.Boards.Board#checkMove(int, int, int, int)
+     */
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
         // Check if the game has started
@@ -102,7 +121,90 @@ public class RussianBoard extends Board implements Cloneable {
         boolean queen = this.isQueen(rCurr, cCurr);
 
         if (queen) {
-            // Here stuff will happen
+            System.out.println("Moving a queen...");
+            int[] step = this.checkQueenStep(rCurr, cCurr, rMov, cMov);
+            if (step == null) {
+                return -6;
+            }
+
+            if (this.checkQueenTake(rCurr, cCurr, step[0], step[1], this)) {
+                // Take pawn
+                System.out.println("Take!");
+
+                if (this.state.getState() == GameState.WHITE) {
+                    int rDir = (int)Math.signum(rMov - rCurr);
+                    int cDir = (int)Math.signum(cMov - cCurr);
+                    int rTmp = rCurr + rDir;
+                    int cTmp = cCurr + cDir;
+
+                    while (rTmp != rMov && cTmp != cMov) {
+                        if (this.isBlack(rTmp, cTmp)) {
+                            this.fields[rTmp][cTmp] = 0;
+                            this.blackPawns--;
+                        }
+
+                        rTmp += rDir;
+                        cTmp += cDir;
+                    }
+
+                    // White wins
+                    if (this.blackPawns == 0) {
+                        return 10;
+                    }
+                }
+                else if (this.state.getState() == GameState.BLACK) {
+                    int rDir = (int)Math.signum(rMov - rCurr);
+                    int cDir = (int)Math.signum(cMov - cCurr);
+                    int rTmp = rCurr + rDir;
+                    int cTmp = cCurr + cDir;
+
+                    while (rTmp != rMov && cTmp != cMov) {
+                        if (this.isWhite(rTmp, cTmp)) {
+                            this.fields[rTmp][cTmp] = 0;
+                            this.whitePawns--;
+                        }
+
+                        rTmp += rDir;
+                        cTmp += cDir;
+                    }
+
+                    // Black wins
+                    if (this.whitePawns == 0) {
+                        return 20;
+                    }
+                }
+
+                // Check for further movement possibilities
+                try {
+                    int lqm = this.longestQueenMove(rMov, cMov, this);
+                    System.out.println("LQM(mov): " + lqm);
+                    if (lqm > 0) {
+                        return 2;
+                    }
+                    return 1;
+                }
+                catch (CloneNotSupportedException e) {
+                    System.out.println("Clone error!");
+                    return -8;
+                }
+            }
+
+            // Check if there is any take possible on the board
+            try {
+                for (int i = 0; i < this.size; i++) {
+                    for (int j = 0; j < this.size; j++) {
+                        if (this.checkPlayer(i, j) && this.longestPawnMove(i, j, this) > 0) {
+                            return -7; // Not taking an enemy pawn when it's possible
+                        }
+                    }
+                }
+            }
+            catch (CloneNotSupportedException e) {
+                System.out.println("Clone error!");
+                return -8;
+            }
+
+            return 1;
         }
 
 

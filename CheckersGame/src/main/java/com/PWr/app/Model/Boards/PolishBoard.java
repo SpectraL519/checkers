@@ -27,5 +27,10 @@ public class PolishBoard extends Board {
 
     @Override
     public void mockEndgame (String player) {}
+
+
+
+    @Override
+    public void mockQueenTake () {}
 }
 

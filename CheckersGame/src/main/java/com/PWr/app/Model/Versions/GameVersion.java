@@ -55,4 +55,10 @@ public abstract class GameVersion {
     public void mockEndgame (String player) {
         this.board.mockEndgame(player);
     }
+
+
+
+    public void mockQueenTake () {
+        this.board.mockQueenTake();
+    }
 }
