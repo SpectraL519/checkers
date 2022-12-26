@@ -83,32 +83,51 @@ public class CheckMoveTest {
         assertEquals(model.movePawn(3, 4, 4, 3), 1); // black
 
         // White taking 2 black pawns
-        assertEquals(model.movePawn(5, 2, 3, 4), 2);
-        assertEquals(model.movePawn(3, 4, 1, 6), 1);
+        assertEquals(model.movePawn(5, 2, 3, 4), 3);
+        assertEquals(model.movePawn(3, 4, 1, 6), 2);
 
 
 
         // Check game restart function
-        System.out.printf("\n\nRestarting the game...\n");
+        System.out.println("\n\nRestarting the game...");
         model.restartGame();
         assertEquals(model.getState(), GameState.WHITE);
         model.displayBoard();
 
         // Mocking an engame situation
-        System.out.printf("\n\nMocking an endgame situation (white wins)...\n");
+        System.out.println("\n\nMocking an endgame situation (white wins)...");
         model.mockEndgame("White");
         model.displayBoard();
         assertEquals(model.movePawn(4, 3, 2, 5), 10);
 
+        System.out.println();
         model.setVersion("Russian");
-        System.out.printf("\n\nMocking an endgame situation (black wins)...\n");
+        System.out.println("Mocking an endgame situation (black wins)...");
         model.mockEndgame("Black");
         model.displayBoard();
         assertEquals(model.movePawn(3, 4, 5, 2), 20);
 
-        
 
-        // TODO
-        // Add queen movement chacks
+
+        // Mocking a queen engamge situation
+        System.out.println();
+        model.setVersion("Russian");
+        System.out.println("Mocking a queen endgame situation (white wins)...");
+        model.mockQueenEndgame();
+        assertEquals(model.longestMove(7, 2), 4);
+        assertEquals(model.movePawn(7, 2, 4, 5), 3);
+        assertEquals(model.movePawn(4, 5, 2, 7), 3);
+        assertEquals(model.movePawn(2, 7, 0, 5), 3);
+        assertEquals(model.movePawn(0, 5, 3, 2), 10);
+
+
+
+        // Mocking a pawn to queen situation
+        System.out.println();
+        model.setVersion("Russian");
+        System.out.println("Mocking a pawn to queen situation (white)...");
+        model.mockPawnToQueen();
+        assertEquals(model.movePawn(1, 6, 0, 7), 1);
+        model.displayBoard();
     }
 }

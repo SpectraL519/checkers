@@ -31,6 +31,18 @@ public class PolishBoard extends Board {
 
 
     @Override
-    public void mockQueenTake () {}
+    public void mockQueenEndgame () {}
+
+
+
+    @Override
+    public void mockPawnToQueen () {}
+
+
+
+    @Override
+    public int longestMove (int r, int c) {
+        return 0;
+    }
 }
 

@@ -109,10 +109,16 @@ final class CommandLine {
                 break;
             }
 
-            case "mockQueenTake": {
-                System.out.println("Mocking a queen taking situation...");
-                this.model.mockQueenTake();
+            case "mockQueenEndgame": {
+                System.out.println("Mocking a queen endgame situation (white wins)...");
+                this.model.mockQueenEndgame();
                 this.model.displayBoard();
+                System.out.println();
+                break;
+            }
+
+            case "lm": {
+                System.out.println("Longest move: " + this.model.longestMove(this.stdInScanner.nextInt(), this.stdInScanner.nextInt()));
                 System.out.println();
                 break;
             }

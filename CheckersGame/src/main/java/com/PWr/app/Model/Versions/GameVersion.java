@@ -58,7 +58,19 @@ public abstract class GameVersion {
 
 
 
-    public void mockQueenTake () {
-        this.board.mockQueenTake();
+    public void mockQueenEndgame () {
+        this.board.mockQueenEndgame();
+    }
+
+
+
+    public void mockPawnToQueen () {
+        this.board.mockPawnToQueen();
+    }
+
+
+
+    public int longestMove (int r, int c) {
+        return this.board.longestMove(r, c);
     }
 }

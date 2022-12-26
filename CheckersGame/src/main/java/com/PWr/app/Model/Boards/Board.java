@@ -19,7 +19,9 @@ public abstract class Board {
 
     protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
     public abstract void mockEndgame (String player);
-    public abstract void mockQueenTake ();
+    public abstract void mockQueenEndgame ();
+    public abstract void mockPawnToQueen ();
+    public abstract int longestMove (int r, int c);
 
     
 
@@ -90,38 +92,80 @@ public abstract class Board {
 
         int check = this.checkMove(rCurr, cCurr, rMov, cMov);
         if (check > 0) {
-            this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
-            this.fields[rCurr][cCurr] = 0;
             System.out.printf("Pawn moved: (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
 
             switch (check) {
                 // TODO
                 // Printing messages via getMessage(check) method
+
                 case 1: {
+                    // Moving the pawn
+                    this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
+                    this.fields[rCurr][cCurr] = 0;
+
                     if (this.pawnToQueen(rCurr, cCurr, rMov, cMov)) {
                         System.out.println("Pawn changed to queen");
                         this.fields[rMov][cMov] *= 10;
                     }
+
                     this.state = this.state.switchPlayer();
                     break;
                 }
 
                 case 2: {
+                    // Moving the pawn and taking an enemy pawn
+                    if (this.isQueen(rCurr, cCurr)) {
+                        this.queenTake(rCurr, cCurr, rMov, cMov);
+                    }
+                    else {
+                        this.pawnTake(rCurr, cCurr, rMov, cMov);
+                    }
+
+                    try {
+                        if (this.pawnToQueen(rCurr, cCurr, rMov, cMov) && this.longestPawnTake(rMov, cMov) == 0) {
+                            System.out.println("Pawn changed to queen");
+                            this.fields[rMov][cMov] *= 10;
+                        }
+                    }
+                    catch (CloneNotSupportedException e) {
+                        System.out.println("Clone error!");
+                    }
+
+                    if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
+                        System.out.println("White wins!\n");
+                        return 10;
+                    }
+
+                    if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
+                        System.out.println("Black wins!\n");
+                        return 20;
+                    }
+
+                    this.state = this.state.switchPlayer();
                     break;
                 }
 
-                case 10: {
-                    System.out.println("White wins!");
-                    this.display();
-                    this.state = this.state.endGame();
-                    break;
-                }
+                case 3: {
+                    // Moving the pawn and taking an enemy pawn
+                    if (this.isQueen(rCurr, cCurr)) {
+                        this.queenTake(rCurr, cCurr, rMov, cMov);
+                    }
+                    else {
+                        this.pawnTake(rCurr, cCurr, rMov, cMov);
+                    }
 
-                case 20: {
-                    System.out.println("Black wins!");
-                    this.display();
-                    System.out.println();
-                    this.state = this.state.endGame();
+                    if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
+                        System.out.println("White wins!\n");
+                        this.state = this.state.endGame();
+                        return 10;
+                    }
+
+                    if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
+                        System.out.println("Black wins!\n");
+                        this.state = this.state.endGame();
+                        return 20;
+                    }
+
                     break;
                 }
 
@@ -296,8 +340,26 @@ public abstract class Board {
 
 
 
+    protected void pawnTake (int rCurr, int cCurr, int rMov, int cMov) {
+        int rDir = (int)Math.signum(rMov - rCurr);
+        int cDir = (int)Math.signum(cMov - cCurr);
+
+        this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
+        this.fields[rCurr + rDir][cCurr + cDir] = 0;
+        this.fields[rCurr][cCurr] = 0;
+
+        if (this.getState() == GameState.WHITE) {
+            this.blackPawns--;
+        }
+        else if (this.getState() == GameState.BLACK) {
+            this.whitePawns--;
+        }
+    }
+
+
     
-    protected int longestPawnMove (int r, int c) throws CloneNotSupportedException {
+    protected int longestPawnTake (int r, int c) throws CloneNotSupportedException {
+        // this.display();
         if (!this.isOnBoard(r, c)) {
             return 0;
         }
@@ -306,42 +368,30 @@ public abstract class Board {
 
         if (this.checkPawnTake(r, c, 2, 2)) {
             Board bc = (Board)this.clone();
+            bc.pawnTake(r, c, r + 2, c + 2);
 
-            bc.fields[r + 2][c + 2] = bc.fields[r][c];
-            bc.fields[r + 1][c + 1] = 0;
-            bc.fields[r][c] = 0;
-
-            moveLengths[0] = 1 + bc.longestPawnMove(r + 2, c + 2);
+            moveLengths[0] = 1 + bc.longestPawnTake(r + 2, c + 2);
         }
 
         if (this.checkPawnTake(r, c, 2, -2)) {
             Board bc = (Board)this.clone();
+            bc.pawnTake(r, c, r + 2, c - 2);
 
-            bc.fields[r + 2][c - 2] = bc.fields[r][c];
-            bc.fields[r + 1][c - 1] = 0;
-            bc.fields[r][c] = 0;
-
-            moveLengths[0] = 1 + bc.longestPawnMove(r + 2, c - 2);
+            moveLengths[0] = 1 + bc.longestPawnTake(r + 2, c - 2);
         }
 
         if (this.checkPawnTake(r, c, -2, 2)) {
             Board bc = (Board)this.clone();
+            bc.pawnTake(r, c, r - 2, c + 2);
 
-            bc.fields[r - 2][c + 2] = bc.fields[r][c];
-            bc.fields[r - 1][c + 1] = 0;
-            bc.fields[r][c] = 0;
-
-            moveLengths[0] = 1 + bc.longestPawnMove(r - 2, c + 2);
+            moveLengths[0] = 1 + bc.longestPawnTake(r - 2, c + 2);
         }
 
         if (this.checkPawnTake(r, c, -2, -2)) {
             Board bc = (Board)this.clone();
+            bc.pawnTake(r, c, r - 2, c - 2);
 
-            bc.fields[r - 2][c - 2] = bc.fields[r][c];
-            bc.fields[r - 1][c - 1] = 0;
-            bc.fields[r][c] = 0;
-
-            moveLengths[0] = 1 + bc.longestPawnMove(r - 2, c - 2);
+            moveLengths[0] = 1 + bc.longestPawnTake(r - 2, c - 2);
         }
 
         int maxLength = 0;
@@ -359,21 +409,11 @@ public abstract class Board {
             return false;
         }
 
-        try {
-            if (this.longestPawnMove(rMov, cMov) > 0) {
-                return false;
-            }
-        }
-        catch (CloneNotSupportedException e) {
-            System.out.println("Clone error!");
-            return false;
-        }
-
-        if (this.fields[rCurr][cCurr] == 1 && rMov == this.size - 1) {
+        if (this.getState() == GameState.WHITE && rMov == 0) {
             return true;
         }
 
-        if (this.fields[rCurr][cCurr] == 2 && rMov == 0) {
+        if (this.getState() == GameState.BLACK && rMov == this.size - 1) {
             return true;
         }
 
@@ -407,11 +447,14 @@ public abstract class Board {
 
 
     protected boolean checkQueenTake (int rCurr, int cCurr, int rStep, int cStep) {
-        if (!this.isOnBoard(rCurr + rStep, cCurr + cStep)) {
+        int rMov = rCurr + rStep;
+        int cMov = cCurr + cStep;
+
+        if (!this.isOnBoard(rMov, cMov)) {
             return false;
         }
 
-        if (this.fields[rCurr + rStep][cCurr + cStep] != 0) {
+        if (this.fields[rMov][cMov] != 0) {
             return false;
         }
 
@@ -421,9 +464,6 @@ public abstract class Board {
 
         int rDir = (int)Math.signum(rStep);
         int cDir = (int)Math.signum(cStep);
-
-        int rMov = rCurr + rStep;
-        int cMov = cCurr + cStep;
         
         int enemyCount = 0;
         int rTmp = rCurr + rDir;
@@ -466,11 +506,7 @@ public abstract class Board {
             }
         }
 
-        if (enemyCount > 1) {
-            return false;
-        }
-
-        if (enemyCount > 0) {
+        if (enemyCount == 1) {
             return true;
         }
 
@@ -480,12 +516,14 @@ public abstract class Board {
 
 
     protected void queenTake (int rCurr, int cCurr, int rMov, int cMov) {
-        if (this.getState() == GameState.WHITE) {
-            int rDir = (int)Math.signum(rMov - rCurr);
-            int cDir = (int)Math.signum(cMov - cCurr);
-            int rTmp = rCurr;
-            int cTmp = cCurr;
+        this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
 
+        int rDir = (int)Math.signum(rMov - rCurr);
+        int cDir = (int)Math.signum(cMov - cCurr);
+        int rTmp = rCurr;
+        int cTmp = cCurr;
+
+        if (this.getState() == GameState.WHITE) {
             while (rTmp != rMov && cTmp != cMov) {
                 if (this.isBlack(rTmp, cTmp)) {
                     this.fields[rTmp][cTmp] = 0;
@@ -497,11 +535,6 @@ public abstract class Board {
             }
         }
         else if (this.getState() == GameState.BLACK) {
-            int rDir = (int)Math.signum(rMov - rCurr);
-            int cDir = (int)Math.signum(cMov - cCurr);
-            int rTmp = rCurr + rDir;
-            int cTmp = cCurr + cDir;
-
             while (rTmp != rMov && cTmp != cMov) {
                 if (this.isWhite(rTmp, cTmp)) {
                     this.fields[rTmp][cTmp] = 0;
@@ -512,12 +545,14 @@ public abstract class Board {
                 cTmp += cDir;
             }
         }
+
+        this.fields[rCurr][cCurr] = 0;
     }
 
 
 
     // TODO
-    protected int longestQueenMove (int r, int c) throws CloneNotSupportedException {
+    protected int longestQueenTake (int r, int c) throws CloneNotSupportedException {
         if (!this.isOnBoard(r, c)) {
             return 0;
         }
@@ -525,107 +560,86 @@ public abstract class Board {
         int[] moveLengths = new int[4];
         int rDir, cDir;
         int rStep, cStep;
-        int m, length;
 
 
         rDir = 1;
         cDir = 1;
         rStep = 2 * rDir;
         cStep = 2 * cDir;
-        m = 0;
         while (this.isOnBoard(r + rStep, c + cStep)) {
             if (this.checkQueenTake(r, c, rStep, cStep)) {
-                System.out.println("Possible take: (" + (r + rStep) + "," + (c + cStep) + ")");
                 Board bc = (Board)this.clone();
-
-                bc.fields[r + rStep][c + cStep] = bc.fields[r][c];
                 bc.queenTake(r, c, r + rStep, c + cStep);
 
-                length = 1 + bc.longestQueenMove(r + rStep, c + cStep);
-                if (length > m) {
-                    m = length;
+                int length = 1 + bc.longestQueenTake(r + rStep, c + cStep);
+                if (length > moveLengths[0]) {
+                    moveLengths[0] = length;
                 }
             }
             
             rStep += rDir;
             cStep += cDir;
         }
-        moveLengths[0] = m;
 
 
         rDir = 1;
         cDir = -1;
         rStep = 2 * rDir;
         cStep = 2 * cDir;
-        m = 0;
         while (this.isOnBoard(r + rStep, c + cStep)) {
             if (this.checkQueenTake(r, c, rStep, cStep)) {
-                System.out.println("Possible take: (" + (r + rStep) + "," + (c + cStep) + ")");
                 Board bc = (Board)this.clone();
-
-                bc.fields[r + rStep][c + cStep] = bc.fields[r][c];
                 bc.queenTake(r, c, r + rStep, c + cStep);
 
-                length = 1 + bc.longestQueenMove(r + rStep, c + cStep);
-                if (length > m) {
-                    m = length;
+                int length = 1 + bc.longestQueenTake(r + rStep, c + cStep);
+                if (length > moveLengths[1]) {
+                    moveLengths[1] = length;
                 }
             }
             
             rStep += rDir;
             cStep += cDir;
         }
-        moveLengths[1] = m;
 
 
         rDir = -1;
         cDir = 1;
         rStep = 2 * rDir;
         cStep = 2 * cDir;
-        m = 0;
         while (this.isOnBoard(r + rStep, c + cStep)) {
             if (this.checkQueenTake(r, c, rStep, cStep)) {
-                System.out.println("Possible take: (" + (r + rStep) + "," + (c + cStep) + ")");
                 Board bc = (Board)this.clone();
-
-                bc.fields[r + rStep][c + cStep] = bc.fields[r][c];
                 bc.queenTake(r, c, r + rStep, c + cStep);
 
-                length = 1 + bc.longestQueenMove(r + rStep, c + cStep);
-                if (length > m) {
-                    m = length;
+                int length = 1 + bc.longestQueenTake(r + rStep, c + cStep);
+                if (length > moveLengths[2]) {
+                    moveLengths[2] = length;
                 }
             }
             
             rStep += rDir;
             cStep += cDir;
         }
-        moveLengths[2] = m;
 
 
         rDir = -1;
         cDir = -1;
         rStep = 2 * rDir;
         cStep = 2 * cDir;
-        m = 0;
         while (this.isOnBoard(r + rStep, c + cStep)) {
             if (this.checkQueenTake(r, c, rStep, cStep)) {
-                System.out.println("Possible take: (" + (r + rStep) + "," + (c + cStep) + ")");
                 Board bc = (Board)this.clone();
-
-                bc.fields[r + rStep][c + cStep] = bc.fields[r][c];
                 bc.queenTake(r, c, r + rStep, c + cStep);
 
-                length = 1 + bc.longestQueenMove(r + rStep, c + cStep);
-                if (length > m) {
-                    m = length;
+                int length = 1 + bc.longestQueenTake(r + rStep, c + cStep);
+                if (length > moveLengths[3]) {
+                    moveLengths[3] = length;
                 }
             }
             
             rStep += rDir;
             cStep += cDir;
         }
-        moveLengths[3] = m;
 
 
 

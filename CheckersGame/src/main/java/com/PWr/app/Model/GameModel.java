@@ -104,7 +104,19 @@ public class GameModel {
 
 
 
-    public void mockQueenTake () {
-        this.version.mockQueenTake();
+    public void mockQueenEndgame () {
+        this.version.mockQueenEndgame();
+    }
+
+
+
+    public void mockPawnToQueen () {
+        this.version.mockPawnToQueen();
+    }
+
+
+
+    public int longestMove (int r, int c) {
+        return this.version.longestMove(r, c);
     }
 }

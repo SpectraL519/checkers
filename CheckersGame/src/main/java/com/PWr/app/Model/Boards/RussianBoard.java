@@ -31,6 +31,11 @@ public class RussianBoard extends Board implements Cloneable {
             }
         }
 
+        boardClone.whitePawns = this.whitePawns;
+        boardClone.blackPawns = this.blackPawns;
+
+        boardClone.state = this.state;
+
         return boardClone;
     }
 
@@ -65,7 +70,7 @@ public class RussianBoard extends Board implements Cloneable {
 
 
     @Override
-    public void mockQueenTake () {
+    public void mockQueenEndgame () {
         this.fields = new int[this.size][this.size];
 
         this.fields[7][2] = 10;
@@ -74,24 +79,58 @@ public class RussianBoard extends Board implements Cloneable {
         this.fields[3][6] = 2;
         this.fields[1][6] = 2;
 
-        this.blackPawns = 4;
         this.whitePawns = 1;
+        this.blackPawns = 4;
 
         this.state = GameState.WHITE.getStateBahaviour();
     }
 
 
 
-    // Czy curr i mov sa na planszy
-    // Czy na curr jest pion
-    // Czy na mov nie ma piona
-    // Czy mov jest na ukos
-    // std::pion - Jesli skok = 2 => Czy na mov - 1 jest pion przeciwnika
-    // std::pion - Czy rusza sie do tyluy bez bicia
-    // Czy odpowiedni kolor piona sie rusza
-    /* (non-Javadoc)
-     * @see com.PWr.app.Model.Boards.Board#checkMove(int, int, int, int)
-     */
+    @Override
+    public void mockPawnToQueen () {
+        this.fields = new int[this.size][this.size];
+
+        this.fields[1][6] = 1;
+        this.fields[1][4] = 2;
+
+        this.whitePawns = 1;
+        this.blackPawns = 1;
+
+        this.state = GameState.WHITE.getStateBahaviour();
+    }
+
+
+
+    @Override
+    public int longestMove (int r, int c) {
+        try {
+            if (this.isQueen(r, c)) {
+                int lqt = this.longestQueenTake(r, c);
+                if (lqt > 0) {
+                    return lqt;
+                }
+
+                return 1;
+            }
+            
+            int lpt = this.longestPawnTake(r, c);
+            if (lpt > 0) {
+                return lpt;
+            }
+
+            return 1;
+        }
+        catch (CloneNotSupportedException e) {
+            System.out.println("Clone error!");
+        }
+
+
+        return 0;
+    }
+
+
+
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
         // Check if the game has started
@@ -123,34 +162,20 @@ public class RussianBoard extends Board implements Cloneable {
         boolean queen = this.isQueen(rCurr, cCurr);
 
         if (queen) {
-            System.out.println("Moving a queen...");
             int[] step = this.checkQueenStep(rCurr, cCurr, rMov, cMov);
             if (step == null) {
                 return -6;
             }
 
             if (this.checkQueenTake(rCurr, cCurr, step[0], step[1])) {
-                // Take pawn
-                this.queenTake(rCurr, cCurr, rMov, cMov);
-
-                // White wins
-                if (this.blackPawns == 0) {
-                    return 10;
-                }
-
-                // Black wins
-                if (this.whitePawns == 0) {
-                    return 20;
-                } 
-
                 // Check for further movement possibilities
                 try {
-                    int lqm = this.longestQueenMove(rMov, cMov);
-                    System.out.println("LQM(mov): " + lqm);
-                    if (lqm > 0) {
-                        return 2;
+                    Board bc = (Board)this.clone();
+                    bc.queenTake(rCurr, cCurr, rMov, cMov);
+                    if (bc.longestQueenTake(rMov, cMov) > 0) {
+                        return 3;
                     }
-                    return 1;
+                    return 2;
                 }
                 catch (CloneNotSupportedException e) {
                     System.out.println("Clone error!");
@@ -162,7 +187,7 @@ public class RussianBoard extends Board implements Cloneable {
             try {
                 for (int i = 0; i < this.size; i++) {
                     for (int j = 0; j < this.size; j++) {
-                        if (this.checkPlayer(i, j) && this.longestPawnMove(i, j) > 0) {
+                        if (this.checkPlayer(i, j) && this.longestPawnTake(i, j) > 0) {
                             return -7; // Not taking an enemy pawn when it's possible
                         }
                     }
@@ -183,32 +208,15 @@ public class RussianBoard extends Board implements Cloneable {
         }
 
         if (Math.abs(step[0]) == 2) {
-            // Take pawn
-            if (this.state.getState() == GameState.WHITE) {
-                this.fields[rCurr + (step[0] / 2)][cCurr + (step[1] / 2)] = 0;
-                this.blackPawns--;
-
-                // White wins
-                if (this.blackPawns == 0) {
-                    return 10;
-                }
-            }
-            else if (this.state.getState() == GameState.BLACK) {
-                this.fields[rCurr + (step[0] / 2)][cCurr + (step[1] / 2)] = 0;
-                this.whitePawns--;
-
-                // Black wins
-                if (this.whitePawns == 0) {
-                    return 20;
-                }
-            }
-
             // Check for further movement possibilities
             try {
-                if (this.longestPawnMove(rMov, cMov) > 0) {
-                    return 2;
+                Board bc = (Board)this.clone();
+                bc.pawnTake(rCurr, cCurr, rMov, cMov);
+                if (bc.longestPawnTake(rMov, cMov) > 0) {
+                    return 3;
                 }
-                return 1;
+
+                return 2;
             }
             catch (CloneNotSupportedException e) {
                 System.out.println("Clone error!");
@@ -220,7 +228,7 @@ public class RussianBoard extends Board implements Cloneable {
         try {
             for (int i = 0; i < this.size; i++) {
                 for (int j = 0; j < this.size; j++) {
-                    if (this.checkPlayer(i, j) && this.longestPawnMove(i, j) > 0) {
+                    if (this.checkPlayer(i, j) && this.longestPawnTake(i, j) > 0) {
                         return -7; // Not taking an enemy pawn when it's possible
                     }
                 }
