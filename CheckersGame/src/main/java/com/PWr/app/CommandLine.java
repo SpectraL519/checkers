@@ -36,6 +36,8 @@ final class CommandLine {
                 System.out.println("\t- restartGame : Restarts the game in the current versio");
                 System.out.println("\t- endGame : Ends the current game");
                 System.out.println("\t- mockEndgame <player> : Mocks an endgame situation with the next move of the <player> player");
+                System.out.println("\t- mockQueenEndgame : Mocks a queen endgame situation with the next move of the WHITE player");
+                System.out.println("\t- longestMove <row> <column> : Calculates the longest move that can be performed from a position (<row>,<column>)");
                 System.out.println("\t- exit : Exits the program\n");
                 break;
             }
@@ -102,6 +104,12 @@ final class CommandLine {
             }
 
             case "mockEndgame": {
+                if (this.model.getVersion() == null) {
+                    this.stdInScanner.nextLine();
+                    System.out.println("Cannot mock an endgame situation - select a game version first!");
+                    break;
+                }
+
                 System.out.println("Mocking an endgame situation...");
                 this.model.mockEndgame(this.stdInScanner.next());
                 this.model.displayBoard();
@@ -110,6 +118,12 @@ final class CommandLine {
             }
 
             case "mockQueenEndgame": {
+                if (this.model.getVersion() == null) {
+                    this.stdInScanner.nextLine();
+                    System.out.println("Cannot mock a queen endgame situation - select a game version first!");
+                    break;
+                }
+                
                 System.out.println("Mocking a queen endgame situation (white wins)...");
                 this.model.mockQueenEndgame();
                 this.model.displayBoard();
@@ -117,7 +131,13 @@ final class CommandLine {
                 break;
             }
 
-            case "lm": {
+            case "longestMove": {
+                if (this.model.getVersion() == null) {
+                    this.stdInScanner.nextLine();
+                    System.out.println("Cannot calculate the longest move - select a game version first!");
+                    break;
+                }
+
                 System.out.println("Longest move: " + this.model.longestMove(this.stdInScanner.nextInt(), this.stdInScanner.nextInt()));
                 System.out.println();
                 break;

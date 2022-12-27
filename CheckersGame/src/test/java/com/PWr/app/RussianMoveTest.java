@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 
 
 
-public class CheckMoveTest {
+public class RussianMoveTest {
     @Test
     public void shouldAnswerWithTrue () {
         GameModel model = new GameModel();
@@ -114,11 +114,11 @@ public class CheckMoveTest {
         model.setVersion("Russian");
         System.out.println("Mocking a queen endgame situation (white wins)...");
         model.mockQueenEndgame();
-        assertEquals(model.longestMove(7, 2), 4);
-        assertEquals(model.movePawn(7, 2, 4, 5), 3);
+        assertEquals(model.longestMove(4, 5), 4);
         assertEquals(model.movePawn(4, 5, 2, 7), 3);
         assertEquals(model.movePawn(2, 7, 0, 5), 3);
-        assertEquals(model.movePawn(0, 5, 3, 2), 10);
+        assertEquals(model.movePawn(0, 5, 3, 2), 3);
+        assertEquals(model.movePawn(3, 2, 6, 5), 10); // white wins
 
 
 

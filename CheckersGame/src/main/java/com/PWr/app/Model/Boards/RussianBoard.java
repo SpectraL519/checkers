@@ -20,9 +20,8 @@ public class RussianBoard extends Board implements Cloneable {
 
 
 
-    // throws CloneNotSupportedException 
     @Override
-    protected Object clone () {
+    protected Board clone () {
         Board boardClone = new RussianBoard();
 
         for (int i = 0; i < this.size; i++) {
@@ -44,8 +43,10 @@ public class RussianBoard extends Board implements Cloneable {
     @Override
     public void mockEndgame (String player) {
         this.fields = new int[this.size][this.size];
+
         this.fields[4][3] = 1;
         this.fields[3][4] = 2;
+
         this.whitePawns = 1;
         this.blackPawns = 1;
 
@@ -73,7 +74,7 @@ public class RussianBoard extends Board implements Cloneable {
     public void mockQueenEndgame () {
         this.fields = new int[this.size][this.size];
 
-        this.fields[7][2] = 10;
+        this.fields[4][5] = 10;
         this.fields[5][4] = 2;
         this.fields[2][3] = 2;
         this.fields[3][6] = 2;
@@ -98,35 +99,6 @@ public class RussianBoard extends Board implements Cloneable {
         this.blackPawns = 1;
 
         this.state = GameState.WHITE.getStateBahaviour();
-    }
-
-
-
-    @Override
-    public int longestMove (int r, int c) {
-        try {
-            if (this.isQueen(r, c)) {
-                int lqt = this.longestQueenTake(r, c);
-                if (lqt > 0) {
-                    return lqt;
-                }
-
-                return 1;
-            }
-            
-            int lpt = this.longestPawnTake(r, c);
-            if (lpt > 0) {
-                return lpt;
-            }
-
-            return 1;
-        }
-        catch (CloneNotSupportedException e) {
-            System.out.println("Clone error!");
-        }
-
-
-        return 0;
     }
 
 
@@ -162,19 +134,20 @@ public class RussianBoard extends Board implements Cloneable {
         boolean queen = this.isQueen(rCurr, cCurr);
 
         if (queen) {
-            int[] step = this.checkQueenStep(rCurr, cCurr, rMov, cMov);
-            if (step == null) {
+            int[] queenStep = this.checkQueenStep(rCurr, cCurr, rMov, cMov);
+            if (queenStep == null) {
                 return -6;
             }
 
-            if (this.checkQueenTake(rCurr, cCurr, step[0], step[1])) {
+            if (this.checkQueenTake(rCurr, cCurr, queenStep[0], queenStep[1])) {
                 // Check for further movement possibilities
                 try {
-                    Board bc = (Board)this.clone();
+                    Board bc = this.clone();
                     bc.queenTake(rCurr, cCurr, rMov, cMov);
                     if (bc.longestQueenTake(rMov, cMov) > 0) {
                         return 3;
                     }
+
                     return 2;
                 }
                 catch (CloneNotSupportedException e) {
@@ -184,33 +157,27 @@ public class RussianBoard extends Board implements Cloneable {
             }
 
             // Check if there is any take possible on the board
-            try {
-                for (int i = 0; i < this.size; i++) {
-                    for (int j = 0; j < this.size; j++) {
-                        if (this.checkPlayer(i, j) && this.longestPawnTake(i, j) > 0) {
-                            return -7; // Not taking an enemy pawn when it's possible
-                        }
-                    }
-                }
+            int lt = this.longestTake();
+            if (lt > 0) {
+                return -7; // Not taking an enemy pawn when it's possible
             }
-            catch (CloneNotSupportedException e) {
-                System.out.println("Clone error!");
-                return -8;
+            if (lt < 0) {
+                return -8; // Clone error
             }
 
             return 1;
         }
 
 
-        int[] step = this.checkPawnStep(rCurr, cCurr, rMov, cMov);
-        if (step == null) {
+        int[] pawnStep = this.checkPawnStep(rCurr, cCurr, rMov, cMov);
+        if (pawnStep == null) {
             return -6;
         }
 
-        if (Math.abs(step[0]) == 2) {
+        if (this.checkPawnTake(rCurr, cCurr, pawnStep[0], pawnStep[1])) {
             // Check for further movement possibilities
             try {
-                Board bc = (Board)this.clone();
+                Board bc = this.clone();
                 bc.pawnTake(rCurr, cCurr, rMov, cMov);
                 if (bc.longestPawnTake(rMov, cMov) > 0) {
                     return 3;
@@ -225,18 +192,12 @@ public class RussianBoard extends Board implements Cloneable {
         }
 
         // Check if there is any take possible on the board
-        try {
-            for (int i = 0; i < this.size; i++) {
-                for (int j = 0; j < this.size; j++) {
-                    if (this.checkPlayer(i, j) && this.longestPawnTake(i, j) > 0) {
-                        return -7; // Not taking an enemy pawn when it's possible
-                    }
-                }
-            }
+        int lt = this.longestTake();
+        if (lt > 0) {
+            return -7; // Not taking an enemy pawn when it's possible
         }
-        catch (CloneNotSupportedException e) {
-            System.out.println("Clone error!");
-            return -8;
+        if (lt < 0) {
+            return -8; // Clone error
         }
 
         return 1;

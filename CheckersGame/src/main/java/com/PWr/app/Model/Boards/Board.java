@@ -18,21 +18,15 @@ public abstract class Board {
 
 
     protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
+
+    // The following methods are of functionality verification purposes only
     public abstract void mockEndgame (String player);
-    public abstract void mockQueenEndgame ();
-    public abstract void mockPawnToQueen ();
-    public abstract int longestMove (int r, int c);
+    public abstract void mockQueenEndgame (); // TODO: Add `String player` parameter
+    public abstract void mockPawnToQueen (); // TODO: Add `String player` parameter
 
     
 
     public void init () {
-        // Pawns:
-        // 0 - no pawn
-        // 1 - white
-        // 10 - white queen
-        // 2 - black
-        // 20 - black queen
-
         // Init white pawns
         int limit = this.size - this.pawnLines - 1;
         for (int r = this.size - 1; r > limit; r--) {
@@ -83,21 +77,19 @@ public abstract class Board {
 
 
 
-
+    // TODO: Printing messages via getMessage(check) method
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
         // < 0: move NOT ok - genereal errrors
         // 0: move NOT ok - not optimal take
-        // 1: move ok but no further move is allowed
-        // 2: move ok and furhter moves allowed
+        // 1: move ok
+        // 2: move ok + enemy pawn taken (furhter moves NOT allowed)
+        // 3: move ok + enemy pawn taken (furhter moves allowed)
 
         int check = this.checkMove(rCurr, cCurr, rMov, cMov);
         if (check > 0) {
             System.out.printf("Pawn moved: (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
 
             switch (check) {
-                // TODO
-                // Printing messages via getMessage(check) method
-
                 case 1: {
                     // Moving the pawn
                     this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
@@ -132,12 +124,16 @@ public abstract class Board {
                     }
 
                     if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
+                        this.display();
                         System.out.println("White wins!\n");
+                        this.state = this.state.endGame();
                         return 10;
                     }
 
                     if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
+                        this.display();
                         System.out.println("Black wins!\n");
+                        this.state = this.state.endGame();
                         return 20;
                     }
 
@@ -155,12 +151,14 @@ public abstract class Board {
                     }
 
                     if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
+                        this.display();
                         System.out.println("White wins!\n");
                         this.state = this.state.endGame();
                         return 10;
                     }
 
                     if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
+                        this.display();
                         System.out.println("Black wins!\n");
                         this.state = this.state.endGame();
                         return 20;
@@ -649,5 +647,69 @@ public abstract class Board {
         }
 
         return maxLength;
+    }
+
+
+
+    protected int longestTake () {
+        try {
+            int longestTake = 0;
+
+            for (int r = 0; r < this.size; r++) {
+                for (int c = 0; c < this.size; c++) {
+                    int takeLength = 0;
+                    if (this.checkPlayer(r, c)) {
+                        if (this.isQueen(r, c)) {
+                            takeLength = this.longestQueenTake(r, c);
+                        }
+                        else {
+                            takeLength = this.longestPawnTake(r, c);
+                        }
+                    }
+
+                    if (takeLength > longestTake) {
+                        longestTake = takeLength;
+                    }
+                }
+            }
+
+            return longestTake;
+        }
+        catch (CloneNotSupportedException e) {
+            System.out.println("Clone error!");
+            return -1;
+        }
+    }
+
+
+
+    public int longestMove (int r, int c) {
+        if (!this.checkPlayer(r, c)) {
+            return -1;
+        }
+        
+        try {
+            if (this.isQueen(r, c)) {
+                int lqt = this.longestQueenTake(r, c);
+                if (lqt > 0) {
+                    return lqt;
+                }
+
+                return 1;
+            }
+            
+            int lpt = this.longestPawnTake(r, c);
+            if (lpt > 0) {
+                return lpt;
+            }
+
+            return 1;
+        }
+        catch (CloneNotSupportedException e) {
+            System.out.println("Clone error!");
+        }
+
+
+        return 0;
     }
 }
