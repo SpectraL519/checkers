@@ -10,22 +10,128 @@ import com.PWr.app.Model.States.*;
 public abstract class Board {
     protected int size;
     protected int pawnLines;
+
     protected int[][] fields;
     protected int whitePawns;
     protected int blackPawns;
+
+    protected int rPrevTake;
+    protected int cPrevTake;
+
     protected GameStateBahaviour state;
 
 
 
-    protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
+    // The following method is of functionality verification purposes only
+    public void mockEndgame (String player) {
+        this.fields = new int[this.size][this.size];
+        
+        int half = this.size / 2;
+        
+        this.fields[half][half - 1] = 1;
+        this.fields[half - 1][half] = 2;
+        
+        this.whitePawns = 1;
+        this.blackPawns = 1;
 
-    // The following methods are of functionality verification purposes only
-    public abstract void mockEndgame (String player);
-    public abstract void mockQueenEndgame (); // TODO: Add `String player` parameter
-    public abstract void mockPawnToQueen (); // TODO: Add `String player` parameter
-
+        switch (player) {
+            case "white": {
+                this.state = GameState.WHITE.getStateBahaviour();
+                break;
+            }
+            
+            case "black": {
+                this.state = GameState.BLACK.getStateBahaviour();
+                break;
+            }
+            
+            default: {
+                System.out.println("Invalid player");
+                break;
+            }
+        }
+    }
     
+    // The following method is of functionality verification purposes only
+    public void mockQueenEndgame (String player) {
+        this.fields = new int[this.size][this.size];
 
+        switch (player) {
+            case "white": {
+                this.fields[4][5] = 10;
+                this.fields[6][3] = 2;
+                this.fields[1][4] = 2;
+                this.fields[3][6] = 2;
+                this.fields[1][6] = 2;
+
+                this.whitePawns = 1;
+                this.blackPawns = 4;
+
+                this.state = GameState.WHITE.getStateBahaviour();
+                break;
+            }
+
+            case "black": {
+                this.fields[4][1] = 1;
+                this.fields[1][4] = 1;
+                this.fields[6][1] = 1;
+                this.fields[5][4] = 1;
+                this.fields[3][2] = 20;
+
+                this.whitePawns = 4;
+                this.blackPawns = 1;
+
+                this.state = GameState.BLACK.getStateBahaviour();
+                break;
+            }
+
+            default: {
+                System.out.println("Invalid player");
+                break;
+            }
+        }
+    }
+    
+    // The following method is of functionality verification purposes only
+    public void mockPawnToQueen (String player) {
+        this.fields = new int[this.size][this.size];
+        
+        switch (player) {
+            case "white": {
+                this.fields[1][this.size - 2] = 1;
+                this.fields[1][this.size - 4] = 2;
+                
+                this.whitePawns = 1;
+                this.blackPawns = 1;
+                
+                this.state = GameState.WHITE.getStateBahaviour();
+                break;
+            }
+            
+            case "black": {
+                this.fields[this.size - 2][3] = 1;
+                this.fields[this.size - 2][1] = 2;
+                
+                this.whitePawns = 1;
+                this.blackPawns = 1;
+                
+                this.state = GameState.BLACK.getStateBahaviour();
+                break;
+            }
+            
+            default: {
+                System.out.println("Invalid player");
+                break;
+            }
+        }
+    }
+
+
+
+    protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
+    
+    
+    
     public void init () {
         // Init white pawns
         int limit = this.size - this.pawnLines - 1;
@@ -105,6 +211,11 @@ public abstract class Board {
                 }
 
                 case 2: {
+                    if (!this.checkTakingPlayer(rCurr, cCurr)) {
+                        System.out.println("Error: Sequential enemy pawn taking performed by invalid pawn");
+                        return -8;
+                    }
+                    
                     // Moving the pawn and taking an enemy pawn
                     if (this.isQueen(rCurr, cCurr)) {
                         this.queenTake(rCurr, cCurr, rMov, cMov);
@@ -137,11 +248,18 @@ public abstract class Board {
                         return 20;
                     }
 
+                    this.rPrevTake = -1;
+                    this.cPrevTake = -1;
                     this.state = this.state.switchPlayer();
                     break;
                 }
 
                 case 3: {
+                    if (!this.checkTakingPlayer(rCurr, cCurr)) {
+                        System.out.println("Error: Sequential enemy pawn taking performed by invalid pawn");
+                        return -8;
+                    }
+
                     // Moving the pawn and taking an enemy pawn
                     if (this.isQueen(rCurr, cCurr)) {
                         this.queenTake(rCurr, cCurr, rMov, cMov);
@@ -163,6 +281,9 @@ public abstract class Board {
                         this.state = this.state.endGame();
                         return 20;
                     }
+
+                    this.rPrevTake = rMov;
+                    this.cPrevTake = cMov;
 
                     break;
                 }
@@ -202,18 +323,22 @@ public abstract class Board {
                 }
 
                 case -5: {
-                    System.out.printf("Error: There is a pawn on the `Movement` position (%d,%d)\n", rMov, cMov);
+                    System.out.printf("Error: There is a pawn on the `Movement` position (%d,%d)!\n", rMov, cMov);
                     break;
                 }
 
                 case -6: {
-                    System.out.printf("Error: Invalid step (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
+                    System.out.printf("Error: Invalid step (%d,%d) -> (%d,%d)!\n", rCurr, cCurr, rMov, cMov);
                     break;
                 }
 
                 case -7: {
                     System.out.println("Error: Not taking an enemy pawn when it is possible!");
                     break;
+                }
+
+                case -10: {
+                    System.out.println("Clone error!");
                 }
 
                 default: {
@@ -262,6 +387,20 @@ public abstract class Board {
 
 
 
+    protected boolean checkTakingPlayer (int r, int c) {
+        if (this.rPrevTake == -1 && this.cPrevTake == -1) {
+            return true;
+        }
+
+        if (r == this.rPrevTake && c == this.cPrevTake) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     protected boolean isOnBoard (int r, int c) {
         if (r < 0 || r >= this.size) {
             return false;
@@ -277,20 +416,10 @@ public abstract class Board {
 
 
     protected int[] checkPawnStep (int rCurr, int cCurr, int rMov, int cMov) {
-        int rStep = rMov - rCurr;
-        int cStep = cMov - cCurr;
-        int[] step = {rStep, cStep};
+        int[] step = {rMov - rCurr, cMov - cCurr};
 
-        // Check for backward movement
-        if (this.isWhite(rCurr, cCurr) && rStep > 0) {
-            return null;
-        } 
-        if (this.isBlack(rCurr, cCurr) && rStep < 0) {
-            return null;
-        } 
-
-        rStep = Math.abs(rStep);
-        cStep = Math.abs(cStep);
+        int rStep = Math.abs(step[0]);
+        int cStep = Math.abs(step[1]);
 
         // Check for stepping on a white field
         if (rStep != cStep) {
@@ -299,10 +428,18 @@ public abstract class Board {
 
         // Check a standard move
         if (rStep == 1 && this.fields[rCurr + step[0]][cCurr + step[1]] == 0) {
+            // Check for backward movement
+            if (this.isWhite(rCurr, cCurr) && step[0] > 0) {
+                return null;
+            } 
+            if (this.isBlack(rCurr, cCurr) && step[0] < 0) {
+                return null;
+            } 
+
             return step;
         }
 
-        // Check taking an enemy pawn
+        // Check for taking an enemy pawn
         if (rStep == 2 && this.checkPawnTake(rCurr, cCurr, step[0], step[1])) {
             return step;
         }

@@ -58,14 +58,14 @@ public abstract class GameVersion {
 
 
 
-    public void mockQueenEndgame () {
-        this.board.mockQueenEndgame();
+    public void mockQueenEndgame (String player) {
+        this.board.mockQueenEndgame(player);
     }
 
 
 
-    public void mockPawnToQueen () {
-        this.board.mockPawnToQueen();
+    public void mockPawnToQueen (String player) {
+        this.board.mockPawnToQueen(player);
     }
 
 

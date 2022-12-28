@@ -31,25 +31,27 @@ final class CommandLine {
         switch (this.command) {
             case "help": {
                 System.out.println("\nCheckers console app commands:");
-                System.out.println("\t- setVersion <version> : Starts a game in the <version> version");
+                System.out.println("\t- newGame <version> : Starts a new game in the <version> version\n\t\t<version> can be: 'russian', 'polish' or 'canadian'");
                 System.out.println("\t- movePawn <current_row> <current_column> <new_row> <new_column> : Moves a pawn from the current to the new position (if it's possible)");
                 System.out.println("\t- restartGame : Restarts the game in the current versio");
                 System.out.println("\t- endGame : Ends the current game");
-                System.out.println("\t- mockEndgame <player> : Mocks an endgame situation with the next move of the <player> player");
-                System.out.println("\t- mockQueenEndgame : Mocks a queen endgame situation with the next move of the WHITE player");
+                System.out.println("\t- mockEndgame <player> : Mocks an endgame situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'");
+                System.out.println("\t- mockQueenEndgame <player> : Mocks a queen endgame situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'");
+                System.out.println("\t- mockPawnToQueen <player> : Mocks a pawn to queen situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'");
                 System.out.println("\t- longestMove <row> <column> : Calculates the longest move that can be performed from a position (<row>,<column>)");
                 System.out.println("\t- exit : Exits the program\n");
+                System.out.println("\n\t");
                 break;
             }
 
-            case "setVersion": {
+            case "newGame": {
                 if (this.model.getVersion() != null) {
                     this.stdInScanner.nextLine();
                     System.out.println("Cannot start a new game - the game has already started!");
                     break;
                 }
 
-                this.model.setVersion(this.stdInScanner.next());
+                this.model.newGame(this.stdInScanner.next());
                 this.model.initBoard();
                 this.model.displayBoard();
                 System.out.println();
@@ -84,8 +86,8 @@ final class CommandLine {
                     break;
                 }
 
-                System.out.println("Game restarted!");
                 this.model.restartGame();
+                System.out.println("Game restarted!");
                 this.model.displayBoard();
                 System.out.println();
                 break;
@@ -124,8 +126,22 @@ final class CommandLine {
                     break;
                 }
                 
-                System.out.println("Mocking a queen endgame situation (white wins)...");
-                this.model.mockQueenEndgame();
+                System.out.println("Mocking a queen endgame situation...");
+                this.model.mockQueenEndgame(this.stdInScanner.next());
+                this.model.displayBoard();
+                System.out.println();
+                break;
+            }
+
+            case "mockPawnToQueen": {
+                if (this.model.getVersion() == null) {
+                    this.stdInScanner.nextLine();
+                    System.out.println("Cannot mock a pawn to queen situation - select a game version first!");
+                    break;
+                }
+                
+                System.out.println("Mocking a pawn queen situation...");
+                this.model.mockPawnToQueen(this.stdInScanner.next());
                 this.model.displayBoard();
                 System.out.println();
                 break;

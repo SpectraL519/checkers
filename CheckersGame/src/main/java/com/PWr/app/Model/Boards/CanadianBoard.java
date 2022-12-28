@@ -15,6 +15,9 @@ public class CanadianBoard extends Board implements Cloneable {
         this.whitePawns = 0;
         this.blackPawns = 0;
 
+        this.rPrevTake = - 1;
+        this.cPrevTake = - 1;
+
         this.state = GameState.RESTING.getStateBahaviour();
     }
 
@@ -37,20 +40,6 @@ public class CanadianBoard extends Board implements Cloneable {
 
         return boardClone;
     }
-
-
-
-    @Override // TODO
-    public void mockEndgame (String player) {}
-
-
-
-    @Override // TODO
-    public void mockQueenEndgame () {}
-
-
-    @Override // TODO
-    public void mockPawnToQueen () {}
 
 
 
@@ -108,8 +97,7 @@ public class CanadianBoard extends Board implements Cloneable {
                     return 2;
                 }
                 catch (CloneNotSupportedException e) {
-                    System.out.println("Clone error!");
-                    return -8;
+                    return -10;
                 }
             }
 
@@ -148,8 +136,7 @@ public class CanadianBoard extends Board implements Cloneable {
                 return 2;
             }
             catch (CloneNotSupportedException e) {
-                System.out.println("Clone error!");
-                return -8;
+                return -10;
             }
         }
 

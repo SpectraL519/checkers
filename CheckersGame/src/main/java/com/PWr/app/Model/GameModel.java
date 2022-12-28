@@ -15,21 +15,21 @@ public class GameModel {
 
 
 
-    public void setVersion (String v) {
+    public void newGame (String v) {
         switch (v) {
-            case "Polish": {
+            case "polish": {
                 System.out.println("Polish version has been selected");
                 this.version = new PolishVersion();
                 break;
             }
 
-            case "Russian": {
+            case "russian": {
                 System.out.println("Russian version has been selected");
                 this.version = new RussianVersion();
                 break;
             }
 
-            case "Canadian": {
+            case "canadian": {
                 System.out.println("Canadian version has been selected");
                 this.version = new CanadianVersion();
                 break;
@@ -104,14 +104,14 @@ public class GameModel {
 
 
 
-    public void mockQueenEndgame () {
-        this.version.mockQueenEndgame();
+    public void mockQueenEndgame (String player) {
+        this.version.mockQueenEndgame(player);
     }
 
 
 
-    public void mockPawnToQueen () {
-        this.version.mockPawnToQueen();
+    public void mockPawnToQueen (String player) {
+        this.version.mockPawnToQueen(player);
     }
 
 

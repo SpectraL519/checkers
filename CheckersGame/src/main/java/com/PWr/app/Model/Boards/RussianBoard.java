@@ -15,6 +15,9 @@ public class RussianBoard extends Board implements Cloneable {
         this.whitePawns = 0;
         this.blackPawns = 0;
 
+        this.rPrevTake = - 1;
+        this.cPrevTake = - 1;
+
         this.state = GameState.RESTING.getStateBahaviour();
     }
 
@@ -36,69 +39,6 @@ public class RussianBoard extends Board implements Cloneable {
         boardClone.state = this.state;
 
         return boardClone;
-    }
-
-
-
-    @Override
-    public void mockEndgame (String player) {
-        this.fields = new int[this.size][this.size];
-
-        this.fields[4][3] = 1;
-        this.fields[3][4] = 2;
-
-        this.whitePawns = 1;
-        this.blackPawns = 1;
-
-        switch (player) {
-            case "White": {
-                this.state = GameState.WHITE.getStateBahaviour();
-                break;
-            }
-
-            case "Black": {
-                this.state = GameState.BLACK.getStateBahaviour();
-                break;
-            }
-
-            default: {
-                System.out.println("Invalid player");
-                break;
-            }
-        }
-    }
-
-
-
-    @Override
-    public void mockQueenEndgame () {
-        this.fields = new int[this.size][this.size];
-
-        this.fields[4][5] = 10;
-        this.fields[5][4] = 2;
-        this.fields[2][3] = 2;
-        this.fields[3][6] = 2;
-        this.fields[1][6] = 2;
-
-        this.whitePawns = 1;
-        this.blackPawns = 4;
-
-        this.state = GameState.WHITE.getStateBahaviour();
-    }
-
-
-
-    @Override
-    public void mockPawnToQueen () {
-        this.fields = new int[this.size][this.size];
-
-        this.fields[1][6] = 1;
-        this.fields[1][4] = 2;
-
-        this.whitePawns = 1;
-        this.blackPawns = 1;
-
-        this.state = GameState.WHITE.getStateBahaviour();
     }
 
 
@@ -151,8 +91,7 @@ public class RussianBoard extends Board implements Cloneable {
                     return 2;
                 }
                 catch (CloneNotSupportedException e) {
-                    System.out.println("Clone error!");
-                    return -8;
+                    return -10;
                 }
             }
 
@@ -186,7 +125,6 @@ public class RussianBoard extends Board implements Cloneable {
                 return 2;
             }
             catch (CloneNotSupportedException e) {
-                System.out.println("Clone error!");
                 return -8;
             }
         }

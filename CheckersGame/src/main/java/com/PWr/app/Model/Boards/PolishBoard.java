@@ -8,12 +8,15 @@ import com.PWr.app.Model.States.GameState;
 
 public class PolishBoard extends Board implements Cloneable {
     public PolishBoard () {
-        this.size = 12;
-        this.pawnLines = 5;
+        this.size = 10;
+        this.pawnLines = 4;
         this.fields = new int[this.size][this.size];
 
         this.whitePawns = 0;
         this.blackPawns = 0;
+
+        this.rPrevTake = - 1;
+        this.cPrevTake = - 1;
 
         this.state = GameState.RESTING.getStateBahaviour();
     }
@@ -37,56 +40,6 @@ public class PolishBoard extends Board implements Cloneable {
 
         return boardClone;
     }
-
-
-
-    @Override
-    public void mockEndgame (String player) {
-        this.fields = new int[this.size][this.size];
-
-        switch (player) {
-            case "White": {
-                this.fields[7][4] = 1;
-                this.fields[7][6] = 1;
-                this.fields[6][5] = 2;
-                this.fields[4][7] = 2;
-
-                this.whitePawns = 2;
-                this.blackPawns = 2;
-
-                this.state = GameState.WHITE.getStateBahaviour();
-                break;
-            }
-
-            case "Black": {
-                this.fields[7][4] = 1;
-                this.fields[5][6] = 1;
-                this.fields[4][5] = 2;
-                this.fields[4][7] = 2;
-
-                this.whitePawns = 2;
-                this.blackPawns = 2;
-
-                this.state = GameState.BLACK.getStateBahaviour();
-                break;
-            }
-
-            default: {
-                System.out.println("Invalid player");
-                break;
-            }
-        }
-    }
-
-
-
-    @Override // TODO
-    public void mockQueenEndgame () {}
-
-
-
-    @Override // TODO
-    public void mockPawnToQueen () {}
 
 
 
@@ -144,8 +97,7 @@ public class PolishBoard extends Board implements Cloneable {
                     return 2;
                 }
                 catch (CloneNotSupportedException e) {
-                    System.out.println("Clone error!");
-                    return -8;
+                    return -10;
                 }
             }
 
@@ -184,8 +136,7 @@ public class PolishBoard extends Board implements Cloneable {
                 return 2;
             }
             catch (CloneNotSupportedException e) {
-                System.out.println("Clone error!");
-                return -8;
+                return -10;
             }
         }
 

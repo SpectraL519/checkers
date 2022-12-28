@@ -22,13 +22,13 @@ public class GameVersionTest {
     public void shouldAnswerWithTrue () {
         GameModel model = new GameModel();
 
-        model.setVersion("Polish");
+        model.newGame("polish");
         assertThat(model.getVersion(), instanceOf(PolishVersion.class));
 
-        model.setVersion("Russian");
+        model.newGame("russian");
         assertThat(model.getVersion(), instanceOf(RussianVersion.class));
 
-        model.setVersion("Canadian");
+        model.newGame("canadian");
         assertThat(model.getVersion(), instanceOf(CanadianVersion.class));
     }
 }
