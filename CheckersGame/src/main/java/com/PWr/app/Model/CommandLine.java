@@ -1,8 +1,8 @@
-package com.PWr.app;
-
-import com.PWr.app.Model.GameModel;
+package com.PWr.app.Model;
 
 import java.util.Scanner;
+
+import com.PWr.app.Model.GameClient;
 
 
 
@@ -10,13 +10,13 @@ import java.util.Scanner;
 
 final class CommandLine {
     private Scanner stdInScanner;
-    private GameModel model;
+    private GameClient model;
 
     private String command;
 
 
 
-    CommandLine (GameModel model) {
+    CommandLine (GameClient model) {
         this.stdInScanner = new Scanner(System.in);
         this.model = model;
     }

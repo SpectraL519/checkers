@@ -1,15 +1,15 @@
-package com.PWr.app.Model.Boards;
+package com.PWr.app.Server.Boards;
 
-import com.PWr.app.Model.States.GameState;
-
-
+import com.PWr.app.Server.States.GameState;
 
 
 
-public class RussianBoard extends Board implements Cloneable {
-    public RussianBoard () {
-        this.size = 8;
-        this.pawnLines = 3;
+
+
+public class CanadianBoard extends Board implements Cloneable {
+    public CanadianBoard () {
+        this.size = 12;
+        this.pawnLines = 5;
         this.fields = new int[this.size][this.size];
 
         this.whitePawns = 0;
@@ -25,7 +25,7 @@ public class RussianBoard extends Board implements Cloneable {
 
     @Override
     protected Board clone () {
-        Board boardClone = new RussianBoard();
+        Board boardClone = new CanadianBoard();
 
         for (int i = 0; i < this.size; i++) {
             for (int j = 0; j < this.size; j++) {
@@ -72,6 +72,7 @@ public class RussianBoard extends Board implements Cloneable {
 
 
         boolean queen = this.isQueen(rCurr, cCurr);
+        int lt = longestTake();
 
         if (queen) {
             int[] queenStep = this.checkQueenStep(rCurr, cCurr, rMov, cMov);
@@ -80,8 +81,13 @@ public class RussianBoard extends Board implements Cloneable {
             }
 
             if (this.checkQueenTake(rCurr, cCurr, queenStep[0], queenStep[1])) {
-                // Check for further movement possibilities
                 try {
+                    // Check for the optimal take
+                    if (this.longestQueenTake(rCurr, cCurr) < lt) {
+                        return 0;
+                    }
+
+                    // Check for further movement possibilities
                     Board bc = this.clone();
                     bc.queenTake(rCurr, cCurr, rMov, cMov);
                     if (bc.longestQueenTake(rMov, cMov) > 0) {
@@ -96,13 +102,13 @@ public class RussianBoard extends Board implements Cloneable {
             }
 
             // Check if there is any take possible on the board
-            int lt = this.longestTake();
             if (lt > 0) {
                 return -7; // Not taking an enemy pawn when it's possible
             }
             if (lt < 0) {
                 return -8; // Clone error
             }
+            
 
             return 1;
         }
@@ -114,8 +120,13 @@ public class RussianBoard extends Board implements Cloneable {
         }
 
         if (this.checkPawnTake(rCurr, cCurr, pawnStep[0], pawnStep[1])) {
-            // Check for further movement possibilities
             try {
+                // Check for the optimal take
+                if (this.longestPawnTake(rCurr, cCurr) < lt) {
+                    return 0;
+                }
+                
+                // Check for further movement possibilities
                 Board bc = this.clone();
                 bc.pawnTake(rCurr, cCurr, rMov, cMov);
                 if (bc.longestPawnTake(rMov, cMov) > 0) {
@@ -125,17 +136,8 @@ public class RussianBoard extends Board implements Cloneable {
                 return 2;
             }
             catch (CloneNotSupportedException e) {
-                return -8;
+                return -10;
             }
-        }
-
-        // Check if there is any take possible on the board
-        int lt = this.longestTake();
-        if (lt > 0) {
-            return -7; // Not taking an enemy pawn when it's possible
-        }
-        if (lt < 0) {
-            return -8; // Clone error
         }
 
         return 1;

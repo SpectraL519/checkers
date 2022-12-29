@@ -1,4 +1,4 @@
-package com.PWr.app.Model.States;
+package com.PWr.app.Server.States;
 
 
 

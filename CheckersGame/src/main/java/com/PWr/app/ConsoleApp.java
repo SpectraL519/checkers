@@ -1,6 +1,6 @@
 package com.PWr.app;
 
-import com.PWr.app.Model.GameModel;
+import com.PWr.app.Model.GameClient;
 
 
 
@@ -8,16 +8,8 @@ import com.PWr.app.Model.GameModel;
 
 public class ConsoleApp {
     public static void main(String args[]) {
-        GameModel model = new GameModel();
-        CommandLine cmd = new CommandLine(model);
-
-        while (true) {
-            try {
-                cmd.getCommand();
-            }
-            catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        // TODO
+        GameClient client = new GameClient();
+        client.start();
     }
 }

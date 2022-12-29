@@ -39,7 +39,15 @@ mvn package
 
 <br />
 
-2. Run the application:
+2. Start the server:
+
+```
+java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.Server.GameServer
+```
+
+<br />
+
+3. Run the application:
 
     * The console application:
 

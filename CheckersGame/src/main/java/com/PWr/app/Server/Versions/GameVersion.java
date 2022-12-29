@@ -1,7 +1,7 @@
-package com.PWr.app.Model.Versions;
+package com.PWr.app.Server.Versions;
 
-import com.PWr.app.Model.Boards.*;
-import com.PWr.app.Model.States.GameState;
+import com.PWr.app.Server.Boards.*;
+import com.PWr.app.Server.States.GameState;
 
 
 

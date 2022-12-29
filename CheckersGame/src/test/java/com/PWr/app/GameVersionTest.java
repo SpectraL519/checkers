@@ -1,9 +1,9 @@
 package com.PWr.app;
 
-import com.PWr.app.Model.GameModel;
-import com.PWr.app.Model.Versions.*;
-
 import org.junit.Test;
+
+import com.PWr.app.Server.Game;
+import com.PWr.app.Server.Versions.*;
 
 import static org.junit.Assert.assertThat;
 
@@ -20,15 +20,15 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 public class GameVersionTest {
     @Test
     public void shouldAnswerWithTrue () {
-        GameModel model = new GameModel();
+        Game game = new Game();
 
-        model.newGame("polish");
-        assertThat(model.getVersion(), instanceOf(PolishVersion.class));
+        game.newGame("polish");
+        assertThat(game.getVersion(), instanceOf(PolishVersion.class));
 
-        model.newGame("russian");
-        assertThat(model.getVersion(), instanceOf(RussianVersion.class));
+        game.newGame("russian");
+        assertThat(game.getVersion(), instanceOf(RussianVersion.class));
 
-        model.newGame("canadian");
-        assertThat(model.getVersion(), instanceOf(CanadianVersion.class));
+        game.newGame("canadian");
+        assertThat(game.getVersion(), instanceOf(CanadianVersion.class));
     }
 }

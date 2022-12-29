@@ -1,6 +1,6 @@
-package com.PWr.app.Model.Boards;
+package com.PWr.app.Server.Boards;
 
-import com.PWr.app.Model.States.GameState;
+import com.PWr.app.Server.States.GameState;
 
 
 

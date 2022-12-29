@@ -1,18 +1,59 @@
-package com.PWr.app.Model;
+package com.PWr.app.Server;
 
-import com.PWr.app.Model.Versions.*;
-import com.PWr.app.Model.Boards.Board;
-import com.PWr.app.Model.States.GameState;
+import java.io.*;
+import java.net.Socket;
+
+import com.PWr.app.Server.Boards.Board;
+import com.PWr.app.Server.States.GameState;
+import com.PWr.app.Server.Versions.*;
 
 
 
 
 
-public class GameModel {
+public class Game implements Runnable {
+    private Socket playerWhite;
+    private Socket playerBlack;
+
     private GameVersion version;
 
-    public GameModel () {}
 
+
+    public Game () {}
+
+    public Game (Socket playerWhite, Socket playerBlack) {
+        this.playerWhite = playerWhite;
+        this.playerBlack = playerBlack;
+    }
+
+
+
+    @Override
+    public void run () {
+        try {
+            BufferedReader inWhite = new BufferedReader(new InputStreamReader(playerWhite.getInputStream()));
+            PrintWriter outWhite = new PrintWriter(playerWhite.getOutputStream(), true);
+
+            BufferedReader inBlack = new BufferedReader(new InputStreamReader(playerBlack.getInputStream()));
+            PrintWriter outBlack = new PrintWriter(playerBlack.getOutputStream(), true);
+
+
+
+            outWhite.println("Playing as white!\nTo start enter `newGame <version>`");
+            outBlack.println("Playing as black!\nWaiting for the game to start...");
+
+
+
+            while (true) {
+                // TODO
+            }
+        }
+        catch (IOException e) {
+            System.err.println("IOError:");
+            e.printStackTrace();
+        }
+    }
+ 
 
 
     public void newGame (String v) {
