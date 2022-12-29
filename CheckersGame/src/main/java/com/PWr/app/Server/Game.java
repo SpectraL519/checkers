@@ -13,7 +13,14 @@ import com.PWr.app.Server.Versions.*;
 
 public class Game implements Runnable {
     private Socket playerWhite;
+    private BufferedReader inWhite;
+    private PrintWriter outWhite;
+    private CommandLine cmdWhite;
+    
     private Socket playerBlack;
+    private BufferedReader inBlack;
+    private PrintWriter outBlack;
+    private CommandLine cmdBlack;
 
     private GameVersion version;
 
@@ -31,25 +38,40 @@ public class Game implements Runnable {
     @Override
     public void run () {
         try {
-            BufferedReader inWhite = new BufferedReader(new InputStreamReader(playerWhite.getInputStream()));
-            PrintWriter outWhite = new PrintWriter(playerWhite.getOutputStream(), true);
+            this.inWhite = new BufferedReader(new InputStreamReader(this.playerWhite.getInputStream()));
+            this.outWhite = new PrintWriter(this.playerWhite.getOutputStream(), true);
+            this.cmdWhite = new CommandLine(this, inWhite, outWhite);
+            
+            this.inBlack = new BufferedReader(new InputStreamReader(this.playerBlack.getInputStream()));
+            this.outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
+            this.cmdBlack = new CommandLine(this, inBlack, outBlack);
 
-            BufferedReader inBlack = new BufferedReader(new InputStreamReader(playerBlack.getInputStream()));
-            PrintWriter outBlack = new PrintWriter(playerBlack.getOutputStream(), true);
-
-
-
-            outWhite.println("Playing as white!\nTo start enter `newGame <version>`");
-            outBlack.println("Playing as black!\nWaiting for the game to start...");
+            this.outWhite.println("Playing as white!\nTo start enter `newGame <version>`");
+            this.outBlack.println("Playing as black!\nWaiting for the game to start...");
 
 
 
             while (true) {
-                // TODO
+                if (this.version == null) {
+                    // white selects the game mode
+                    System.out.println("Waiting for player WHITE to select game mode...");
+                    this.cmdWhite.getCommand();
+                }
+                else {
+                    if (this.getState() == GameState.WHITE) {
+                        this.cmdWhite.getCommand();
+                    }
+                    else if (this.getState() == GameState.BLACK) {
+                        this.cmdBlack.getCommand();
+                    }
+                    else {
+                        System.out.println("Error: Invalid game state!");
+                    }
+                }
             }
         }
         catch (IOException e) {
-            System.err.println("IOError:");
+            System.err.println("IOError: " + e.getMessage());
             e.printStackTrace();
         }
     }

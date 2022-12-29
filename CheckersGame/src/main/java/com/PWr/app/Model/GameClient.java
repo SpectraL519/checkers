@@ -6,25 +6,25 @@ import com.PWr.app.Server.States.GameState;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 
 
 
 public class GameClient {
+    // TODO: Change project structure
+    // Separate maven projects for the game server and for the game client
+
     private Socket socket;
     private BufferedReader input;
     private PrintWriter output;
 
-    private CommandLine cmd;
-
-    private int player;
-    private final int WHITE = 1;
-    private final int BLACK = 2;
+    private Scanner stdInScanner;
 
 
 
     public GameClient () {
-        this.cmd = new CommandLine(this);
+        this.stdInScanner = new Scanner(System.in);
     }
 
 
@@ -34,7 +34,15 @@ public class GameClient {
         this.getInit();
 
         while (true) {
-            
+            try{
+                System.out.print(this.input.readLine());
+                this.output.println(this.stdInScanner.nextLine());
+                System.out.println(this.input.readLine());
+            }
+            catch (IOException e) {
+                System.err.println("IOError: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -60,95 +68,12 @@ public class GameClient {
 
     private void getInit () {
         try {
-            System.out.println(input.readLine());
-            System.out.println(input.readLine());
+            System.out.println(this.input.readLine());
+            System.out.println(this.input.readLine());
         }
         catch (IOException e) {
             System.out.println("I/O error");
             System.exit(1);
         }
-    }
-
-
-
-    public void newGame (String v) {
-        // TODO
-    }
-
-
-
-    public GameVersion getVersion () {
-        // TODO
-        return null;
-    }
-
-
-
-    public void initBoard () {
-        // TODO
-    }
-
-
-
-    public void displayBoard () {
-        // TODO
-    }
-
-
-
-    public Board getBoard () {
-        // TODO
-        return null;
-    }
-
-
-
-    public GameState getState () {
-        // TODO
-        return null;
-    }
-
-
-
-    public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
-        // TODO
-        return -1;
-    }
-
-
-
-    public void endGame () {
-        // TODO
-    }
-
-
-
-    public void restartGame () {
-        // TODO
-    }
-
-
-
-    public void mockEndgame (String player) {
-        // TODO
-    }
-
-
-
-    public void mockQueenEndgame (String player) {
-        // TODO
-    }
-
-
-
-    public void mockPawnToQueen (String player) {
-        // TODO
-    }
-
-
-
-    public int longestMove (int r, int c) {
-        // TODO
-        return -1;
     }
 }
