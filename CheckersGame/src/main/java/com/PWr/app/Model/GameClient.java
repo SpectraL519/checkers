@@ -1,9 +1,5 @@
 package com.PWr.app.Model;
 
-import com.PWr.app.Server.Boards.Board;
-import com.PWr.app.Server.Versions.GameVersion;
-import com.PWr.app.Server.States.GameState;
-
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -35,9 +31,16 @@ public class GameClient {
 
         while (true) {
             try{
-                System.out.print(this.input.readLine());
-                this.output.println(this.stdInScanner.nextLine());
-                System.out.println(this.input.readLine());
+                String line = this.input.readLine();
+                System.out.print(line);
+                
+                if (line.startsWith("cmd:")) {
+                    this.output.println(this.stdInScanner.nextLine()); // send command (args)
+                    System.out.println(this.input.readLine()); // print message
+                }
+                else {
+                    System.out.println();
+                }
             }
             catch (IOException e) {
                 System.err.println("IOError: " + e.getMessage());

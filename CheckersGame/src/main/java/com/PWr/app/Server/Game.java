@@ -55,14 +55,22 @@ public class Game implements Runnable {
                 if (this.version == null) {
                     // white selects the game mode
                     System.out.println("Waiting for player WHITE to select game mode...");
-                    this.cmdWhite.getCommand();
+                    
+                    String message = this.cmdWhite.execCommand();
+                    this.cmdWhite.sendMessage(message);
+                    this.cmdBlack.sendMessage("(white) " + message);
                 }
                 else {
-                    if (this.getState() == GameState.WHITE) {
-                        this.cmdWhite.getCommand();
+                    GameState state = this.getState();
+                    if (state == GameState.WHITE) {
+                        String message = this.cmdWhite.execCommand();
+                        this.cmdWhite.sendMessage(message);
+                        this.cmdBlack.sendMessage("(white) " + message);
                     }
-                    else if (this.getState() == GameState.BLACK) {
-                        this.cmdBlack.getCommand();
+                    else if (state == GameState.BLACK) {
+                        String message = this.cmdBlack.execCommand();
+                        this.cmdWhite.sendMessage("(black) " + message);
+                        this.cmdBlack.sendMessage(message);
                     }
                     else {
                         System.out.println("Error: Invalid game state!");

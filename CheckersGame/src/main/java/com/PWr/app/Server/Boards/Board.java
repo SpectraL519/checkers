@@ -19,6 +19,11 @@ public abstract class Board {
     protected int cPrevTake;
 
     protected GameStateBahaviour state;
+    
+    // TODO: add error codes (here and in the Game.java class)
+    // In the Game.java class add method: getErrorMessage(int errorNo)
+    protected int GAME_NOT_STARED = -1;
+    // ...
 
 
 
