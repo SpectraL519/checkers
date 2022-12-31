@@ -56,24 +56,61 @@ public class Game implements Runnable {
                     // white selects the game mode
                     System.out.println("Waiting for player WHITE to select game mode...");
                     
-                    String message = this.cmdWhite.execCommand();
-                    this.cmdWhite.sendMessage(message);
-                    this.cmdBlack.sendMessage("(white) " + message);
+                    try {
+                        String message = this.cmdWhite.execCommand();
+
+                        if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                            this.cmdWhite.sendMessage(message);
+                        }
+                        else {
+                            this.cmdWhite.sendMessage(message);
+                            this.cmdBlack.sendMessage("(white) " + message);
+                        }
+                    }
+                    catch (ClassNotFoundException e) {
+                        System.out.println("Error: " + e.getMessage());
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     GameState state = this.getState();
                     if (state == GameState.WHITE) {
-                        String message = this.cmdWhite.execCommand();
-                        this.cmdWhite.sendMessage(message);
-                        this.cmdBlack.sendMessage("(white) " + message);
+                        try {
+                            String message = this.cmdWhite.execCommand();
+    
+                            if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                                this.cmdWhite.sendMessage(message);
+                            }
+                            else {
+                                this.cmdWhite.sendMessage(message);
+                                this.cmdBlack.sendMessage("(white) " + message);
+                            }
+                        }
+                        catch (ClassNotFoundException e) {
+                            System.out.println("Error: " + e.getMessage());
+                            e.printStackTrace();
+                        }
                     }
                     else if (state == GameState.BLACK) {
-                        String message = this.cmdBlack.execCommand();
-                        this.cmdWhite.sendMessage("(black) " + message);
-                        this.cmdBlack.sendMessage(message);
+                        try {
+                            String message = this.cmdBlack.execCommand();
+    
+                            if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                                this.cmdBlack.sendMessage(message);
+                            }
+                            else {
+                                this.cmdWhite.sendMessage(("(black) ") + message);
+                                this.cmdBlack.sendMessage(message);
+                            }
+                        }
+                        catch (ClassNotFoundException e) {
+                            System.out.println("Error: " + e.getMessage());
+                            e.printStackTrace();
+                        }
                     }
                     else {
-                        System.out.println("Error: Invalid game state!");
+                        this.cmdWhite.sendMessage("Error: Invalid game state!");
+                        this.cmdBlack.sendMessage("Error: Invalid game state!");
                     }
                 }
             }
@@ -82,6 +119,12 @@ public class Game implements Runnable {
             System.err.println("IOError: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+
+
+    public String getMoveErrorMessage (int errorNo) {
+        return this.version.getMoveErrorMessage(errorNo);
     }
  
 

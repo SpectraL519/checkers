@@ -7,7 +7,7 @@ import com.PWr.app.Server.States.*;
 
 
 // This is a factory class
-public abstract class Board {
+public abstract class Board implements java.io.Serializable {
     protected int size;
     protected int pawnLines;
 
@@ -19,11 +19,24 @@ public abstract class Board {
     protected int cPrevTake;
 
     protected GameStateBahaviour state;
-    
-    // TODO: add error codes (here and in the Game.java class)
-    // In the Game.java class add method: getErrorMessage(int errorNo)
-    protected int GAME_NOT_STARED = -1;
-    // ...
+
+    protected final static int MOVE_ALLOWED = 1;
+    protected final static int TAKE_ALLOWED = 2;
+    protected final static int SEQUENTIAL_TAKE_ALLOWED = 3;
+    protected final static int WHITE_WINS = 10;
+    protected final static int BLACK_WINS = 20;
+
+    protected final static int NOT_OPTIMAL_TAKE = 0;
+    protected final static int GAME_NOT_STARED = -1;
+    protected final static int CURR_NOT_ON_BOARD = -2;
+    protected final static int MOV_NOT_ON_BOARD = -3;
+    protected final static int INVALID_PLAYER = -4;
+    protected final static int PAWN_ON_MOV = -5;
+    protected final static int INVALID_STEP = -6;
+    protected final static int FORCED_TAKE_ERROR = -7;
+    protected final static int SEQUENTIAL_TAKE_ERROR = -8;
+    protected final static int CLONE_ERROR = -9;
+    protected final static int UNKNOWN_ERROR = -10;
 
 
 
@@ -201,7 +214,7 @@ public abstract class Board {
             System.out.printf("Pawn moved: (%d,%d) -> (%d,%d)\n", rCurr, cCurr, rMov, cMov);
 
             switch (check) {
-                case 1: {
+                case Board.MOVE_ALLOWED: {
                     // Moving the pawn
                     this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
                     this.fields[rCurr][cCurr] = 0;
@@ -215,10 +228,10 @@ public abstract class Board {
                     break;
                 }
 
-                case 2: {
+                case Board.TAKE_ALLOWED: {
                     if (!this.checkTakingPlayer(rCurr, cCurr)) {
                         System.out.println("Error: Sequential enemy pawn taking performed by invalid pawn");
-                        return -8;
+                        return Board.SEQUENTIAL_TAKE_ERROR;
                     }
                     
                     // Moving the pawn and taking an enemy pawn
@@ -243,14 +256,14 @@ public abstract class Board {
                         this.display();
                         System.out.println("White wins!\n");
                         this.state = this.state.endGame();
-                        return 10;
+                        return Board.WHITE_WINS;
                     }
 
                     if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
                         this.display();
                         System.out.println("Black wins!\n");
                         this.state = this.state.endGame();
-                        return 20;
+                        return Board.BLACK_WINS;
                     }
 
                     this.rPrevTake = -1;
@@ -259,10 +272,10 @@ public abstract class Board {
                     break;
                 }
 
-                case 3: {
+                case Board.SEQUENTIAL_TAKE_ALLOWED: {
                     if (!this.checkTakingPlayer(rCurr, cCurr)) {
                         System.out.println("Error: Sequential enemy pawn taking performed by invalid pawn");
-                        return -8;
+                        return Board.SEQUENTIAL_TAKE_ERROR;
                     }
 
                     // Moving the pawn and taking an enemy pawn
@@ -277,14 +290,14 @@ public abstract class Board {
                         this.display();
                         System.out.println("White wins!\n");
                         this.state = this.state.endGame();
-                        return 10;
+                        return Board.WHITE_WINS;
                     }
 
                     if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
                         this.display();
                         System.out.println("Black wins!\n");
                         this.state = this.state.endGame();
-                        return 20;
+                        return Board.BLACK_WINS;
                     }
 
                     this.rPrevTake = rMov;
@@ -294,66 +307,79 @@ public abstract class Board {
                 }
 
                 default: {
-                    System.out.println("Error: unknown flag - game ended!");
+                    check = Board.UNKNOWN_ERROR;
                     this.state = this.state.endGame();
-                    break;
-                }
-            }
-        }
-        else {
-            switch (check) {
-                case 0: {
-                    System.out.println("Error: Not optimal take!");
-                    break;
-                }
-
-                case -1: {
-                    System.out.println("Error: The game has not started yet!");
-                    break;
-                }
-
-                case -2: {
-                    System.out.printf("Error: The selected Current position (%d,%d) is not on the board!\n", rCurr, cCurr);
-                    break;
-                }
-
-                case -3: {
-                    System.out.printf("Error: The selected Movement position (%d,%d) is not on the board!\n", rMov, cMov);
-                    break;
-                }
-
-                case -4: {
-                    System.out.println("Error: Invalid position selected for the current player: " + this.state.getState() + "!");
-                    break;
-                }
-
-                case -5: {
-                    System.out.printf("Error: There is a pawn on the `Movement` position (%d,%d)!\n", rMov, cMov);
-                    break;
-                }
-
-                case -6: {
-                    System.out.printf("Error: Invalid step (%d,%d) -> (%d,%d)!\n", rCurr, cCurr, rMov, cMov);
-                    break;
-                }
-
-                case -7: {
-                    System.out.println("Error: Not taking an enemy pawn when it is possible!");
-                    break;
-                }
-
-                case -10: {
-                    System.out.println("Clone error!");
-                }
-
-                default: {
-                    System.out.println("Error: Unknown");
                     break;
                 }
             }
         }
 
         return check;
+    }
+
+
+
+    public String getMoveErrorMessage (int errorNo) {
+        String message = null;
+
+        switch (errorNo) {
+            case Board.NOT_OPTIMAL_TAKE: {
+                message = "Error: Not optimal take";
+                break;
+            }
+
+            case Board.GAME_NOT_STARED: {
+                message = "Error: The game has not started yet";
+                break;
+            }
+
+            case Board.CURR_NOT_ON_BOARD: {
+                message = "Error: The selected `Current` position is not on the board";
+                break;
+            }
+
+            case Board.MOV_NOT_ON_BOARD: {
+                message = "Error: The selected `Movement` position is not on the board";
+                break;
+            }
+
+            case Board.INVALID_PLAYER: {
+                message = "Error: Invalid position selected for the current player: " + this.state.getState();
+                break;
+            }
+
+            case Board.PAWN_ON_MOV: {
+                message = "Error: There is a pawn on the `Movement` position";
+                break;
+            }
+
+            case Board.INVALID_STEP: {
+                message = "Error: Invalid step";
+                break;
+            }
+
+            case Board.FORCED_TAKE_ERROR: {
+                message = "Error: Not taking an enemy pawn when it is possible";
+                break;
+            }
+
+            case Board.SEQUENTIAL_TAKE_ERROR: {
+                message = "Error: Invalid sequential taking";
+                break;
+            }
+
+            case Board.CLONE_ERROR: {
+                message = "Error: Clone";
+                break;
+            }
+
+            default: {
+                message = "Error: Unknown";
+                break;
+            }
+        }
+
+        return message;
     }
 
 

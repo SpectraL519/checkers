@@ -1,34 +1,34 @@
 package com.PWr.app.Server;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.IOException;
+import java.io.*;
 
 
 
 
 
 final class CommandLine {
-    private BufferedReader input;
-    private PrintWriter output;
     private Game game;
 
+    private BufferedReader input;
+    private PrintWriter output;
 
 
-    CommandLine (Game model, BufferedReader input, PrintWriter output) {
-        this.game = model;
+
+    public CommandLine (Game game, BufferedReader input, PrintWriter output) {
+        this.game = game;
         this.input = input;
         this.output = output;
     }
 
 
 
-    public String execCommand () throws IOException {
+    public String execCommand () throws IOException, ClassNotFoundException {
         // TODO: displaying the board in the clients window
         this.output.println("cmd: ");
 
-        String command = this.input.readLine().trim().replaceAll(" +", " ");
-        String[] args = command.split(" ");
+        // String command = this.input.readLine();
+        String command = (String) this.input.readLine();
+        String[] args = command.trim().replaceAll(" +", " ").split(" ");
         String message = null;
         
         switch (args[0]) {
@@ -49,7 +49,7 @@ final class CommandLine {
 
             case "newGame": {
                 if (this.game.getVersion() != null) {
-                    message = "Cannot start a new game - the game has already started!";
+                    message = "Error: Cannot start a new game - the game has already started!";
                     break;
                 }
 
@@ -68,7 +68,7 @@ final class CommandLine {
 
             case "movePawn": {
                 if (this.game.getVersion() == null) {
-                    message = "Cannot move a pawn - the game hasn't started yet!";
+                    message = "Error: Cannot move a pawn - the game hasn't started yet!";
                     break;
                 }
 
@@ -84,8 +84,7 @@ final class CommandLine {
                     message = String.format("Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
                 }
                 else {
-                    // TODO:
-                    // message = this.game.getErrorMessage(status);
+                    message = this.game.getMoveErrorMessage(status);
                 }
 
                 break;
@@ -93,7 +92,7 @@ final class CommandLine {
 
             case "restartGame": {
                 if (this.game.getVersion() == null) {
-                    message = "Cannot restart a game - the game hasn't started yet!";
+                    message = "Error: Cannot restart a game - the game hasn't started yet!";
                     break;
                 }
 
@@ -106,7 +105,7 @@ final class CommandLine {
 
             case "endGame": {
                 if (this.game.getVersion() == null) {
-                    message = "Cannot end a game - the game hasn't started yet!";
+                    message = "Error: Cannot end a game - the game hasn't started yet!";
                     break;
                 }
 
@@ -118,7 +117,7 @@ final class CommandLine {
 
             case "mockEndgame": {
                 if (this.game.getVersion() == null) {
-                    message = "Cannot mock an endgame situation - the game hasn't started yet!";
+                    message = "Error: Cannot mock an endgame situation - the game hasn't started yet!";
                     break;
                 }
 
@@ -131,7 +130,7 @@ final class CommandLine {
 
             case "mockQueenEndgame": {
                 if (this.game.getVersion() == null) {
-                    message = "Cannot mock a queen endgame situation - the game hasn't started yet!";
+                    message = "Error: Cannot mock a queen endgame situation - the game hasn't started yet!";
                     break;
                 }
                 
@@ -144,7 +143,7 @@ final class CommandLine {
 
             case "mockPawnToQueen": {
                 if (this.game.getVersion() == null) {
-                    message = "Cannot mock a pawn to queen situation - the game hasn't started yet!";
+                    message = "Error: Cannot mock a pawn to queen situation - the game hasn't started yet!";
                     break;
                 }
                 
@@ -157,7 +156,7 @@ final class CommandLine {
 
             case "longestMove": {
                 if (this.game.getVersion() == null) {
-                    message = "Cannot calculate the longest move - the game hasn't started yet!";
+                    message = "Error: Cannot calculate the longest move - the game hasn't started yet!";
                     break;
                 }
 
@@ -171,7 +170,7 @@ final class CommandLine {
             // }
 
             default: {
-                message = "Invalid command!\nTo get a commands' overview type 'help'";
+                message = "Error: Invalid command\nTo get a commands' overview type 'help'";
             }
         }
 
@@ -184,7 +183,12 @@ final class CommandLine {
 
 
 
-    public void sendMessage (String message) {
+    public void sendMessage (String message) throws IOException {
         this.output.println(message);
+
+        // TODO: sending a board description object
+        // Example: 
+        // In classes Board, Version, Game add function - ArrayList <int> getBoardDescription () {...}
+        // Here add: this.output.println(this.game.getBoardDescription().toString());
     }
 }

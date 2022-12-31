@@ -48,6 +48,12 @@ public abstract class GameVersion {
 
 
 
+    public String getMoveErrorMessage (int errorNo) {
+        return this.board.getMoveErrorMessage(errorNo);
+    }
+
+
+
     public abstract void reset ();
 
 
