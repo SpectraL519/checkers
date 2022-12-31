@@ -201,7 +201,6 @@ public abstract class Board implements java.io.Serializable {
 
 
 
-    // TODO: Printing messages via getMessage(check) method
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
         // < 0: move NOT ok - genereal errrors
         // 0: move NOT ok - not optimal take
@@ -230,7 +229,6 @@ public abstract class Board implements java.io.Serializable {
 
                 case Board.TAKE_ALLOWED: {
                     if (!this.checkTakingPlayer(rCurr, cCurr)) {
-                        System.out.println("Error: Sequential enemy pawn taking performed by invalid pawn");
                         return Board.SEQUENTIAL_TAKE_ERROR;
                     }
                     
@@ -244,24 +242,21 @@ public abstract class Board implements java.io.Serializable {
 
                     try {
                         if (this.pawnToQueen(rCurr, cCurr, rMov, cMov) && this.longestPawnTake(rMov, cMov) == 0) {
-                            System.out.println("Pawn changed to queen");
                             this.fields[rMov][cMov] *= 10;
                         }
                     }
                     catch (CloneNotSupportedException e) {
-                        System.out.println("Clone error!");
+                        return Board.CLONE_ERROR;
                     }
 
                     if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
                         this.display();
-                        System.out.println("White wins!\n");
                         this.state = this.state.endGame();
                         return Board.WHITE_WINS;
                     }
 
                     if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
                         this.display();
-                        System.out.println("Black wins!\n");
                         this.state = this.state.endGame();
                         return Board.BLACK_WINS;
                     }
@@ -274,7 +269,6 @@ public abstract class Board implements java.io.Serializable {
 
                 case Board.SEQUENTIAL_TAKE_ALLOWED: {
                     if (!this.checkTakingPlayer(rCurr, cCurr)) {
-                        System.out.println("Error: Sequential enemy pawn taking performed by invalid pawn");
                         return Board.SEQUENTIAL_TAKE_ERROR;
                     }
 
@@ -288,14 +282,12 @@ public abstract class Board implements java.io.Serializable {
 
                     if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
                         this.display();
-                        System.out.println("White wins!\n");
                         this.state = this.state.endGame();
                         return Board.WHITE_WINS;
                     }
 
                     if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
                         this.display();
-                        System.out.println("Black wins!\n");
                         this.state = this.state.endGame();
                         return Board.BLACK_WINS;
                     }
@@ -319,10 +311,35 @@ public abstract class Board implements java.io.Serializable {
 
 
 
-    public String getMoveErrorMessage (int errorNo) {
+    public String getMoveMessage (int status) {
         String message = null;
 
-        switch (errorNo) {
+        switch (status) {
+            case Board.MOVE_ALLOWED: {
+                message = "Move allowed";
+                break;
+            }
+
+            case Board.TAKE_ALLOWED: {
+                message = "Take allowed";
+                break;
+            }
+
+            case Board.SEQUENTIAL_TAKE_ALLOWED: {
+                message = "Sequential take allowed";
+                break;
+            }
+
+            case Board.WHITE_WINS: {
+                message = "White wins!";
+                break;
+            }
+
+            case Board.BLACK_WINS: {
+                message = "Black wins!";
+                break;
+            }
+
             case Board.NOT_OPTIMAL_TAKE: {
                 message = "Error: Not optimal take";
                 break;
@@ -717,7 +734,6 @@ public abstract class Board implements java.io.Serializable {
 
 
 
-    // TODO
     protected int longestQueenTake (int r, int c) throws CloneNotSupportedException {
         if (!this.isOnBoard(r, c)) {
             return 0;

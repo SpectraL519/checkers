@@ -60,3 +60,26 @@ java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.Server.GameServer
     ```
     mvn clean javafx:run
     ```
+
+<br />
+<br />
+<br />
+
+# TODO:
+
+* exit command handling to the GameClient class
+
+* Change project structure. Separate maven projects for the game server and for the game client.
+
+* Sending the game board to the client: 
+
+```
+// Example: 
+// In classes Board, Version, Game add function: 
+ArrayList <int> getBoardDescription () {...}
+
+// In CommandLine.sendMessage() add: 
+this.output.println(this.game.getBoardDescription().toString());
+
+// In GameClient class add reading the board
+```

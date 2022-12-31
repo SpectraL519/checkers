@@ -23,7 +23,6 @@ final class CommandLine {
 
 
     public String execCommand () throws IOException, ClassNotFoundException {
-        // TODO: displaying the board in the clients window
         this.output.println("cmd: ");
 
         // String command = this.input.readLine();
@@ -81,10 +80,10 @@ final class CommandLine {
 
                 if (status > 0) {
                     this.game.displayBoard();
-                    message = String.format("Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
+                    message = this.game.getMoveMessage(status) + String.format(":\n\tPawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
                 }
                 else {
-                    message = this.game.getMoveErrorMessage(status);
+                    message = this.game.getMoveMessage(status);
                 }
 
                 break;
@@ -163,11 +162,6 @@ final class CommandLine {
                 message = "Longest move: " + this.game.longestMove(Integer.parseInt(args[1]), Integer.parseInt(args[2])) + "\n";
                 break;
             }
-            
-            // TODO: move exit command handling to the GameClient class
-            // case "exit": {
-            //     System.exit(0);
-            // }
 
             default: {
                 message = "Error: Invalid command\nTo get a commands' overview type 'help'";
@@ -185,10 +179,5 @@ final class CommandLine {
 
     public void sendMessage (String message) throws IOException {
         this.output.println(message);
-
-        // TODO: sending a board description object
-        // Example: 
-        // In classes Board, Version, Game add function - ArrayList <int> getBoardDescription () {...}
-        // Here add: this.output.println(this.game.getBoardDescription().toString());
     }
 }

@@ -1,7 +1,5 @@
 package com.PWr.app;
 
-import com.PWr.app.Server.Boards.Board;
-
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -11,9 +9,6 @@ import java.util.Scanner;
 
 // MVC::Model class
 public class GameClient {
-    // TODO: Change project structure
-    // Separate maven projects for the game server and for the game client
-
     private Socket socket;
     private BufferedReader input;
     private PrintWriter output;
@@ -34,8 +29,7 @@ public class GameClient {
 
         while (true) {
             try{
-                // String line = this.input.readLine();
-                String line = (String) this.input.readLine();
+                String line = this.input.readLine();
                 System.out.print(line);
                 
                 if (line.startsWith("cmd:")) {

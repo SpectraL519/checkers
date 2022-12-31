@@ -123,8 +123,8 @@ public class Game implements Runnable {
 
 
 
-    public String getMoveErrorMessage (int errorNo) {
-        return this.version.getMoveErrorMessage(errorNo);
+    public String getMoveMessage (int errorNo) {
+        return this.version.getMoveMessage(errorNo);
     }
  
 
