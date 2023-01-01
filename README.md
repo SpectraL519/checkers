@@ -75,7 +75,7 @@ java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.Server.GameServer
 
 ```
 // Example: 
-// In classes Board, Version, Game add function: 
+// In classes Board, Version, Game add functions:
 ArrayList <int> getBoardDescription () {...}
 
 // In CommandLine.sendMessage() add: 

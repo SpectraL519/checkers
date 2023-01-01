@@ -22,11 +22,10 @@ final class CommandLine {
 
 
 
-    public String execCommand () throws IOException, ClassNotFoundException {
+    public String execCommand () throws IOException {
         this.output.println("cmd: ");
 
-        // String command = this.input.readLine();
-        String command = (String) this.input.readLine();
+        String command =  this.input.readLine();
         String[] args = command.trim().replaceAll(" +", " ").split(" ");
         String message = null;
         
@@ -59,7 +58,7 @@ final class CommandLine {
                 }
 
                 this.game.initBoard();
-                this.game.displayBoard();
+                // this.displayBoard(this.input.readLine());
 
                 message = "New game started: " + args[1];
                 break;
@@ -79,8 +78,8 @@ final class CommandLine {
                 int status = this.game.movePawn(rCurr, cCurr, rMov, cMov);
 
                 if (status > 0) {
-                    this.game.displayBoard();
-                    message = this.game.getMoveMessage(status) + String.format(":\n\tPawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
+                    // this.displayBoard(this.input.readLine());
+                    message = this.game.getMoveMessage(status) + String.format(" ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
                 }
                 else {
                     message = this.game.getMoveMessage(status);
@@ -96,7 +95,7 @@ final class CommandLine {
                 }
 
                 this.game.restartGame();
-                this.game.displayBoard();
+                // this.displayBoard(this.input.readLine());
 
                 message = "Game restarted!";
                 break;
@@ -121,7 +120,7 @@ final class CommandLine {
                 }
 
                 this.game.mockEndgame(args[1]);
-                this.game.displayBoard();
+                // this.displayBoard(this.input.readLine());
 
                 message = "Mocking an endgame situation for player " + args[1] + "...";
                 break;
@@ -134,7 +133,7 @@ final class CommandLine {
                 }
                 
                 this.game.mockQueenEndgame(args[1]);
-                this.game.displayBoard();
+                // this.displayBoard(this.input.readLine());
 
                 message = "Mocking a queen endgame situation for player " + args[1] + "...";
                 break;
@@ -147,7 +146,7 @@ final class CommandLine {
                 }
                 
                 this.game.mockPawnToQueen(args[1]);
-                this.game.displayBoard();
+                // this.displayBoard(this.input.readLine());
 
                 message = "Mocking a pawn to queen situation for player " + args[1] + "...";
                 break;
@@ -164,7 +163,7 @@ final class CommandLine {
             }
 
             default: {
-                message = "Error: Invalid command\nTo get a commands' overview type 'help'";
+                message = "Error: Invalid command - To get a commands' overview type 'help'";
             }
         }
 
@@ -179,5 +178,13 @@ final class CommandLine {
 
     public void sendMessage (String message) throws IOException {
         this.output.println(message);
+
+        if (this.game.getBoard() == null) {
+            System.out.println("Null board");
+            this.output.println("");
+            return;
+        }
+        
+        this.output.println(this.game.getBoardDescription());
     }
 }

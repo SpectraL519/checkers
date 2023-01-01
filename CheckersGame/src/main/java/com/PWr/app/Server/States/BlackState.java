@@ -34,4 +34,3 @@ public class BlackState implements GameStateBahaviour {
         return GameState.RESTING.getStateBahaviour();
     }
 }
-

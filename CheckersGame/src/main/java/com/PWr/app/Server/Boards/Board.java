@@ -7,7 +7,7 @@ import com.PWr.app.Server.States.*;
 
 
 // This is a factory class
-public abstract class Board implements java.io.Serializable {
+public abstract class Board {
     protected int size;
     protected int pawnLines;
 
@@ -37,112 +37,6 @@ public abstract class Board implements java.io.Serializable {
     protected final static int SEQUENTIAL_TAKE_ERROR = -8;
     protected final static int CLONE_ERROR = -9;
     protected final static int UNKNOWN_ERROR = -10;
-
-
-
-    // The following method is of functionality verification purposes only
-    public void mockEndgame (String player) {
-        this.fields = new int[this.size][this.size];
-        
-        int half = this.size / 2;
-        
-        this.fields[half][half - 1] = 1;
-        this.fields[half - 1][half] = 2;
-        
-        this.whitePawns = 1;
-        this.blackPawns = 1;
-
-        switch (player) {
-            case "white": {
-                this.state = GameState.WHITE.getStateBahaviour();
-                break;
-            }
-            
-            case "black": {
-                this.state = GameState.BLACK.getStateBahaviour();
-                break;
-            }
-            
-            default: {
-                System.out.println("Invalid player");
-                break;
-            }
-        }
-    }
-    
-    // The following method is of functionality verification purposes only
-    public void mockQueenEndgame (String player) {
-        this.fields = new int[this.size][this.size];
-
-        switch (player) {
-            case "white": {
-                this.fields[4][5] = 10;
-                this.fields[6][3] = 2;
-                this.fields[1][4] = 2;
-                this.fields[3][6] = 2;
-                this.fields[1][6] = 2;
-
-                this.whitePawns = 1;
-                this.blackPawns = 4;
-
-                this.state = GameState.WHITE.getStateBahaviour();
-                break;
-            }
-
-            case "black": {
-                this.fields[4][1] = 1;
-                this.fields[1][4] = 1;
-                this.fields[6][1] = 1;
-                this.fields[5][4] = 1;
-                this.fields[3][2] = 20;
-
-                this.whitePawns = 4;
-                this.blackPawns = 1;
-
-                this.state = GameState.BLACK.getStateBahaviour();
-                break;
-            }
-
-            default: {
-                System.out.println("Invalid player");
-                break;
-            }
-        }
-    }
-    
-    // The following method is of functionality verification purposes only
-    public void mockPawnToQueen (String player) {
-        this.fields = new int[this.size][this.size];
-        
-        switch (player) {
-            case "white": {
-                this.fields[1][this.size - 2] = 1;
-                this.fields[1][this.size - 4] = 2;
-                
-                this.whitePawns = 1;
-                this.blackPawns = 1;
-                
-                this.state = GameState.WHITE.getStateBahaviour();
-                break;
-            }
-            
-            case "black": {
-                this.fields[this.size - 2][3] = 1;
-                this.fields[this.size - 2][1] = 2;
-                
-                this.whitePawns = 1;
-                this.blackPawns = 1;
-                
-                this.state = GameState.BLACK.getStateBahaviour();
-                break;
-            }
-            
-            default: {
-                System.out.println("Invalid player");
-                break;
-            }
-        }
-    }
 
 
 
@@ -196,7 +90,23 @@ public abstract class Board implements java.io.Serializable {
         for (int c = 0; c < this.size; c++) {
             System.out.printf(" %d", c);
         }
-        System.out.printf("\n");
+        System.out.println();
+    }
+
+
+
+    public String getDescription () {
+        String description = "board:" + String.valueOf(this.size);
+
+        for (int r = 0; r < this.size; r++) {
+            for (int c = 0; c < this.size; c++) {
+                if (this.fields[r][c] > 0) {
+                    description += ";" + String.valueOf(r) + "," + String.valueOf(c) + "," + String.valueOf(this.fields[r][c]);
+                }
+            }
+        }
+        
+        return description;
     }
 
 
@@ -895,5 +805,117 @@ public abstract class Board implements java.io.Serializable {
 
 
         return 0;
+    }
+
+
+
+
+    
+    // The following methods are of functionality verification purposes only
+    public void mockEndgame (String player) {
+        this.fields = new int[this.size][this.size];
+        
+        int half = this.size / 2;
+        
+        this.fields[half][half - 1] = 1;
+        this.fields[half - 1][half] = 2;
+        
+        this.whitePawns = 1;
+        this.blackPawns = 1;
+
+        switch (player) {
+            case "white": {
+                this.state = GameState.WHITE.getStateBahaviour();
+                break;
+            }
+            
+            case "black": {
+                this.state = GameState.BLACK.getStateBahaviour();
+                break;
+            }
+            
+            default: {
+                System.out.println("Invalid player");
+                break;
+            }
+        }
+    }
+    
+
+
+
+
+    public void mockQueenEndgame (String player) {
+        this.fields = new int[this.size][this.size];
+
+        switch (player) {
+            case "white": {
+                this.fields[4][5] = 10;
+                this.fields[6][3] = 2;
+                this.fields[1][4] = 2;
+                this.fields[3][6] = 2;
+                this.fields[1][6] = 2;
+
+                this.whitePawns = 1;
+                this.blackPawns = 4;
+
+                this.state = GameState.WHITE.getStateBahaviour();
+                break;
+            }
+
+            case "black": {
+                this.fields[4][1] = 1;
+                this.fields[1][4] = 1;
+                this.fields[6][1] = 1;
+                this.fields[5][4] = 1;
+                this.fields[3][2] = 20;
+
+                this.whitePawns = 4;
+                this.blackPawns = 1;
+
+                this.state = GameState.BLACK.getStateBahaviour();
+                break;
+            }
+
+            default: {
+                System.out.println("Invalid player");
+                break;
+            }
+        }
+    }
+    
+
+    
+    public void mockPawnToQueen (String player) {
+        this.fields = new int[this.size][this.size];
+        
+        switch (player) {
+            case "white": {
+                this.fields[1][this.size - 2] = 1;
+                this.fields[1][this.size - 4] = 2;
+                
+                this.whitePawns = 1;
+                this.blackPawns = 1;
+                
+                this.state = GameState.WHITE.getStateBahaviour();
+                break;
+            }
+            
+            case "black": {
+                this.fields[this.size - 2][3] = 1;
+                this.fields[this.size - 2][1] = 2;
+                
+                this.whitePawns = 1;
+                this.blackPawns = 1;
+                
+                this.state = GameState.BLACK.getStateBahaviour();
+                break;
+            }
+            
+            default: {
+                System.out.println("Invalid player");
+                break;
+            }
+        }
     }
 }

@@ -1,11 +1,11 @@
 package com.PWr.app.Server;
 
-import java.io.*;
-import java.net.Socket;
-
 import com.PWr.app.Server.Boards.Board;
 import com.PWr.app.Server.States.GameState;
 import com.PWr.app.Server.Versions.*;
+
+import java.io.*;
+import java.net.Socket;
 
 
 
@@ -40,11 +40,11 @@ public class Game implements Runnable {
         try {
             this.inWhite = new BufferedReader(new InputStreamReader(this.playerWhite.getInputStream()));
             this.outWhite = new PrintWriter(this.playerWhite.getOutputStream(), true);
-            this.cmdWhite = new CommandLine(this, inWhite, outWhite);
+            this.cmdWhite = new CommandLine(this, this.inWhite, this.outWhite);
             
             this.inBlack = new BufferedReader(new InputStreamReader(this.playerBlack.getInputStream()));
             this.outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
-            this.cmdBlack = new CommandLine(this, inBlack, outBlack);
+            this.cmdBlack = new CommandLine(this, this.inBlack, this.outBlack);
 
             this.outWhite.println("Playing as white!\nTo start enter `newGame <version>`");
             this.outBlack.println("Playing as black!\nWaiting for the game to start...");
@@ -58,6 +58,7 @@ public class Game implements Runnable {
                     
                     try {
                         String message = this.cmdWhite.execCommand();
+                        System.out.println("(white) " + message);
 
                         if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
                             this.cmdWhite.sendMessage(message);
@@ -67,7 +68,7 @@ public class Game implements Runnable {
                             this.cmdBlack.sendMessage("(white) " + message);
                         }
                     }
-                    catch (ClassNotFoundException e) {
+                    catch (IOException e) {
                         System.out.println("Error: " + e.getMessage());
                         e.printStackTrace();
                     }
@@ -77,6 +78,7 @@ public class Game implements Runnable {
                     if (state == GameState.WHITE) {
                         try {
                             String message = this.cmdWhite.execCommand();
+                            System.out.println("(white) " + message);
     
                             if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
                                 this.cmdWhite.sendMessage(message);
@@ -86,7 +88,7 @@ public class Game implements Runnable {
                                 this.cmdBlack.sendMessage("(white) " + message);
                             }
                         }
-                        catch (ClassNotFoundException e) {
+                        catch (IOException e) {
                             System.out.println("Error: " + e.getMessage());
                             e.printStackTrace();
                         }
@@ -94,6 +96,7 @@ public class Game implements Runnable {
                     else if (state == GameState.BLACK) {
                         try {
                             String message = this.cmdBlack.execCommand();
+                            System.out.println("(black) " + message);
     
                             if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
                                 this.cmdBlack.sendMessage(message);
@@ -103,7 +106,7 @@ public class Game implements Runnable {
                                 this.cmdBlack.sendMessage(message);
                             }
                         }
-                        catch (ClassNotFoundException e) {
+                        catch (IOException e) {
                             System.out.println("Error: " + e.getMessage());
                             e.printStackTrace();
                         }
@@ -123,8 +126,8 @@ public class Game implements Runnable {
 
 
 
-    public String getMoveMessage (int errorNo) {
-        return this.version.getMoveMessage(errorNo);
+    public String getMoveMessage (int status) {
+        return this.version.getMoveMessage(status);
     }
  
 
@@ -132,25 +135,22 @@ public class Game implements Runnable {
     public void newGame (String v) {
         switch (v) {
             case "polish": {
-                System.out.println("Polish version has been selected");
                 this.version = new PolishVersion();
                 break;
             }
 
             case "russian": {
-                System.out.println("Russian version has been selected");
                 this.version = new RussianVersion();
                 break;
             }
 
             case "canadian": {
-                System.out.println("Canadian version has been selected");
                 this.version = new CanadianVersion();
                 break;
             }
 
             default: {
-                System.out.println("Invalid game version specified!");
+                System.out.println("Error: Invalid game version specified!");
                 break;
             }
         }
@@ -170,14 +170,20 @@ public class Game implements Runnable {
 
 
 
-    public void displayBoard () {
-        this.version.displayBoard();
+    public Board getBoard () {
+        return this.version.getBoard();
     }
 
 
 
-    public Board getBoard () {
-        return this.version.getBoard();
+    public String getBoardDescription () {
+        return this.version.getBoardDescription();
+    }
+    
+    
+    
+    public void displayBoard () {
+        this.version.displayBoard();
     }
 
 

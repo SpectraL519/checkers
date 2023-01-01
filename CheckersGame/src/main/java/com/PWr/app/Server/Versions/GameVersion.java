@@ -31,6 +31,12 @@ public abstract class GameVersion {
 
 
 
+    public String getBoardDescription () {
+        return this.board.getDescription();
+    }
+
+
+
     public GameState getState () {
         return this.board.getState();
     }
@@ -48,8 +54,8 @@ public abstract class GameVersion {
 
 
 
-    public String getMoveMessage (int errorNo) {
-        return this.board.getMoveMessage(errorNo);
+    public String getMoveMessage (int status) {
+        return this.board.getMoveMessage(status);
     }
 
 
