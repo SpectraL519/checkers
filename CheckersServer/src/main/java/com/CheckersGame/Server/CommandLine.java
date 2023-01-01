@@ -51,16 +51,22 @@ final class CommandLine {
                     break;
                 }
 
-                this.game.newGame(args[1]);
-                if (this.game.getVersion() == null) {
-                    message = "Error: Could not start a new game!";
-                    break;
+                try {
+                    this.game.newGame(args[1]);
+                    if (this.game.getVersion() == null) {
+                        message = "Error: Could not start a new game!";
+                        break;
+                    }
+    
+                    this.game.initBoard();
+                    // this.displayBoard(this.input.readLine());
+    
+                    message = "New game started: " + args[1];
+                }
+                catch (IndexOutOfBoundsException e) {
+                    message = "Error: Invalid number of arguments!";
                 }
 
-                this.game.initBoard();
-                // this.displayBoard(this.input.readLine());
-
-                message = "New game started: " + args[1];
                 break;
             }
 
@@ -70,19 +76,24 @@ final class CommandLine {
                     break;
                 }
 
-                int rCurr = Integer.parseInt(args[1]);
-                int cCurr = Integer.parseInt(args[2]);
-                int rMov = Integer.parseInt(args[3]); 
-                int cMov = Integer.parseInt(args[4]);
-
-                int status = this.game.movePawn(rCurr, cCurr, rMov, cMov);
-
-                if (status > 0) {
-                    // this.displayBoard(this.input.readLine());
-                    message = this.game.getMoveMessage(status) + String.format(" ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
+                try {
+                    int rCurr = Integer.parseInt(args[1]);
+                    int cCurr = Integer.parseInt(args[2]);
+                    int rMov = Integer.parseInt(args[3]); 
+                    int cMov = Integer.parseInt(args[4]);
+    
+                    int status = this.game.movePawn(rCurr, cCurr, rMov, cMov);
+    
+                    if (status > 0) {
+                        // this.displayBoard(this.input.readLine());
+                        message = this.game.getMoveMessage(status) + String.format(" ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
+                    }
+                    else {
+                        message = this.game.getMoveMessage(status);
+                    }
                 }
-                else {
-                    message = this.game.getMoveMessage(status);
+                catch (IndexOutOfBoundsException e) {
+                    message = "Error: Invalid number of arguments!";
                 }
 
                 break;
@@ -96,8 +107,8 @@ final class CommandLine {
 
                 this.game.restartGame();
                 // this.displayBoard(this.input.readLine());
-
                 message = "Game restarted!";
+
                 break;
             }
 
@@ -108,8 +119,8 @@ final class CommandLine {
                 }
 
                 this.game.endGame();
-
                 message = "Game ended!";
+
                 break;
             }
 
@@ -119,10 +130,15 @@ final class CommandLine {
                     break;
                 }
 
-                this.game.mockEndgame(args[1]);
-                // this.displayBoard(this.input.readLine());
+                try {
+                    this.game.mockEndgame(args[1]);
+                    // this.displayBoard(this.input.readLine());
+                    message = "Mocking an endgame situation for player " + args[1] + "...";
+                }
+                catch (IndexOutOfBoundsException e) {
+                    message = "Error: Invalid number of arguments!";
+                }
 
-                message = "Mocking an endgame situation for player " + args[1] + "...";
                 break;
             }
 
@@ -132,10 +148,15 @@ final class CommandLine {
                     break;
                 }
                 
-                this.game.mockQueenEndgame(args[1]);
-                // this.displayBoard(this.input.readLine());
+                try {
+                    this.game.mockQueenEndgame(args[1]);
+                    // this.displayBoard(this.input.readLine());
+                    message = "Mocking a queen endgame situation for player " + args[1] + "...";
+                }
+                catch (IndexOutOfBoundsException e) {
+                    message = "Error: Invalid number of arguments!";
+                }
 
-                message = "Mocking a queen endgame situation for player " + args[1] + "...";
                 break;
             }
 
@@ -145,10 +166,15 @@ final class CommandLine {
                     break;
                 }
                 
-                this.game.mockPawnToQueen(args[1]);
-                // this.displayBoard(this.input.readLine());
+                try {
+                    this.game.mockPawnToQueen(args[1]);
+                    // this.displayBoard(this.input.readLine());
+                    message = "Mocking a pawn to queen situation for player " + args[1] + "...";
+                }
+                catch (IndexOutOfBoundsException e) {
+                    message = "Error: Invalid number of arguments!";
+                }
 
-                message = "Mocking a pawn to queen situation for player " + args[1] + "...";
                 break;
             }
 
@@ -158,7 +184,13 @@ final class CommandLine {
                     break;
                 }
 
-                message = "Longest move: " + this.game.longestMove(Integer.parseInt(args[1]), Integer.parseInt(args[2])) + "\n";
+                try {
+                    message = "Longest move: " + this.game.longestMove(Integer.parseInt(args[1]), Integer.parseInt(args[2])) + "\n";
+                }
+                catch (IndexOutOfBoundsException e) {
+                    message = "Error: Invalid number of arguments!";
+                }
+
                 break;
             }
 
