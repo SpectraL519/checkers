@@ -1,12 +1,18 @@
 # Checkers - WIP
 Game of checkers in 3 different variants:
 
-**Table: Checkers game versions**
 | Lp. | Version  | Board size | Obliagtion of taking pawns |
 | :-: | :------: | :--------: | :------------------------: |
 | 1   | Polish   | 10 x 10    | Best                       |
 | 2   | Canadian | 12 x 12    | Best                       |
 | 3   | Russian  | 8 x 8      | Any                        | 
+
+<br />
+
+### Authors
+
+* Jakub Musiał: `Spectral519`
+* Krzysztof Dobrucki: `xywa5000`
 
 <br />
 
@@ -21,65 +27,63 @@ cd <project_directory>
 git clone https://github.com/SpectraL519/checkers.git
 ```
 
-3. Enter the maven project directory:
-
-```
-cd CheckersGame
-```
-
 <br />
+<br />
+
 
 ### Running the project
 
-1. First build the project with:
+1. Start the server:
 
 ```
+cd <project_directory>
+```
+
+<br />
+
+Use one of the following methods:
+
+```
+cd CheckersServer
 mvn package
+mvn clean compile exec:run
+```
+
+```
+cd CheckersServer
+mvn package
+java -cp target/CheckersServer-1.0-SNAPSHOT.jar com.CheckersGame.Server.GameServer
+```
+
+<br />
+<br />
+
+
+2. Run the client application:
+
+```
+cd <project_directory>
 ```
 
 <br />
 
-2. Start the server:
-
+* The console application (use one of the following methods):
 ```
-java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.Server.GameServer
+cd CheckersClient
+mvn package
+mvn clean compile exec:java
+```
+```
+cd CheckersClient
+mvn package
+java -cp target/CheckersClient-1.0-SNAPSHOT.jar com.CheckersGame.Client.ConsoleApp
 ```
 
 <br />
 
-3. Run the application:
-
-    * The console application:
-
-    ```
-    java -cp target/CheckersGame-1.0-SNAPSHOT.jar com.PWr.app.ConsoleApp
-    ```
-
-    * The GUI application:
-
-    ```
-    mvn clean javafx:run
-    ```
-
-<br />
-<br />
-<br />
-
-# TODO:
-
-* exit command handling to the GameClient class
-
-* Change project structure. Separate maven projects for the game server and for the game client.
-
-* Sending the game board to the client: 
-
+* The GUI application:
 ```
-// Example: 
-// In classes Board, Version, Game add functions:
-ArrayList <int> getBoardDescription () {...}
-
-// In CommandLine.sendMessage() add: 
-this.output.println(this.game.getBoardDescription().toString());
-
-// In GameClient class add reading the board
+cd CheckersClient
+mvn package
+mvn clean javafx:run
 ```
