@@ -1,12 +1,9 @@
-package com.CheckersGame;
+package com.CheckersGame.Server;
 
-import org.junit.Test;
-
-import com.CheckersGame.Server.Game;
 import com.CheckersGame.Server.Versions.*;
 
+import org.junit.Test;
 import static org.junit.Assert.assertThat;
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 
 

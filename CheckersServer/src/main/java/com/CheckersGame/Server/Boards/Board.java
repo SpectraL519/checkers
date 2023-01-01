@@ -36,7 +36,7 @@ public abstract class Board {
     protected final static int FORCED_TAKE_ERROR = -7;
     protected final static int SEQUENTIAL_TAKE_ERROR = -8;
     protected final static int CLONE_ERROR = -9;
-    protected final static int UNKNOWN_ERROR = -10;
+    public final static int UNKNOWN_ERROR = -10;
 
 
 

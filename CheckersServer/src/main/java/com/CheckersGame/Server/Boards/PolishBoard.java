@@ -72,7 +72,7 @@ public class PolishBoard extends Board implements Cloneable {
 
 
         boolean queen = this.isQueen(rCurr, cCurr);
-        int lt = longestTake();
+        int lt = this.longestTake();
 
         if (queen) {
             int[] queenStep = this.checkQueenStep(rCurr, cCurr, rMov, cMov);
@@ -83,7 +83,7 @@ public class PolishBoard extends Board implements Cloneable {
             if (this.checkQueenTake(rCurr, cCurr, queenStep[0], queenStep[1])) {
                 try {
                     // Check for the optimal take
-                    if (this.longestQueenTake(rCurr, cCurr) < lt) {
+                    if (this.longestQueenTake(rCurr, cCurr) < lt || 1 + this.longestQueenTake(rMov, cMov) < lt) {
                         return Board.NOT_OPTIMAL_TAKE;
                     }
 
@@ -121,7 +121,7 @@ public class PolishBoard extends Board implements Cloneable {
         if (this.checkPawnTake(rCurr, cCurr, pawnStep[0], pawnStep[1])) {
             try {
                 // Check for the optimal take
-                if (this.longestPawnTake(rCurr, cCurr) < lt) {
+                if (this.longestPawnTake(rCurr, cCurr) < lt || 1 + this.longestPawnTake(rMov, cMov) < lt) {
                     return Board.NOT_OPTIMAL_TAKE;
                 }
                 

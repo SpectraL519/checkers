@@ -165,36 +165,60 @@ public class Game implements Runnable {
 
 
     public void initBoard () {
+        if (this.version == null) {
+            return;
+        }
+
         this.version.initBoard();
     }
 
 
 
     public Board getBoard () {
+        if (this.version == null) {
+            return null;
+        }
+
         return this.version.getBoard();
     }
 
 
 
     public String getBoardDescription () {
+        if (this.version == null) {
+            return null;
+        }
+
         return this.version.getBoardDescription();
     }
     
     
     
     public void displayBoard () {
+        if (this.version == null) {
+            return;
+        }
+
         this.version.displayBoard();
     }
 
 
 
     public GameState getState () {
+        if (this.version == null) {
+            return null;
+        }
+
         return this.getBoard().getState();
     }
 
 
 
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
+        if (this.version == null) {
+            return Board.UNKNOWN_ERROR;
+        }
+
         int status = this.version.movePawn(rCurr, cCurr, rMov, cMov);
         
         if (status == 10 || status == 20) {
@@ -213,30 +237,50 @@ public class Game implements Runnable {
 
 
     public void restartGame () {
+        if (this.version == null) {
+            return;
+        }
+
         this.version.reset();
     }
 
 
 
     public void mockEndgame (String player) {
+        if (this.version == null) {
+            return;
+        }
+
         this.version.mockEndgame(player);
     }
 
 
 
     public void mockQueenEndgame (String player) {
+        if (this.version == null) {
+            return;
+        }
+
         this.version.mockQueenEndgame(player);
     }
 
 
 
     public void mockPawnToQueen (String player) {
+        if (this.version == null) {
+            return;
+        }
+
         this.version.mockPawnToQueen(player);
     }
 
 
 
     public int longestMove (int r, int c) {
+        if (this.version == null) {
+            return -1;
+        }
+
         return this.version.longestMove(r, c);
     }
 }

@@ -35,6 +35,7 @@ public class GameClient {
                     System.out.print(line);
 
                     String command = this.stdInScanner.nextLine();
+
                     if (command.equals("exit")) {
                         System.exit(0);
                     }
@@ -42,7 +43,7 @@ public class GameClient {
                     this.output.println(command); // send command (args)
 
                     String message = this.input.readLine();
-                    if (message.startsWith("Error")) {
+                    if (command.equals("endGame") || message.startsWith("Error")) {
                         System.out.println(message);
                         this.input.readLine(); // board description
                     }
