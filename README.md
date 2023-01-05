@@ -1,9 +1,18 @@
 # Checkers - WIP
-Game of checkers in 3 different variants
+Game of checkers in 3 different variants:
 
-* [Polish](https://pl.wikipedia.org/wiki/Warcaby_polskie)
-* German
-* Spanish
+| Lp. | Version  | Board size | Obliagtion of taking pawns |
+| :-: | :------: | :--------: | :------------------------: |
+| 1   | Polish   | 10 x 10    | Best                       |
+| 2   | Canadian | 12 x 12    | Best                       |
+| 3   | Russian  | 8 x 8      | Any                        | 
+
+<br />
+
+### Authors
+
+* Jakub Musiał: `Spectral519`
+* Krzysztof Dobrucki: `xywa5000`
 
 <br />
 
@@ -18,24 +27,63 @@ cd <project_directory>
 git clone https://github.com/SpectraL519/checkers.git
 ```
 
-3. Enter the maven project directory:
+<br />
+<br />
+
+
+### Running the project
+
+1. Start the server:
 
 ```
-cd CheckersGame
+cd <project_directory>
 ```
 
 <br />
 
-### Running the project
-
-1. First build the project with:
+Use one of the following methods:
 
 ```
+cd CheckersServer
 mvn package
+mvn clean compile exec:run
 ```
 
-2. Run the application:
+```
+cd CheckersServer
+mvn package
+java -cp target/CheckersServer-1.0-SNAPSHOT.jar com.CheckersGame.Server.GameServer
+```
+
+<br />
+<br />
+
+
+2. Run the client application:
 
 ```
+cd <project_directory>
+```
+
+<br />
+
+* The console application (use one of the following methods):
+```
+cd CheckersClient
+mvn package
+mvn clean compile exec:java
+```
+```
+cd CheckersClient
+mvn package
+java -cp target/CheckersClient-1.0-SNAPSHOT.jar com.CheckersGame.Client.ConsoleApp
+```
+
+<br />
+
+* The GUI application:
+```
+cd CheckersClient
+mvn package
 mvn clean javafx:run
 ```
