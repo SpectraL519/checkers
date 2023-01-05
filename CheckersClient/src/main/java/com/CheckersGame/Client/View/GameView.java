@@ -4,36 +4,54 @@ import javafx.scene.layout.BorderPane;
 
 
 
-
 public class GameView extends BorderPane {
+
     private Toolbar toolbar;
-    private GameBoard board;
+    public GameBoard board;
+    private GameInfo gameinfo;
+    private Creditsbar creditsbar;
 
-
-
-    public GameView (int boardSize) {
+    public GameView (int boardSize, int rowOfPawns) {
         // add params
-        this.setPrefSize(1024, 720);
-
         this.toolbar = new Toolbar();
-        this.toolbar.render();
-
-        this.board = new GameBoard(8, 600);
-        this.board.render();
+        this.creditsbar = new Creditsbar();
+        this.board = new GameBoard(boardSize, 600, rowOfPawns);
+        this.gameinfo = new GameInfo();
     }
 
     
 
-    public void render () {
-        this.setTop(this.toolbar);
-        this.setCenter(this.board);
+    private void renderToolbar () {
+        this.toolbar.render();
     }
 
-    public void renderToolbar () {}
+    private void renderBoard () {
+        this.board.render();
+    }
 
-    public void renderBoard () {}
+    private void renderGameinfo () {
+        this.gameinfo.render();
+    }
 
-    public void renderPawns () {}
+    private void renderCreditsbar () {
+        this.creditsbar.render();
+    }
 
-    public void movePawn () {}
+    // private void renderPawns () {}
+
+
+
+    public void render () {
+        this.renderToolbar();
+        this.renderBoard();
+        this.renderCreditsbar();
+        this.renderGameinfo();
+  
+        this.setTop(this.toolbar);
+        this.setBottom(this.creditsbar);
+        this.setLeft(this.board);
+        this.setRight(this.gameinfo);
+        
+    }
+
 }

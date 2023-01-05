@@ -7,15 +7,22 @@ import javafx.scene.paint.Color;
 
 
 
-
-
 public class Field extends Pane {
-    public Field (Color color, int pixelSize) {
+
+    public Pawn whitePawn;
+    public Pawn blackPawn;
+
+    public Field (Color color, int pixelSizeV, int pixelSizeH) {
         super();
-        this.setMinWidth(pixelSize);
-        this.setMaxWidth(pixelSize);
-        this.setMinHeight(pixelSize);
-        this.setMaxHeight(pixelSize);
+        this.setMinWidth(pixelSizeH);
+        this.setMaxWidth(pixelSizeH);
+        this.setMinHeight(pixelSizeV);
+        this.setMaxHeight(pixelSizeV);
         this.setBackground(new Background(new BackgroundFill(color, null, null)));
     }
+
+    public void showWhitePawn(boolean b){}
+
+    public void showBlackPawn(boolean b){}
+
 }

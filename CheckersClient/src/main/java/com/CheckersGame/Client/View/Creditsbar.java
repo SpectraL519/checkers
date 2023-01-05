@@ -1,7 +1,7 @@
 package com.CheckersGame.Client.View;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
@@ -9,30 +9,26 @@ import javafx.scene.paint.Color;
 
 
 
-public class Toolbar extends HBox {
-    public Toolbar () {
+public class Creditsbar extends HBox {
+    
+    public Creditsbar () {
         super();
     }
 
 
-    public void render () {
+    public void render() {
         this.setPadding(new Insets(7, 7, 7, 7));
         this.setSpacing(10);
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY,null,null)));
 
-        this.getChildren().addAll(new ExitButton(), new RestartButton());
+        this.getChildren().addAll(new CreditsLabel());
     }
 
 
-    class ExitButton extends Button {
-        public ExitButton () {
-            super("Exit game");
+    class CreditsLabel extends Label {
+        public CreditsLabel () {
+            super("CHECKERS 2022 (C)");
         }
     }
 
-    class RestartButton extends Button {
-        public RestartButton () {
-            super("Restart game");
-        }
-    }
 }
