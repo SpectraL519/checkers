@@ -6,14 +6,24 @@ import java.io.*;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the communication with clients
+ */
 final class CommandLine {
-    private Game game;
+    private Game game; /** An instance of the Game class by which the CommandLine has been instantiaded */
 
-    private BufferedReader input;
-    private PrintWriter output;
+    private BufferedReader input; /** The server's input stream handling masseges sent from a client */
+    private PrintWriter output; /** The server's output stream handling sending messages to a client */
 
 
-
+    /**
+     * CommandLine class constructor
+     * @param game
+     * @param input
+     * @param output
+     */
     public CommandLine (Game game, BufferedReader input, PrintWriter output) {
         this.game = game;
         this.input = input;
@@ -22,7 +32,15 @@ final class CommandLine {
 
 
 
+    
+    /** 
+     * Reads an input line sent by a client, from which it extracs the command to execute and tries to execute it.
+     * If the command execution fails, sends an error message to the client.
+     * @return String
+     * @throws IOException
+     */
     public String execCommand () throws IOException {
+        // TODO: add playAgain funcionality
         this.output.println("cmd: ");
 
         String command =  this.input.readLine();
@@ -58,9 +76,6 @@ final class CommandLine {
                         break;
                     }
     
-                    this.game.initBoard();
-                    // this.displayBoard(this.input.readLine());
-    
                     message = "New game started: " + args[1];
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -85,7 +100,6 @@ final class CommandLine {
                     int status = this.game.movePawn(rCurr, cCurr, rMov, cMov);
     
                     if (status > 0) {
-                        // this.displayBoard(this.input.readLine());
                         message = this.game.getMoveMessage(status) + String.format(" ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
                     }
                     else {
@@ -105,8 +119,7 @@ final class CommandLine {
                     break;
                 }
 
-                this.game.restartGame();
-                // this.displayBoard(this.input.readLine());
+                this.game.restart();
                 message = "Game restarted!";
 
                 break;
@@ -118,7 +131,7 @@ final class CommandLine {
                     break;
                 }
 
-                this.game.endGame();
+                this.game.end();
                 message = "Game ended!";
 
                 break;
@@ -132,7 +145,6 @@ final class CommandLine {
 
                 try {
                     this.game.mockEndgame(args[1]);
-                    // this.displayBoard(this.input.readLine());
                     message = "Mocking an endgame situation for player " + args[1] + "...";
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -150,7 +162,6 @@ final class CommandLine {
                 
                 try {
                     this.game.mockQueenEndgame(args[1]);
-                    // this.displayBoard(this.input.readLine());
                     message = "Mocking a queen endgame situation for player " + args[1] + "...";
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -168,7 +179,6 @@ final class CommandLine {
                 
                 try {
                     this.game.mockPawnToQueen(args[1]);
-                    // this.displayBoard(this.input.readLine());
                     message = "Mocking a pawn to queen situation for player " + args[1] + "...";
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -207,7 +217,23 @@ final class CommandLine {
     }
 
 
+    
+    /** 
+     * Sends a initial message to a client.
+     * @param message
+     * @throws IOException
+     */
+    public void sendInit (String message) throws IOException {
+        this.output.println(message);
+    }
 
+
+
+    /** 
+     * Sends a message and a current game board description (if the board has been initialized) to a client.
+     * @param message
+     * @throws IOException
+     */
     public void sendMessage (String message) throws IOException {
         this.output.println(message);
 

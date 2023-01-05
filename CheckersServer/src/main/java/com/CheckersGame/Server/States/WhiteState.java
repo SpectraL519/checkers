@@ -4,7 +4,15 @@ package com.CheckersGame.Server.States;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the WHITE player's turn (state)
+ */
 public class WhiteState implements GameStateBahaviour {
+    /** 
+     * @return GameState.WHITE
+     */
     @Override
     public GameState getState () {
         return GameState.WHITE;
@@ -12,6 +20,9 @@ public class WhiteState implements GameStateBahaviour {
 
 
 
+    /** 
+     * @return WhiteState (this)
+     */
     @Override
     public GameStateBahaviour startGame () {
         // The game has already started
@@ -20,6 +31,9 @@ public class WhiteState implements GameStateBahaviour {
 
 
 
+    /** 
+     * @return BlackState instance
+     */
     @Override
     public GameStateBahaviour switchPlayer () {
         // Switch player to black
@@ -28,6 +42,9 @@ public class WhiteState implements GameStateBahaviour {
 
 
 
+    /** 
+     * @return RestingState instance
+     */
     @Override
     public GameStateBahaviour endGame () {
         // Switch to resting state

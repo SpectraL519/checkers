@@ -6,10 +6,18 @@ import com.CheckersGame.Server.States.GameState;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the polish checkers game board operations
+ */
 public class PolishBoard extends Board implements Cloneable {
+    /**
+     * PolishBoard class constructor
+     */
     public PolishBoard () {
         this.size = 10;
-        this.pawnLines = 4;
+        this.pawnRows = 4;
         this.fields = new int[this.size][this.size];
 
         this.whitePawns = 0;
@@ -23,6 +31,10 @@ public class PolishBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Clones the instance of PolishBoard
+     * @return Board
+     */
     @Override
     protected Board clone () {
         Board boardClone = new PolishBoard();
@@ -43,6 +55,14 @@ public class PolishBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Checks whether moving a pawn from the position `current` to the position `movement` is allowed
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int
+     */
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
         // Check if the game has started
@@ -148,6 +168,14 @@ public class PolishBoard extends Board implements Cloneable {
             catch (CloneNotSupportedException e) {
                 return Board.CLONE_ERROR;
             }
+        }
+
+        // Check if there is any take possible on the board
+        if (lt > 0) {
+            return Board.FORCED_TAKE_ERROR; // Not taking an enemy pawn when it's possible
+        }
+        if (lt < 0) {
+            return Board.CLONE_ERROR; // Clone error
         }
 
         return Board.MOVE_ALLOWED;

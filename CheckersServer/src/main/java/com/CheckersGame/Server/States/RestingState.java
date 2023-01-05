@@ -4,7 +4,15 @@ package com.CheckersGame.Server.States;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the game RESTING state (no player's turn)
+ */
 public class RestingState implements GameStateBahaviour {
+    /** 
+     * @return GameState.RESTING
+     */
     @Override
     public GameState getState () {
         return GameState.RESTING;
@@ -12,6 +20,9 @@ public class RestingState implements GameStateBahaviour {
 
 
 
+    /** 
+     * @return WhiteState
+     */
     @Override
     public GameStateBahaviour startGame () {
         // The game has already started
@@ -20,6 +31,9 @@ public class RestingState implements GameStateBahaviour {
 
 
 
+    /** 
+     * @return WhiteState (this)
+     */
     @Override
     public GameStateBahaviour switchPlayer () {
         // Cannot switch player in the resting state
@@ -28,6 +42,9 @@ public class RestingState implements GameStateBahaviour {
 
 
 
+    /** 
+     * @return RestingState (this)
+     */
     @Override
     public GameStateBahaviour endGame () {
         // Game hasn't started yet

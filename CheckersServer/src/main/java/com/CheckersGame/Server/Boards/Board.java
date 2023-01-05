@@ -6,47 +6,62 @@ import com.CheckersGame.Server.States.*;
 
 
 
-// This is a factory class
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Checkers game board operation handling abstract class
+ */
 public abstract class Board {
-    protected int size;
-    protected int pawnLines;
+    protected int size; /** The number of fields in one row or column on the board */
+    protected int pawnRows; /** The number of rows in which the pawns are placed when initializing the board */
 
-    protected int[][] fields;
-    protected int whitePawns;
-    protected int blackPawns;
+    protected int[][] fields; /** The board structure */
+    protected int whitePawns; /** The number of white pawns on the board */
+    protected int blackPawns; /** The number of black pawns on the board */
 
-    protected int rPrevTake;
-    protected int cPrevTake;
+    protected int rPrevTake; /** Stores the row value of the previously taking pawn `movement` position */
+    protected int cPrevTake; /** Stores the column value of the previously taking pawn `movement` position */
 
-    protected GameStateBahaviour state;
+    protected GameStateBahaviour state; /** Handles the current game state */
 
-    protected final static int MOVE_ALLOWED = 1;
-    protected final static int TAKE_ALLOWED = 2;
-    protected final static int SEQUENTIAL_TAKE_ALLOWED = 3;
-    protected final static int WHITE_WINS = 10;
-    protected final static int BLACK_WINS = 20;
+    protected final static int MOVE_ALLOWED = 1; /** Pawn move return code: given move is allowed */
+    protected final static int TAKE_ALLOWED = 2; /** Pawn move return code: given move is allowed and an enemy pawn can be taken */
+    protected final static int SEQUENTIAL_TAKE_ALLOWED = 3; /** Pawn move return code: given move is allowed and multiple enemy pawns can be taken */
+    public final static int WHITE_WINS = 10; /** Pawn move return code: player WHITE wins */
+    public final static int BLACK_WINS = 20; /** Pawn move return code: player BLACK wins */
 
-    protected final static int NOT_OPTIMAL_TAKE = 0;
-    protected final static int GAME_NOT_STARED = -1;
-    protected final static int CURR_NOT_ON_BOARD = -2;
-    protected final static int MOV_NOT_ON_BOARD = -3;
-    protected final static int INVALID_PLAYER = -4;
-    protected final static int PAWN_ON_MOV = -5;
-    protected final static int INVALID_STEP = -6;
-    protected final static int FORCED_TAKE_ERROR = -7;
-    protected final static int SEQUENTIAL_TAKE_ERROR = -8;
-    protected final static int CLONE_ERROR = -9;
-    public final static int UNKNOWN_ERROR = -10;
+    protected final static int NOT_OPTIMAL_TAKE = 0; /** Pawn move return code: Not optimal take error */
+    protected final static int GAME_NOT_STARED = -1; /** Pawn move return code: Game not started error */
+    protected final static int CURR_NOT_ON_BOARD = -2; /** Pawn move return code: Position `current` is not on board */
+    protected final static int MOV_NOT_ON_BOARD = -3; /** Pawn move return code: Position `movement` is not on board */
+    protected final static int INVALID_PLAYER = -4; /** Pawn move return code: The position `current` is invalid for the current player */
+    protected final static int PAWN_ON_MOV = -5; /** Pawn move return code: There is already a pawn on the position `movement` */
+    protected final static int INVALID_STEP = -6; /** Pawn move return code: Invalid move step */
+    protected final static int FORCED_TAKE_ERROR = -7; /** Pawn move return code: Not taking an enemy pawn when it's possible */
+    protected final static int SEQUENTIAL_TAKE_ERROR = -8; /** Pawn move return code: Player tries to take enemy pawns sequentially with different pawns */
+    protected final static int CLONE_ERROR = -9; /** Pawn move return code: Clone error */
+    public final static int UNKNOWN_ERROR = -10; /** Pawn move return code: Unknown error */
 
 
 
+    /** 
+     * Checks whether moving a pawn from the position `current` to the position `movement` is allowed
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int
+     */
     protected abstract int checkMove (int rCurr, int cCurr, int rMov, int cMov);
     
     
     
+    /**
+     * Initializes the game board and pawns
+     */
     public void init () {
         // Init white pawns
-        int limit = this.size - this.pawnLines - 1;
+        int limit = this.size - this.pawnRows - 1;
         for (int r = this.size - 1; r > limit; r--) {
             int startPos = (r + 1) % 2;
             for (int c = startPos; c < this.size; c += 2) {
@@ -55,27 +70,36 @@ public abstract class Board {
         }
         
         // Init black pawns
-        for (int r = 0; r < this.pawnLines; r++) {
+        for (int r = 0; r < this.pawnRows; r++) {
             int startPos = (r + 1) % 2;
             for (int c = startPos; c < this.size; c += 2) {
                 this.fields[r][c] = 2;
             }
         }
 
-        this.whitePawns = this.pawnLines * this.size / 2;
+        this.whitePawns = this.pawnRows * this.size / 2;
         this.blackPawns = this.whitePawns;
 
+        this.state = GameState.RESTING.getStateBahaviour();
         this.state = this.state.startGame();
     }
 
 
 
+    
+    /** 
+     * Returns the current game state
+     * @return GameState
+     */
     public GameState getState () {
         return this.state.getState();
     }
 
 
 
+    /**
+     * Displays the game board on the server's terminal
+     */
     public void display () {
         System.out.printf("White pawns: %d\n", this.whitePawns);
         System.out.printf("Black pawns: %d\n", this.blackPawns);
@@ -95,6 +119,12 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Returns a description of the current game board in the following format:
+     * `boardSize;pawn_1_raw,pawn_1_column,pawn_1_type;(...);pawn_n_raw,pawn_n_column,pawn_n_type`
+     * @return String
+     */
     public String getDescription () {
         String description = "board:" + String.valueOf(this.size);
 
@@ -111,6 +141,15 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Tries to move a pawn on the current board from the position `current` to the position `movement`.
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int
+     */
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
         // < 0: move NOT ok - genereal errrors
         // 0: move NOT ok - not optimal take
@@ -221,6 +260,12 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Returns a pawn move message for the given status
+     * @param status
+     * @return String
+     */
     public String getMoveMessage (int status) {
         String message = null;
 
@@ -311,18 +356,39 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Returns true if the pawn on the given position is white
+     * @param r
+     * @param c
+     * @return boolean
+     */
     protected boolean isWhite (int r, int c) {
         return (this.fields[r][c] == 1 || this.fields[r][c] == 10);
     }
 
 
 
+    
+    /** 
+     * Returns true if the pawn on the given position is black
+     * @param r
+     * @param c
+     * @return boolean
+     */
     protected boolean isBlack (int r, int c) {
         return (this.fields[r][c] == 2 || this.fields[r][c] == 20);
     }
 
 
 
+    
+    /** 
+     * Checks wheter the pawn on the given position is valid for the curent player
+     * @param r
+     * @param c
+     * @return boolean
+     */
     protected boolean checkPlayer (int r, int c) {
         if (this.isWhite(r, c)) {
             if (this.state.getState() == GameState.WHITE) {
@@ -345,6 +411,13 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Checks if a sequential enemy pawn taking is performed by a single pawn
+     * @param r
+     * @param c
+     * @return boolean
+     */
     protected boolean checkTakingPlayer (int r, int c) {
         if (this.rPrevTake == -1 && this.cPrevTake == -1) {
             return true;
@@ -359,6 +432,13 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Checks whether the given position is on the game board
+     * @param r
+     * @param c
+     * @return boolean
+     */
     protected boolean isOnBoard (int r, int c) {
         if (r < 0 || r >= this.size) {
             return false;
@@ -373,6 +453,15 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Checkt if the step from the position `current` to the position `movement` is valid. If not returns null
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int[]
+     */
     protected int[] checkPawnStep (int rCurr, int cCurr, int rMov, int cMov) {
         int[] step = {rMov - rCurr, cMov - cCurr};
 
@@ -407,12 +496,21 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Checks whether enemeny pawn taking is performed correctly
+     * @param rCurr
+     * @param cCurr
+     * @param rStep
+     * @param cStep
+     * @return boolean
+     */
     protected boolean checkPawnTake (int rCurr, int cCurr, int rStep, int cStep) {
         if (!this.isOnBoard(rCurr + rStep, cCurr + cStep)) {
             return false;
         }
 
-        if (!(Math.abs(rStep) == 2)) {
+        if (Math.abs(rStep) != 2) {
             return false;
         }
 
@@ -433,6 +531,14 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Performs pawn taking
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     */
     protected void pawnTake (int rCurr, int cCurr, int rMov, int cMov) {
         int rDir = (int)Math.signum(rMov - rCurr);
         int cDir = (int)Math.signum(cMov - cCurr);
@@ -451,6 +557,14 @@ public abstract class Board {
 
 
     
+    
+    /** 
+     * Calculates the longest pawn take from the given position
+     * @param r
+     * @param c
+     * @return int
+     * @throws CloneNotSupportedException
+     */
     protected int longestPawnTake (int r, int c) throws CloneNotSupportedException {
         // this.display();
         if (!this.isOnBoard(r, c)) {
@@ -497,6 +611,15 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Checks for a pawn to queen conversion
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return boolean
+     */
     protected boolean pawnToQueen (int rCurr, int cCurr, int rMov, int cMov) {
         if (isQueen(rCurr, cCurr)) {
             return false;
@@ -515,6 +638,13 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Returns true if the pawn on the given position is a queen
+     * @param rCurr
+     * @param cCurr
+     * @return boolean
+     */
     protected boolean isQueen (int rCurr, int cCurr) {
         if ((this.fields[rCurr][cCurr] / 10) == 0) {
             return false;
@@ -525,6 +655,15 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Checkt if the queen's step from the position `current` to the position `movement` is valid. If not returns null
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int[]
+     */
     protected int[] checkQueenStep (int rCurr, int cCurr, int rMov, int cMov) {
         int rStep = rMov - rCurr;
         int cStep = cMov - cCurr;
@@ -539,6 +678,15 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Checks whether enemeny pawn taking is performed correctly (by a queen)
+     * @param rCurr
+     * @param cCurr
+     * @param rStep
+     * @param cStep
+     * @return boolean
+     */
     protected boolean checkQueenTake (int rCurr, int cCurr, int rStep, int cStep) {
         int rMov = rCurr + rStep;
         int cMov = cCurr + cStep;
@@ -608,6 +756,14 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Performs pawn taking (by a queen)
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     */
     protected void queenTake (int rCurr, int cCurr, int rMov, int cMov) {
         this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
 
@@ -644,6 +800,14 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Calculates the longest queen take from the given position
+     * @param r
+     * @param c
+     * @return int
+     * @throws CloneNotSupportedException
+     */
     protected int longestQueenTake (int r, int c) throws CloneNotSupportedException {
         if (!this.isOnBoard(r, c)) {
             return 0;
@@ -745,6 +909,11 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Calculates the longest possible take on the board for the current player
+     * @return int
+     */
     protected int longestTake () {
         try {
             int longestTake = 0;
@@ -777,6 +946,13 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Calculates the longest move on the board for the current player
+     * @param r
+     * @param c
+     * @return int
+     */
     public int longestMove (int r, int c) {
         if (!this.checkPlayer(r, c)) {
             return -1;
@@ -811,7 +987,12 @@ public abstract class Board {
 
 
     
-    // The following methods are of functionality verification purposes only
+    
+    /** 
+     * Mocks a simple endgame situation where the next (winning) move belongs to the specified `player`  
+     * This method are of functionality verification purposes only
+     * @param player
+     */
     public void mockEndgame (String player) {
         this.fields = new int[this.size][this.size];
         
@@ -845,6 +1026,12 @@ public abstract class Board {
 
 
 
+    
+    /** 
+     * Mocks a queen endgame situation where the next (winning) move belongs to the specified `player`
+     * This method are of functionality verification purposes only
+     * @param player
+     */
     public void mockQueenEndgame (String player) {
         this.fields = new int[this.size][this.size];
 
@@ -886,6 +1073,12 @@ public abstract class Board {
     
 
     
+    
+    /** 
+     * Mocks an endgame situation in which the specified `player`'s move will change a pawn to a queen
+     * This method are of functionality verification purposes only
+     * @param player
+     */
     public void mockPawnToQueen (String player) {
         this.fields = new int[this.size][this.size];
         

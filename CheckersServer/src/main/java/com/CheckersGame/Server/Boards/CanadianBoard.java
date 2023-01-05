@@ -6,10 +6,18 @@ import com.CheckersGame.Server.States.GameState;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the canadian checkers game board operations
+ */
 public class CanadianBoard extends Board implements Cloneable {
+    /**
+     * CandaianBoard class constructor
+     */
     public CanadianBoard () {
         this.size = 12;
-        this.pawnLines = 5;
+        this.pawnRows = 5;
         this.fields = new int[this.size][this.size];
 
         this.whitePawns = 0;
@@ -23,6 +31,10 @@ public class CanadianBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Clones the instance of CanadianBoard
+     * @return Board
+     */
     @Override
     protected Board clone () {
         Board boardClone = new CanadianBoard();
@@ -43,6 +55,14 @@ public class CanadianBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Checks whether moving a pawn from the position `current` to the position `movement` is allowed
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int
+     */
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
         // Check if the game has started
@@ -148,6 +168,14 @@ public class CanadianBoard extends Board implements Cloneable {
             catch (CloneNotSupportedException e) {
                 return Board.CLONE_ERROR;
             }
+        }
+
+        // Check if there is any take possible on the board
+        if (lt > 0) {
+            return Board.FORCED_TAKE_ERROR; // Not taking an enemy pawn when it's possible
+        }
+        if (lt < 0) {
+            return Board.CLONE_ERROR; // Clone error
         }
 
         return Board.MOVE_ALLOWED;

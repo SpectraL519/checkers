@@ -1,7 +1,8 @@
 package com.CheckersGame.Server;
 
 import com.CheckersGame.Server.States.GameState;
-import com.CheckersGame.Server.Versions.*;
+import com.CheckersGame.Server.Versions.RussianVersion;
+import com.CheckersGame.Server.Boards.RussianBoard;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -13,6 +14,9 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 
 
 
+/**
+ * Checks the correctnes of operations performed on the russian game board
+ */
 public class RussianGameTest {
     @Test
     public void shouldAnswerWithTrue () {
@@ -20,15 +24,15 @@ public class RussianGameTest {
 
         // End game
         game.newGame("russian");
-        game.endGame();
+        game.end();
         assertTrue(game.getVersion() == null);
+        assertTrue(game.getBoard() == null);
+        assertEquals(game.movePawn(5, 0, 4, 1), -10);
 
         // Check game version and initial states
         game.newGame("russian");
         assertThat(game.getVersion(), instanceOf(RussianVersion.class));
-        assertEquals(game.getState(), GameState.RESTING);
-        assertEquals(game.movePawn(5, 0, 4, 1), -1);
-        game.initBoard();
+        assertThat(game.getBoard(), instanceOf(RussianBoard.class));
         assertEquals(game.getState(), GameState.WHITE);
 
 
@@ -85,17 +89,17 @@ public class RussianGameTest {
 
         // Check game restart function
         System.out.println("\n\nRestarting the game...");
-        game.restartGame();
+        game.restart();
         assertEquals(game.getState(), GameState.WHITE);
 
         // Mocking an engame situation
-        System.out.println("\n\nMocking an endgame situation (white wins)...");
+        System.out.println("\n\nMocking an end situation (white wins)...");
         game.mockEndgame("white");
         assertEquals(game.movePawn(4, 3, 2, 5), 10);
 
         System.out.println();
         game.newGame("russian");
-        System.out.println("Mocking an endgame situation (black wins)...");
+        System.out.println("Mocking an end situation (black wins)...");
         game.mockEndgame("black");
         assertEquals(game.movePawn(3, 4, 5, 2), 20);
 
@@ -104,7 +108,7 @@ public class RussianGameTest {
         // Mocking a queen engamge situation
         System.out.println();
         game.newGame("russian");
-        System.out.println("Mocking a queen endgame situation (white wins)...");
+        System.out.println("Mocking a queen end situation (white wins)...");
         game.mockQueenEndgame("white");
         assertEquals(game.longestMove(4, 5), 4);
         assertEquals(game.movePawn(4, 5, 2, 7), 3);
@@ -115,7 +119,7 @@ public class RussianGameTest {
         // Mocking a queen engamge situation
         System.out.println();
         game.newGame("russian");
-        System.out.println("Mocking a queen endgame situation (black wins)...");
+        System.out.println("Mocking a queen end situation (black wins)...");
         game.mockQueenEndgame("black");
         assertEquals(game.longestMove(3, 2), 4);
         assertEquals(game.movePawn(3, 2, 5, 0), 3);

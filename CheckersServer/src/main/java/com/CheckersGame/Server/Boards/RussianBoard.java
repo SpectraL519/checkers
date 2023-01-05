@@ -6,10 +6,18 @@ import com.CheckersGame.Server.States.GameState;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the russian checkers game board operations
+ */
 public class RussianBoard extends Board implements Cloneable {
+    /**
+     * RussianBoard class constructor
+     */
     public RussianBoard () {
         this.size = 8;
-        this.pawnLines = 3;
+        this.pawnRows = 3;
         this.fields = new int[this.size][this.size];
 
         this.whitePawns = 0;
@@ -23,6 +31,10 @@ public class RussianBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Clones the instance of RussianBoard
+     * @return Board
+     */
     @Override
     protected Board clone () {
         Board boardClone = new RussianBoard();
@@ -43,6 +55,14 @@ public class RussianBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Checks whether moving a pawn from the position `current` to the position `movement` is allowed
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int
+     */
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
         // Check if the game has started
@@ -112,10 +132,10 @@ public class RussianBoard extends Board implements Cloneable {
         if (pawnStep == null) {
             return Board.INVALID_STEP;
         }
-
+        
         if (this.checkPawnTake(rCurr, cCurr, pawnStep[0], pawnStep[1])) {
-            // Check for further movement possibilities
             try {
+                // Check for further movement possibilities
                 Board bc = this.clone();
                 bc.pawnTake(rCurr, cCurr, rMov, cMov);
                 if (bc.longestPawnTake(rMov, cMov) > 0) {
