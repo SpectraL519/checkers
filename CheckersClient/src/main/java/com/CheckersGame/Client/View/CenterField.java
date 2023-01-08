@@ -2,6 +2,11 @@ package com.CheckersGame.Client.View;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -18,13 +23,15 @@ public class CenterField extends Field {
 
     public final int row;
     public final int column;
+    public final Color color;
 
-    public CenterField (Color color, int pixelSizeV, int pixelSizeH, final int row, final int column, final GameBoard board) {
+    public CenterField (final Color color, int pixelSizeV, int pixelSizeH, final int row, final int column, final GameBoard board) {
 
         super(color, pixelSizeV, pixelSizeH);
 
         this.row = row;
         this.column = column;
+        this.color = color;
         
         this.whitePawn = new Pawn((pixelSizeH - 20) / 2, Color.WHITESMOKE);
         whitePawn.setLayoutX(this.getLayoutX() + (pixelSizeH / 2));
@@ -46,6 +53,7 @@ public class CenterField extends Field {
                 board.controller.askController(row, column);
             }
         });
+     
 
     }
 
