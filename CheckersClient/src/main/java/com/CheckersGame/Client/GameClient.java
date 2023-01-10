@@ -89,6 +89,7 @@ public class GameClient {
             this.socket = new Socket("localhost", 4444);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
+            System.out.println("Waiting for the oponnent to connect...");
         } 
         catch (UnknownHostException e) {
             System.out.println("Unknown host: localhost");

@@ -1,5 +1,7 @@
 package com.CheckersGame.Server;
 
+import com.CheckersGame.Server.Boards.Board;
+
 import java.io.*;
 
 
@@ -40,7 +42,6 @@ final class CommandLine {
      * @throws IOException
      */
     public String execCommand () throws IOException {
-        // TODO: add playAgain funcionality
         this.output.println("cmd: ");
 
         String command =  this.input.readLine();
@@ -86,7 +87,7 @@ final class CommandLine {
             }
 
             case "movePawn": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot move a pawn - the game hasn't started yet!";
                     break;
                 }
@@ -98,7 +99,7 @@ final class CommandLine {
                     int cMov = Integer.parseInt(args[4]);
     
                     int status = this.game.movePawn(rCurr, cCurr, rMov, cMov);
-    
+
                     if (status > 0) {
                         message = this.game.getMoveMessage(status) + String.format(" ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
                     }
@@ -115,7 +116,7 @@ final class CommandLine {
 
             case "restartGame": {
                 if (this.game.getVersion() == null) {
-                    message = "Error: Cannot restart a game - the game hasn't started yet!";
+                    message = "Error: Cannot restart a game - game mode not specified!";
                     break;
                 }
 
@@ -126,7 +127,7 @@ final class CommandLine {
             }
 
             case "endGame": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot end a game - the game hasn't started yet!";
                     break;
                 }
@@ -138,7 +139,7 @@ final class CommandLine {
             }
 
             case "mockEndgame": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot mock an endgame situation - the game hasn't started yet!";
                     break;
                 }
@@ -155,7 +156,7 @@ final class CommandLine {
             }
 
             case "mockQueenEndgame": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot mock a queen endgame situation - the game hasn't started yet!";
                     break;
                 }
@@ -172,7 +173,7 @@ final class CommandLine {
             }
 
             case "mockPawnToQueen": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot mock a pawn to queen situation - the game hasn't started yet!";
                     break;
                 }
@@ -189,7 +190,7 @@ final class CommandLine {
             }
 
             case "longestMove": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot calculate the longest move - the game hasn't started yet!";
                     break;
                 }
@@ -242,7 +243,7 @@ final class CommandLine {
             this.output.println("");
             return;
         }
-        
+
         this.output.println(this.game.getBoardDescription());
     }
 }

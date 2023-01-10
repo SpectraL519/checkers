@@ -25,7 +25,7 @@ public class RussianGameTest {
         // End game
         game.newGame("russian");
         game.end();
-        assertTrue(game.getVersion() == null);
+        assertThat(game.getVersion(), instanceOf(RussianVersion.class));
         assertTrue(game.getBoard() == null);
         assertEquals(game.movePawn(5, 0, 4, 1), -10);
 
