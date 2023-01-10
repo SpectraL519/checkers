@@ -1,5 +1,10 @@
 package com.CheckersGame.Client.View;
 
+import com.CheckersGame.Client.View.GameViewComponents.Creditsbar;
+import com.CheckersGame.Client.View.GameViewComponents.GameBoard;
+import com.CheckersGame.Client.View.GameViewComponents.GameInfo;
+import com.CheckersGame.Client.View.GameViewComponents.Toolbar;
+
 import javafx.scene.layout.BorderPane;
 
 

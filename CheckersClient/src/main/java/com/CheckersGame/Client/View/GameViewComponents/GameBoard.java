@@ -1,4 +1,9 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.GameViewComponents;
+
+import com.CheckersGame.Client.View.GameViewComponents.Fields.CenterField;
+import com.CheckersGame.Client.View.GameViewComponents.Fields.CornerField;
+import com.CheckersGame.Client.View.GameViewComponents.Fields.Field;
+import com.CheckersGame.Client.View.GameViewComponents.Fields.PositionField;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;

@@ -1,4 +1,4 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.GameViewComponents.Fields;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

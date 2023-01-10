@@ -1,4 +1,4 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.Menus;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;

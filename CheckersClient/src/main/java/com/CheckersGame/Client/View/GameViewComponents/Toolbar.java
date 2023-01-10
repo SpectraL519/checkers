@@ -1,4 +1,4 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.GameViewComponents;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

@@ -1,5 +1,10 @@
 package com.CheckersGame.Client.View;
 
+import com.CheckersGame.Client.View.Menus.StartMenu;
+import com.CheckersGame.Client.View.Menus.WaitPlayerMenu;
+import com.CheckersGame.Client.View.Menus.WaitSelectionMenu;
+import com.CheckersGame.Client.View.Menus.WelcomeMenu;
+
 import javafx.scene.layout.BorderPane;
 
 

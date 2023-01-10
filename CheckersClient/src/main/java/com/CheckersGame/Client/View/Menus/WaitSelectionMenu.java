@@ -1,23 +1,19 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.Menus;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 
 
 
-public class WelcomeMenu extends VBox {
+public class WaitSelectionMenu extends VBox {
 
-    public WelcomeMenu () {
+    public WaitSelectionMenu () {
         super();
     }
 
@@ -28,32 +24,19 @@ public class WelcomeMenu extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setMinWidth(250);
         this.setMaxWidth(250);
-        this.getChildren().addAll(new WelcomeText(), new StartButton());
+        this.getChildren().addAll(new WelcomeText("Please wait! "), new WelcomeText("Your opponent is choosing a game type..."));
     }
 
     class WelcomeText extends Label {
-        public WelcomeText () {
-            super("Welcome in Checkers Game!");
+        public WelcomeText (String text) {
+            super(text);
             CornerRadii corner = new CornerRadii(3);
             this.setBackground(new Background(new BackgroundFill(Color.WHITE, corner, null)));
             this.setMinWidth(230);
             this.setMaxWidth(230);
-            this.setMinHeight(70);
-            this.setMaxHeight(70);
+            this.setMinHeight(30);
+            this.setMaxHeight(30);
             this.setAlignment(Pos.CENTER);
-            this.setContentDisplay(ContentDisplay.CENTER);
-        }
-    }
-
-    class StartButton extends Button {
-        public StartButton () {
-            super("START!");
-            this.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                  System.out.println("Move to StartMenu or WaitMenu!");
-                }
-            });
         }
     }
 

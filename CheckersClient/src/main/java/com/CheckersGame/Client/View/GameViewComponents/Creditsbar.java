@@ -1,4 +1,4 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.GameViewComponents;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;

@@ -1,6 +1,9 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.GameViewComponents.Fields;
 
 import javafx.scene.paint.Color;
+
+import com.CheckersGame.Client.View.GameViewComponents.GameBoard;
+
 import javafx.event.Event;
 import javafx.event.EventHandler;
 

@@ -1,4 +1,4 @@
-package com.CheckersGame.Client.View;
+package com.CheckersGame.Client.View.GameViewComponents.Fields;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
