@@ -7,22 +7,32 @@ import java.util.Scanner;
 
 
 
-// MVC::Model class
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the client thread
+ */
 public class GameClient {
-    private Socket socket;
+    private Socket socket; /** A socket for the client to connect to the server */
 
-    private BufferedReader input;
-    private PrintWriter output;
-    private Scanner stdInScanner;
+    private BufferedReader input; /** The client's input stream handling masseges sent from a server */
+    private PrintWriter output; /** The clients's output stream handling sending messages to a server */
+    private Scanner stdInScanner; /** Handles client's input from the terminal */
 
 
 
+    /**
+     * GameClient class constructor
+     */
     public GameClient () {
         this.stdInScanner = new Scanner(System.in);
     }
 
 
 
+    /**
+     * Starts the client thread
+     */
     public void start () {
         this.listen();
         this.getInit();
@@ -71,11 +81,15 @@ public class GameClient {
 
 
 
+    /**
+     * Tries to connect to the server
+     */
     private void listen () {
         try {
             this.socket = new Socket("localhost", 4444);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
+            System.out.println("Waiting for the oponnent to connect...");
         } 
         catch (UnknownHostException e) {
             System.out.println("Unknown host: localhost");
@@ -89,6 +103,9 @@ public class GameClient {
 
 
 
+    /**
+     * Handles the initial message recieved from the client
+     */
     private void getInit () {
         try {
             System.out.println(this.input.readLine());
@@ -102,6 +119,11 @@ public class GameClient {
 
 
 
+    
+    /** 
+     * Displays the board on the client's terminal
+     * @param boardDescription
+     */
     private void displayBoard (String boardDescription) {
         if (!boardDescription.startsWith("board:")) {
             System.out.println("Error: Invalid board description");
@@ -138,6 +160,5 @@ public class GameClient {
             System.out.printf(" %d", c);
         }
         System.out.println("\n");
-
     }
 }

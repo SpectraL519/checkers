@@ -7,7 +7,16 @@ import java.net.*;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Checkers server application main class
+ */
 public class GameServer {
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(4444)) {
             System.out.println("Server is listening on port 4444");

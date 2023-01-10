@@ -6,10 +6,18 @@ import com.CheckersGame.Server.States.GameState;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Class handling the polish checkers game board operations
+ */
 public class PolishBoard extends Board implements Cloneable {
+    /**
+     * PolishBoard class constructor
+     */
     public PolishBoard () {
         this.size = 10;
-        this.pawnLines = 4;
+        this.pawnRows = 4;
         this.fields = new int[this.size][this.size];
 
         this.whitePawns = 0;
@@ -23,6 +31,10 @@ public class PolishBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Clones the instance of PolishBoard
+     * @return Board
+     */
     @Override
     protected Board clone () {
         Board boardClone = new PolishBoard();
@@ -43,6 +55,14 @@ public class PolishBoard extends Board implements Cloneable {
 
 
 
+    /** 
+     * Checks whether moving a pawn from the position `current` to the position `movement` is allowed
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int
+     */
     @Override
     public int checkMove (int rCurr, int cCurr, int rMov, int cMov) {
         // Check if the game has started
@@ -83,13 +103,18 @@ public class PolishBoard extends Board implements Cloneable {
             if (this.checkQueenTake(rCurr, cCurr, queenStep[0], queenStep[1])) {
                 try {
                     // Check for the optimal take
-                    if (this.longestQueenTake(rCurr, cCurr) < lt || 1 + this.longestQueenTake(rMov, cMov) < lt) {
+                    if (this.longestQueenTake(rCurr, cCurr) < lt) {
+                        return Board.NOT_OPTIMAL_TAKE;
+                    }
+
+                    Board bc = this.clone();
+                    bc.queenTake(rCurr, cCurr, rMov, cMov);
+                    int lqtMov = bc.longestQueenTake(rMov, cMov);
+                    if (1 + lqtMov < lt) {
                         return Board.NOT_OPTIMAL_TAKE;
                     }
 
                     // Check for further movement possibilities
-                    Board bc = this.clone();
-                    bc.queenTake(rCurr, cCurr, rMov, cMov);
                     if (bc.longestQueenTake(rMov, cMov) > 0) {
                         return Board.SEQUENTIAL_TAKE_ALLOWED;
                     }
@@ -121,14 +146,20 @@ public class PolishBoard extends Board implements Cloneable {
         if (this.checkPawnTake(rCurr, cCurr, pawnStep[0], pawnStep[1])) {
             try {
                 // Check for the optimal take
-                if (this.longestPawnTake(rCurr, cCurr) < lt || 1 + this.longestPawnTake(rMov, cMov) < lt) {
+                if (this.longestPawnTake(rCurr, cCurr) < lt) {
                     return Board.NOT_OPTIMAL_TAKE;
                 }
                 
                 // Check for further movement possibilities
                 Board bc = this.clone();
                 bc.pawnTake(rCurr, cCurr, rMov, cMov);
-                if (bc.longestPawnTake(rMov, cMov) > 0) {
+                int lptMov = bc.longestPawnTake(rMov, cMov);
+                if (1 + lptMov < lt) {
+                    return Board.NOT_OPTIMAL_TAKE;
+                }
+                
+                // Check for further movement possibilities
+                if (bc.longestQueenTake(rMov, cMov) > 0) {
                     return Board.SEQUENTIAL_TAKE_ALLOWED;
                 }
 
@@ -137,6 +168,14 @@ public class PolishBoard extends Board implements Cloneable {
             catch (CloneNotSupportedException e) {
                 return Board.CLONE_ERROR;
             }
+        }
+
+        // Check if there is any take possible on the board
+        if (lt > 0) {
+            return Board.FORCED_TAKE_ERROR; // Not taking an enemy pawn when it's possible
+        }
+        if (lt < 0) {
+            return Board.CLONE_ERROR; // Clone error
         }
 
         return Board.MOVE_ALLOWED;
