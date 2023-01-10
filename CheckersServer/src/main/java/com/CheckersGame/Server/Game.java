@@ -65,8 +65,8 @@ public class Game implements Runnable {
             PrintWriter outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
             this.cmdBlack = new CommandLine(this, inBlack, outBlack);
 
-            this.cmdWhite.sendInit("Playing as white!\nTo start enter `newGame <version>`");
-            this.cmdBlack.sendInit("Playing as black!\nWaiting for the game to start...");
+            this.cmdWhite.sendInit("white");
+            this.cmdBlack.sendInit("black");
 
 
 
