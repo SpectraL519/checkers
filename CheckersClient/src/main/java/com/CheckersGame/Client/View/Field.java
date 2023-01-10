@@ -11,6 +11,8 @@ public class Field extends Pane {
 
     public Pawn whitePawn;
     public Pawn blackPawn;
+    public Pawn whitePawnQueen;
+    public Pawn blackPawnQueen;
 
     public Field (Color color, int pixelSizeV, int pixelSizeH) {
         super();
@@ -24,5 +26,9 @@ public class Field extends Pane {
     public void showWhitePawn(boolean b){}
 
     public void showBlackPawn(boolean b){}
+
+    public void showWhitePawnQueen(boolean b){}
+
+    public void showBlackPawnQueen(boolean b){}
 
 }

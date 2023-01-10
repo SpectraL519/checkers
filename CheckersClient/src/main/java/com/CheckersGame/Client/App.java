@@ -1,7 +1,6 @@
 package com.CheckersGame.Client;
 
 import com.CheckersGame.Client.View.AppView;
-import com.CheckersGame.Client.View.GameView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;

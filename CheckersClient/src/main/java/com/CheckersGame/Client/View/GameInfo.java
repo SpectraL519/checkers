@@ -1,6 +1,10 @@
 package com.CheckersGame.Client.View;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -18,21 +22,23 @@ public class GameInfo extends VBox {
 
     private int horizontalSpace;
     private int verticalSpace;
+    private String colorOfPawns;
 
-    public GameInfo () {
+    public GameInfo (String colorOfPawns) {
         super();
         this.horizontalSpace = 374;
         this.verticalSpace = 650;
+        this.colorOfPawns = colorOfPawns;
     }
 
     public void render() {
-        this.getChildren().addAll(new PlayersLabel(horizontalSpace), new GameHistoryLabel(horizontalSpace), new GameLogLabel(horizontalSpace));
+        this.getChildren().addAll(new PlayerLabel(horizontalSpace, colorOfPawns), new GameHistoryLabel(horizontalSpace), new GameLogLabel(horizontalSpace));
     }
 
 
-    class PlayersLabel extends Label {
-        public PlayersLabel (int horizontalSpace) {
-            super("Krzys 2.5 : 1.5 Kubus");
+    class PlayerLabel extends Label {
+        public PlayerLabel (int horizontalSpace, String colorOfPawns) {
+            super("You're playing as: " + colorOfPawns);
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(50);
@@ -53,14 +59,33 @@ public class GameInfo extends VBox {
         }
     }
 
-    class GameLogLabel extends Label {
+    class GameLogLabel extends VBox {
         public GameLogLabel (int horizontalSpace) {
-            super("Here will be some messeges from server:\nCorrect moive!");
+            super();
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(100);
             this.setMaxHeight(100);
+            this.setPadding(new Insets(5, 5, 5, 5));
             this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            this.getChildren().addAll(new MoveButton());
+        }
+    }
+
+    class MoveButton extends Button {
+        public MoveButton () {
+            super("MOVE!");
+            this.setMinHeight(88);
+            this.setMaxHeight(88);
+            this.setMinWidth(362);
+            this.setMaxWidth(362);
+            this.setStyle("-fx-font-size:40");
+            this.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                  System.out.println("Move pawn");
+                }
+            });
         }
     }
 }

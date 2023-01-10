@@ -10,13 +10,15 @@ public class GameView extends BorderPane {
     public GameBoard board;
     private GameInfo gameinfo;
     private Creditsbar creditsbar;
+    public String colorOfPawns;
 
-    public GameView (int boardSize, int rowOfPawns) {
+    public GameView (int boardSize, int rowOfPawns, String colorOfPawns) {
         // add params
         this.toolbar = new Toolbar();
         this.creditsbar = new Creditsbar();
         this.board = new GameBoard(boardSize, 600, rowOfPawns);
-        this.gameinfo = new GameInfo();
+        this.gameinfo = new GameInfo(colorOfPawns);
+        this.colorOfPawns = colorOfPawns;
     }
 
     

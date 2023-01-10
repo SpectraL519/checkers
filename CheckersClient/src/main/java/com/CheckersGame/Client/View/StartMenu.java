@@ -11,15 +11,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 
 
 public class StartMenu extends VBox {
 
     private String checkedGame = "";
-    private String nickOne = "";
-    private String nickTwo = "";
 
     public StartMenu () {
         super();
@@ -32,14 +29,14 @@ public class StartMenu extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setMinWidth(250);
         this.setMaxWidth(250);
-        this.getChildren().addAll(new WelcomeText(), new GermanButton(), new PolishButton(), new CanadianButton(), new StartButton());
+        this.getChildren().addAll(new WelcomeText(), new GermanButton(this), new PolishButton(this), new CanadianButton(this), new StartButton(this));
     }
 
     class WelcomeText extends Label {
         public WelcomeText () {
             super("Select checkers type:");
             CornerRadii corner = new CornerRadii(3);
-            this.setBackground(new Background(new BackgroundFill(Color.WHITE, corner, null)));
+            this.setBackground(new Background(new BackgroundFill(Color.GAINSBORO, corner, null)));
             this.setMinWidth(230);
             this.setMaxWidth(230);
             this.setMinHeight(30);
@@ -49,7 +46,7 @@ public class StartMenu extends VBox {
     }
 
     class GermanButton extends Button {
-        public GermanButton () {
+        public GermanButton (StartMenu startMenu) {
             super("German Checkers");
             this.setMinWidth(230);
             this.setMaxWidth(230);
@@ -57,13 +54,14 @@ public class StartMenu extends VBox {
                 @Override
                 public void handle(ActionEvent event) {
                   System.out.println("German selected");
+                  startMenu.checkedGame = "german";
                 }
             });
         }
     }
 
     class PolishButton extends Button {
-        public PolishButton () {
+        public PolishButton (StartMenu startMenu) {
             super("Polish Checkers");
             this.setMinWidth(230);
             this.setMaxWidth(230);
@@ -71,13 +69,14 @@ public class StartMenu extends VBox {
                 @Override
                 public void handle(ActionEvent event) {
                   System.out.println("Polish selected");
+                  startMenu.checkedGame = "polish";
                 }
             });
         }
     }
 
     class CanadianButton extends Button {
-        public CanadianButton () {
+        public CanadianButton (StartMenu startMenu) {
             super("Canadian Checkers");
             this.setMinWidth(230);
             this.setMaxWidth(230);
@@ -85,18 +84,20 @@ public class StartMenu extends VBox {
                 @Override
                 public void handle(ActionEvent event) {
                   System.out.println("Canadian selected");
+                  startMenu.checkedGame = "canadian";
                 }
             });
         }
     }
 
     class StartButton extends Button {
-        public StartButton () {
+        public StartButton (StartMenu startMenu) {
             super("START!");
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                   System.out.println("Move to GameView!");
+                  System.out.println(startMenu.checkedGame);
                 }
             });
         }

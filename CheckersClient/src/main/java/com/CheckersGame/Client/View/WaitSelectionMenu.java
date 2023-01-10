@@ -7,19 +7,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 
 
-public class WaitMenu extends VBox {
+public class WaitSelectionMenu extends VBox {
 
-    private String checkedGame = "";
-    private String nickOne = "";
-    private String nickTwo = "";
-
-    public WaitMenu () {
+    public WaitSelectionMenu () {
         super();
     }
 
@@ -30,12 +24,12 @@ public class WaitMenu extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setMinWidth(250);
         this.setMaxWidth(250);
-        this.getChildren().addAll(new WelcomeText());
+        this.getChildren().addAll(new WelcomeText("Please wait! "), new WelcomeText("Your opponent is choosing a game type..."));
     }
 
     class WelcomeText extends Label {
-        public WelcomeText () {
-            super("Waiting for Your oponent...");
+        public WelcomeText (String text) {
+            super(text);
             CornerRadii corner = new CornerRadii(3);
             this.setBackground(new Background(new BackgroundFill(Color.WHITE, corner, null)));
             this.setMinWidth(230);
