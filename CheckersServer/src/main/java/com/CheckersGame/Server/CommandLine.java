@@ -17,6 +17,7 @@ final class CommandLine {
     private BufferedReader input; /** The server's input stream handling masseges sent from a client */
     private PrintWriter output; /** The server's output stream handling sending messages to a client */
 
+    private String player;
 
     /**
      * CommandLine class constructor
@@ -24,10 +25,11 @@ final class CommandLine {
      * @param input
      * @param output
      */
-    public CommandLine (Game game, BufferedReader input, PrintWriter output) {
+    public CommandLine (Game game, BufferedReader input, PrintWriter output, String player) {
         this.game = game;
         this.input = input;
         this.output = output;
+        this.player = player;
     }
 
 
@@ -129,7 +131,7 @@ final class CommandLine {
                 }
 
                 try {
-                    this.game.mockEndgame(args[1]);
+                    this.game.mockEndgame(this.player);
                     message = "Mocking an endgame situation for player " + args[1] + "...";
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -146,7 +148,7 @@ final class CommandLine {
                 }
                 
                 try {
-                    this.game.mockQueenEndgame(args[1]);
+                    this.game.mockQueenEndgame(this.player);
                     message = "Mocking a queen endgame situation for player " + args[1] + "...";
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -163,7 +165,7 @@ final class CommandLine {
                 }
                 
                 try {
-                    this.game.mockPawnToQueen(args[1]);
+                    this.game.mockPawnToQueen(this.player);
                     message = "Mocking a pawn to queen situation for player " + args[1] + "...";
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -190,7 +192,7 @@ final class CommandLine {
             }
 
             default: {
-                message = "Error: Invalid command - To get a commands' overview type 'help'";
+                message = "Error: Invalid operation";
             }
         }
 

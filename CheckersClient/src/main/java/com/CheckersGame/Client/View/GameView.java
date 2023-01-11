@@ -24,7 +24,6 @@ import javafx.stage.Stage;
 public class GameView extends BorderPane {
     private Stage stage;
     private GameController gameController;
-    public String player;
 
     private final static int WIDTH = 1040;
     private final static int HEIGHT = 760;
@@ -50,7 +49,7 @@ public class GameView extends BorderPane {
     
 
     private void renderToolbar () {
-        this.toolbar = new Toolbar(this.gameController, this.player);
+        this.toolbar = new Toolbar(this.gameController);
         this.toolbar.render();
     }
 

@@ -80,32 +80,6 @@ public class GameController {
 
 
 
-    /**
-     * Model -> view
-     */
-    public void displayWaitScreen (String type) {
-        System.out.println("displayWaitScreen " + type + " -> connector");
-        switch (type) {
-            case "opponentAwaiting": {
-                //this.view.renderWaitPlayerMenu();
-                break;
-            }
-
-            case "modeSelection": {
-                //this.view.renderWaitSelectionMenu();
-                break;
-            }
-
-            default: {
-                System.err.println("Invalid waitscreen type info");
-                this.closeApplication(1);
-                break;
-            }
-        }
-    }
-
-
-
     public void renderBoard (String boardDescription) {
         if (!boardDescription.endsWith("null")) {
             this.view.renderBoard(boardDescription);
@@ -154,22 +128,22 @@ public class GameController {
      * @param type
      * @param player
      */
-    public void mock (String type, String player) {
+    public void mock (String type) {
         switch (type) {
             case "simple": {
-                this.model.sendMessage("mockEndgame " + player);
+                this.model.sendMessage("mockEndgame");
                 this.setActive(false);
                 break;
             }
 
             case "queen": {
-                this.model.sendMessage("mockQueenEndgame" + player);
+                this.model.sendMessage("mockQueenEndgame");
                 this.setActive(false);               
                 break;
             }
 
             case "convert": {
-                this.model.sendMessage("mockPawnToQueen " + player);
+                this.model.sendMessage("mockPawnToQueen");
                 this.setActive(false);                
                 break;
             }
@@ -188,6 +162,6 @@ public class GameController {
     public void closeApplication (int status) {
         // System.exit(status);
         System.out.println("Program ended with return status: " + status);
-        Platform.exit();
+        System.exit(status);
     }
 }
