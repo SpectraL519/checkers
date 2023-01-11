@@ -19,14 +19,17 @@ import javafx.scene.paint.Color;
 
 public class Toolbar extends HBox {
     private GameController gameController;
-    private String player;
+
+    private GameType newGameButton;
+    private MockSituation mockMenu;
+    private RestartButton restartButton;
+    private ExitButton exitButton;
 
 
 
-    public Toolbar(GameController gameController, String player) {
+    public Toolbar(GameController gameController) {
         super();
         this.gameController = gameController;
-        this.player = player;
     }
 
 
@@ -38,7 +41,12 @@ public class Toolbar extends HBox {
         this.setSpacing(10);
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
-        this.getChildren().addAll(new GameType(this.gameController), new MockSituation(this.gameController), new RestartButton(this.gameController), new ExitButton(this.gameController));
+        this.newGameButton = new GameType(this.gameController);
+        this.mockMenu = new MockSituation(this.gameController);
+        this.restartButton = new RestartButton(this.gameController);
+        this.exitButton = new ExitButton(this.gameController);
+
+        this.getChildren().addAll(this.newGameButton, this.mockMenu, this.restartButton, this.exitButton);
     }
 
 
@@ -82,44 +90,46 @@ public class Toolbar extends HBox {
 
 
     class MockSituation extends SplitMenuButton {
+        private MenuItem simple;
+        private MenuItem queen;
+        private MenuItem convert;
+
         public MockSituation(GameController gameController) {
             super();
             this.setText("Mocks");
 
-            MenuItem choice1 = new MenuItem("Simple endgame");
-            MenuItem choice2 = new MenuItem("Queen endgame");
-            MenuItem choice3 = new MenuItem("Pawn to queen");
+            this.simple = new MenuItem("Simple endgame");
+            this.queen = new MenuItem("Queen endgame");
+            this.convert = new MenuItem("Pawn to queen");
 
-            choice1.setOnAction(new EventHandler<ActionEvent>() {
+            this.simple.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     if(gameController.isAstive()) {
-                        gameController.mock("simple", player);
+                        gameController.mock("simple");
                     }
                 }
             });
 
-            choice2.setOnAction(new EventHandler<ActionEvent>() {
+            this.queen.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     if(gameController.isAstive()) {
-                        gameController.mock("queen", player);
+                        gameController.mock("queen");
                     }
                 }
             });
 
-            choice3.setOnAction(new EventHandler<ActionEvent>() {
+            this.convert.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     if(gameController.isAstive()) {
-                        gameController.mock("convert", player);
+                        gameController.mock("convert");
                     }
                 }
             });
 
-            this.getItems().addAll(choice1, choice2, choice3);
-
-
+            this.getItems().addAll(this.simple, this.queen, this.convert);
         }
     }
 

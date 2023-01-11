@@ -93,7 +93,8 @@ public class GameInfo extends VBox {
     class GameLog extends Label {
         public GameLog (int horizontalSpace) {
             super("Game log:");
-            this.setFont(Font.font("Monospace", 10));
+            this.setFont(Font.font("Monospace", 12));
+            this.setWrapText(true);
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(500);
