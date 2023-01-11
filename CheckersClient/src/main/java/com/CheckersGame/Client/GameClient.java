@@ -36,11 +36,10 @@ public class GameClient {
      */
     public void start () {
         this.listen();
-        // this.getInit();
 
-        while (true) {
-            this.getMessage();
-        }
+        // while (true) {
+        //     this.getMessage();
+        // }
     }
 
 
@@ -50,12 +49,12 @@ public class GameClient {
      */
     private void listen () {
         try {
-            System.out.println("listen");
+            System.out.println("Connecting to server...");
             this.socket = new Socket("localhost", 4444);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
-            System.out.println("displayWaitScreen -> client");
-            this.controller.displayWaitScreen("opponentAwaiting");
+            System.out.println("Success!");
+            this.controller.updateGameLog("Server connection successful!");
         } 
         catch (UnknownHostException e) {
             System.err.println("Unknown host: localhost");
@@ -69,42 +68,6 @@ public class GameClient {
 
 
 
-    /**
-     * Handles the initial message recieved from the client
-     */
-    private void getInit () {
-        System.out.println("Recieving: init");
-        try {
-            String player = this.input.readLine();
-            System.out.println("player: " + player);
-            this.controller.setPlayer(player);
-
-            switch (player) {
-                case "white": {
-                    this.controller.chooseGameMode();
-                    break;
-                }
-
-                case "black": {
-                    this.controller.displayWaitScreen("modeSelection");
-                    break;
-                }
-
-                default: {
-                    System.err.println("Invalid player info");
-                    this.controller.closeApplication(1);
-                }
-            }
-        }
-        catch (IOException e) {
-            System.err.println("I/O error");
-            //this.controller.updateLog("I/O error");
-            this.controller.closeApplication(1);
-        }
-    }
-
-
-
     private void getMessage() {
         try{
             String message = this.input.readLine();
@@ -112,11 +75,10 @@ public class GameClient {
 
             if (message.startsWith("init:")) {
                 if (message.endsWith("white")) {
-                    System.out.println("displayGameModeSelection -> client");
-                    this.controller.chooseGameMode();
+                    this.controller.setPlayer("white");
                 }
                 else if (message.endsWith("black")) {
-                    this.controller.displayWaitScreen("modeSelection");
+                    this.controller.setPlayer("black");
                 }
                 else {
                     System.err.println("Error: invalid init message");
@@ -130,11 +92,11 @@ public class GameClient {
                 this.controller.renderBoard(message);
             }
             else {
-                this.controller.updateLog(message);
+                this.controller.updateGameLog(message);
             }
         }
         catch (IOException e) {
-            this.controller.updateLog("IOError: " + e.getMessage());
+            this.controller.updateGameLog("IOError: " + e.getMessage());
             e.printStackTrace();
         }
     }

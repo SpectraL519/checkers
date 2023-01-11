@@ -6,66 +6,123 @@ import com.CheckersGame.Client.View.GameViewComponents.GameBoard;
 import com.CheckersGame.Client.View.GameViewComponents.GameInfo;
 import com.CheckersGame.Client.View.GameViewComponents.Toolbar;
 
+import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+
 
 
 
 public class GameView extends BorderPane {
+    private Stage stage;
+    private GameController gameController;
+    public String player;
+
+    private final static int WIDTH = 1040;
+    private final static int HEIGHT = 760;
 
     private Toolbar toolbar;
     public GameBoard board;
-    private GameInfo gameinfo;
+    private GameInfo gameInfo;
     private Creditsbar creditsbar;
-    private GameController gameController;
-    private String gameLog;
-    public String colorOfPawns;
+    private Label welcomeLabel;
+    private Label renderingLabel;
 
 
-    //public GameView (int boardSize, int rowOfPawns, String colorOfPawns)
-    public GameView (String colorOfPawns, GameController gameController, String gameLog) {
+
+    public GameView (Stage stage, GameController gameController) {
+        this.stage = stage;
         this.gameController = gameController;
-        this.colorOfPawns = colorOfPawns;
-        this.gameLog = gameLog;
-        this.toolbar = new Toolbar(this.gameController, this.colorOfPawns);
-        this.creditsbar = new Creditsbar();
-        this.board = new GameBoard("board:8;2,0,1", this.gameController);
-        this.gameinfo = new GameInfo(this.colorOfPawns, this.gameController, this, this.gameLog);
-        
-        
+
+        this.stage.setOnCloseRequest(e -> Platform.exit());
+        this.stage.setTitle("Checkers client");
+        this.stage.show();
     }
 
     
 
     private void renderToolbar () {
+        this.toolbar = new Toolbar(this.gameController, this.player);
         this.toolbar.render();
     }
 
-    private void renderBoard () {
-        this.board.render();
+
+
+    private void renderGameInfo () {
+        this.gameInfo = new GameInfo(this.player, this.gameController, this);
+        this.gameInfo.render();
     }
 
-    private void renderGameinfo () {
-        this.gameinfo.render();
-    }
+
 
     private void renderCreditsbar () {
+        this.creditsbar = new Creditsbar();
         this.creditsbar.render();
     }
 
-    // private void renderPawns () {}
+
+
+    private void renderWelcomeLabel () {
+        this.welcomeLabel = new Label("Welcome to the Checkers Game!");
+        this.welcomeLabel.setFont(Font.font("Monospace", 36));
+        this.welcomeLabel.setAlignment(Pos.CENTER);
+    }
+
+
+
+    private void renderRenderingLabel () {
+        this.renderingLabel = new Label("Waiting for board render...");
+        this.renderingLabel.setFont(Font.font("Monospace", 36));
+        this.renderingLabel.setAlignment(Pos.CENTER);
+    }
+
+
+
+    public void renderBoard (String description) {
+        this.setCenter(this.renderingLabel);
+        this.board = new GameBoard(description, this.gameController);
+        this.board.render();
+        this.setCenter(this.board);
+    }
 
 
 
     public void render () {
+        this.stage.setScene(new Scene(this));
+        this.stage.setHeight(HEIGHT);
+        this.stage.setWidth(WIDTH);
+        this.stage.setResizable(false);
+        this.setBackground(new Background(new BackgroundFill(Color.CORNSILK, null, getInsets())));
+
+        this.renderWelcomeLabel();
         this.renderToolbar();
-        this.renderBoard();
         this.renderCreditsbar();
-        this.renderGameinfo();
+        this.renderGameInfo();
+        this.renderRenderingLabel();
   
         this.setTop(this.toolbar);
         this.setBottom(this.creditsbar);
-        this.setLeft(this.board);
-        this.setRight(this.gameinfo);
+        this.setCenter(this.welcomeLabel);
+        this.setRight(this.gameInfo);
     }
 
+
+
+    public void updateGameLog (String log) {
+        this.gameInfo.updateLog(log);
+    }
+
+
+
+    public void setPlayer (String player) {
+        this.gameInfo.setPlayer(player);
+    }
 }

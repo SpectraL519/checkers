@@ -9,6 +9,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -16,38 +18,65 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 
-//VBox or GridPane?
+
 
 
 public class GameInfo extends VBox {
-
     private int horizontalSpace;
-    private int verticalSpace;
-    private String colorOfPawns;
+
+    private String player;
     private GameController gameController;
     private GameView gameView;
-    private String gameLog;
 
-    public GameInfo (String colorOfPawns, GameController gameController, GameView gameView, String gameLog) {
+    private PlayerInfo playerInfo;
+    private GameLog log;
+    private MoveButtonFrame moveFrame;
+
+
+
+    public GameInfo (String player, GameController gameController, GameView gameView) {
         super();
+
         this.horizontalSpace = 374;
-        this.verticalSpace = 650;
-        this.colorOfPawns = colorOfPawns;
+
+        this.player = player;
         this.gameController = gameController;
         this.gameView = gameView;
-        this.gameLog = gameLog;
-    }
-
-    public void render() {
-        this.getChildren().addAll(new PlayerLabel(horizontalSpace, colorOfPawns), new GameHistoryLabel(horizontalSpace, gameLog), new MoveButtonFrame(horizontalSpace, this.gameController, this.gameView));
     }
 
 
-    class PlayerLabel extends Label {
-        public PlayerLabel (int horizontalSpace, String colorOfPawns) {
-            super("You're playing as: " + colorOfPawns);
+
+    public void render () {
+        this.setBackground(new Background(new BackgroundFill(Color.CORNSILK, null, getInsets())));
+
+        this.playerInfo = new PlayerInfo(horizontalSpace, player);
+        this.log = new GameLog(horizontalSpace);
+        this.moveFrame = new MoveButtonFrame(horizontalSpace, this.gameController, this.gameView);
+
+        this.getChildren().addAll(this.playerInfo, this.log, this.moveFrame);
+    }
+
+
+
+    public void setPlayer (String player) {
+        this.player = player;
+    }
+
+
+
+    public void updateLog (String newLog) {
+        this.log.setText(this.log.getText() + "\n" + newLog);
+    }
+
+
+
+    class PlayerInfo extends Label {
+        public PlayerInfo (int horizontalSpace, String player) {
+            super("You're playing as: " + player);
+            this.setFont(Font.font("Monospace", 20));
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(50);
@@ -57,9 +86,12 @@ public class GameInfo extends VBox {
         }
     }
 
-    class GameHistoryLabel extends Label {
-        public GameHistoryLabel (int horizontalSpace, String gameLog) {
-            super(gameLog);
+
+
+    class GameLog extends Label {
+        public GameLog (int horizontalSpace) {
+            super("Game log:");
+            this.setFont(Font.font("Monospace", 20));
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(500);
@@ -67,6 +99,8 @@ public class GameInfo extends VBox {
             this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         }
     }
+
+
 
     class MoveButtonFrame extends VBox {
         public MoveButtonFrame (int horizontalSpace, GameController gameController, GameView gameView) {
@@ -80,6 +114,8 @@ public class GameInfo extends VBox {
             this.getChildren().addAll(new MoveButton(gameController, gameView));
         }
     }
+
+
 
     class MoveButton extends Button {
         public MoveButton (GameController gameController, GameView gameView) {

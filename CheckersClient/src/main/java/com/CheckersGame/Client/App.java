@@ -1,11 +1,9 @@
 package com.CheckersGame.Client;
 
-import com.CheckersGame.Client.View.AppView;
 import com.CheckersGame.Client.View.GameView;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 
 
 
@@ -31,16 +29,14 @@ public class App extends Application {
      */
     @Override
     public void start (Stage primaryStage) {
-        
         GameController controller = new GameController();
 
         GameClient model = new GameClient(controller);
+        GameView view = new GameView(primaryStage, controller);
 
-        // SceneController sceneController = new SceneController(primaryStage, "Checkers Game");
-        AppView view = new AppView(primaryStage, controller);
-        view.renderGameView();
-        //controller.setModel(model);
-        //controller.setView(view);
-        //controller.startView();
+        controller.setModel(model);
+        controller.setView(view);
+        controller.startView();
+        controller.startModel();
     }
 }

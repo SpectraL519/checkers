@@ -1,6 +1,5 @@
 package com.CheckersGame.Client;
 
-import com.CheckersGame.Client.View.AppView;
 import com.CheckersGame.Client.View.GameView;
 
 
@@ -9,7 +8,7 @@ import com.CheckersGame.Client.View.GameView;
 
 public class GameController {
     private GameClient model;
-    private AppView view;
+    private GameView view;
     private Boolean active;
 
 
@@ -28,7 +27,7 @@ public class GameController {
 
 
 
-    public void setView (AppView view) {
+    public void setView (GameView view) {
         this.view = view;
     }
 
@@ -47,14 +46,13 @@ public class GameController {
 
 
     public void startView () {
-        this.view.renderGameView();
+        this.view.render();
     }
 
 
 
     public void startModel () {
         this.model.start();
-        // this.model.getMessage();
     }
 
 
@@ -62,8 +60,8 @@ public class GameController {
      * Model -> view
      * @param message
      */
-    public void updateLog (String message) {
-        //this.view.updateLog(message);
+    public void updateGameLog (String message) {
+        this.view.updateGameLog(message);
     }
 
 
@@ -73,16 +71,7 @@ public class GameController {
      * @param player
      */
     public void setPlayer (String player) {
-        //this.view.setPlayer(player);
-    }
-
-
-
-    /**
-     * Model -> view
-     */
-    public void chooseGameMode () {
-        //this.view.renderStartMenu();
+        this.view.setPlayer(player);
     }
 
 
@@ -115,7 +104,7 @@ public class GameController {
 
     public void renderBoard (String boardDescription) {
         if (!boardDescription.endsWith("null")) {
-            //this.view.renderGameView(boardDescription);
+            this.view.renderBoard(boardDescription);
         }
     }
 
@@ -128,9 +117,6 @@ public class GameController {
     public void newGame (String version) {
         this.model.sendMessage("newGame " + version);
         this.setActive(false);
-        // this.model.getMessage(); // Game start status
-        // this.model.getMessage(); // Board description
-        // this.model.getMessage();
     }
 
 
@@ -141,19 +127,6 @@ public class GameController {
     public void restartGame () {
         this.model.sendMessage("restartGame");
         this.setActive(false);
-        // this.model.getMessage(); // Game restart status
-        // this.model.getMessage(); // Board description
-        // this.model.getMessage();
-    }
-
-
-
-    public void endGame () {
-        this.model.sendMessage("endGame");
-        this.setActive(false);
-        // this.model.getMessage(); // Game end status
-        this.chooseGameMode();
-        // this.model.getMessage();
     }
 
 
@@ -168,9 +141,6 @@ public class GameController {
     public void movePawn (int rCurr, int cCurr, int rMov, int cMov) {
         this.model.sendMessage(String.format("movePawn %d %d %d %d", rCurr, cCurr, rMov, cMov));
         this.setActive(false);
-        // this.model.getMessage(); // Move status
-        // this.model.getMessage(); // Board description
-        // this.model.getMessage();
     }
 
 
@@ -201,15 +171,11 @@ public class GameController {
             }
 
             default: {
-                //this.view.updateLog("Error: Invalid mock");
+                this.view.updateGameLog("Error: Invalid mock");
                 this.setActive(false);
                 return;
             }
         }
-
-        // this.model.getMessage(); // Move status
-        // this.model.getMessage(); // Board description
-        // this.model.getMessage();
     }
 
 
