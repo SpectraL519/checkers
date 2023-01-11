@@ -38,7 +38,7 @@ public class App extends Application {
 
         controller.setModel(model);
         controller.setView(view);
-        controller.start();
+        controller.startView();
 
         Scene scene = new Scene(view);
         primaryStage.setTitle("Checkers Game");

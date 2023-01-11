@@ -67,20 +67,6 @@ cd <project_directory>
 
 <br />
 
-* The console application (use one of the following methods):
-```
-cd CheckersClient
-mvn package
-mvn clean compile exec:java
-```
-```
-cd CheckersClient
-mvn package
-java -cp target/CheckersClient-1.0-SNAPSHOT.jar com.CheckersGame.Client.ConsoleApp
-```
-
-<br />
-
 * The GUI application:
 ```
 cd CheckersClient

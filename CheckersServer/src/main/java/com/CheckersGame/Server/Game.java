@@ -26,8 +26,6 @@ public class Game implements Runnable {
     private GameVersion version; /** A game board factory class object */
     private Board board; /** The game board */
 
-    private boolean active; /** Game activity status */
-
 
 
     /**
@@ -45,8 +43,6 @@ public class Game implements Runnable {
     public Game (Socket playerWhite, Socket playerBlack) {
         this.playerWhite = playerWhite;
         this.playerBlack = playerBlack;
-
-        this.active = false;
     }
 
 
@@ -148,34 +144,6 @@ public class Game implements Runnable {
     }
 
 
-
-    /**
-     * Checks if there is an active game in the thread
-     * @return boolean
-     */
-    public boolean isActive () {
-        return this.active;
-    }
-
-
-
-    /**
-     * Activates a game
-     */
-    public void activate () {
-        this.active = true;
-    }
-
-
-
-    /**
-     * Deactivates the game
-     */
-    public void deactivate () {
-        this.active = false;
-    }
-
-
     
     /** 
      * Returns the current game version
@@ -249,7 +217,6 @@ public class Game implements Runnable {
                 this.version = new PolishVersion();
                 this.board = this.version.getBoard();
                 this.board.init();
-                this.activate();
                 break;
             }
 
@@ -257,7 +224,6 @@ public class Game implements Runnable {
                 this.version = new RussianVersion();
                 this.board = this.version.getBoard();
                 this.board.init();
-                this.activate();
                 break;
             }
 
@@ -265,7 +231,6 @@ public class Game implements Runnable {
                 this.version = new CanadianVersion();
                 this.board = this.version.getBoard();
                 this.board.init();
-                this.activate();
                 break;
             }
 
@@ -363,7 +328,6 @@ public class Game implements Runnable {
 
         this.version.resetBoard();
         this.board = this.version.getBoard();
-        this.activate();
     }
 
 

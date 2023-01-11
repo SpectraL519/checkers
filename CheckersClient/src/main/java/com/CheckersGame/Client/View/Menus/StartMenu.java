@@ -5,6 +5,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+import com.CheckersGame.Client.GameController;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,10 +19,13 @@ import javafx.scene.control.Label;
 
 public class StartMenu extends VBox {
 
-    private String checkedGame = "";
+    private String checkedGame;
+    private GameController gameController;
 
-    public StartMenu () {
+    public StartMenu (GameController gameController) {
         super();
+        this.gameController = gameController;
+        this.checkedGame = null;
     }
 
     public  void render(){
@@ -29,7 +35,7 @@ public class StartMenu extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setMinWidth(250);
         this.setMaxWidth(250);
-        this.getChildren().addAll(new WelcomeText(), new GermanButton(this), new PolishButton(this), new CanadianButton(this), new StartButton(this));
+        this.getChildren().addAll(new WelcomeText(), new RussianButton(this), new PolishButton(this), new CanadianButton(this), new StartButton(this, this.gameController));
     }
 
     class WelcomeText extends Label {
@@ -45,16 +51,15 @@ public class StartMenu extends VBox {
         }
     }
 
-    class GermanButton extends Button {
-        public GermanButton (StartMenu startMenu) {
-            super("German Checkers");
+    class RussianButton extends Button {
+        public RussianButton (StartMenu startMenu) {
+            super("Russian Checkers");
             this.setMinWidth(230);
             this.setMaxWidth(230);
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                  System.out.println("German selected");
-                  startMenu.checkedGame = "german";
+                  startMenu.checkedGame = "russian";
                 }
             });
         }
@@ -68,7 +73,6 @@ public class StartMenu extends VBox {
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                  System.out.println("Polish selected");
                   startMenu.checkedGame = "polish";
                 }
             });
@@ -83,7 +87,6 @@ public class StartMenu extends VBox {
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                  System.out.println("Canadian selected");
                   startMenu.checkedGame = "canadian";
                 }
             });
@@ -91,13 +94,14 @@ public class StartMenu extends VBox {
     }
 
     class StartButton extends Button {
-        public StartButton (StartMenu startMenu) {
+        public StartButton (StartMenu startMenu, GameController gameController) {
             super("START!");
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                  System.out.println("Move to GameView!");
-                  System.out.println(startMenu.checkedGame);
+                    if (startMenu.checkedGame != null) {
+                        gameController.newGame(checkedGame);
+                    }
                 }
             });
         }

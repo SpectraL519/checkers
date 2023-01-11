@@ -89,7 +89,7 @@ public class GameClient {
             }
         }
         catch (IOException e) {
-            this.controller.displayMessage("I/O error");
+            this.controller.updateLog("I/O error");
             this.controller.closeApplication(1);
         }
     }
@@ -101,20 +101,20 @@ public class GameClient {
             String message = this.input.readLine();
             
             if (message.startsWith("cmd:")) {
-                this.controller.activateMoveButtons();
+                this.controller.setActive(true);
             }
             else if (message.startsWith("(white)") || message.startsWith("(black)")) {
-                this.controller.displayMessage(message);
+                this.controller.updateLog(message);
             }
             else if (message.startsWith("board:")) {
                 this.controller.renderBoard(message);
             }
             else {
-                this.controller.displayMessage(message);
+                this.controller.updateLog(message);
             }
         }
         catch (IOException e) {
-            this.controller.displayMessage("IOError: " + e.getMessage());
+            this.controller.updateLog("IOError: " + e.getMessage());
             e.printStackTrace();
         }
     }

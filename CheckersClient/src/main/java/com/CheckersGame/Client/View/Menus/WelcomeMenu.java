@@ -5,6 +5,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+import com.CheckersGame.Client.GameController;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,18 +20,21 @@ import javafx.scene.control.Label;
 
 public class WelcomeMenu extends VBox {
 
-    public WelcomeMenu () {
+    private GameController gameController;
+
+    public WelcomeMenu (GameController gameController) {
         super();
+        this.gameController = gameController;
     }
 
-    public  void render(){
+    public void render () {
         this.setBackground(new Background(new BackgroundFill(Color.CORAL, null, null)));
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.setMinWidth(250);
         this.setMaxWidth(250);
-        this.getChildren().addAll(new WelcomeText(), new StartButton());
+        this.getChildren().addAll(new WelcomeText(), new StartButton(this.gameController));
     }
 
     class WelcomeText extends Label {
@@ -46,12 +52,12 @@ public class WelcomeMenu extends VBox {
     }
 
     class StartButton extends Button {
-        public StartButton () {
+        public StartButton (GameController gameController) {
             super("START!");
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                  System.out.println("Move to StartMenu or WaitMenu!");
+                    gameController.startModel();
                 }
             });
         }

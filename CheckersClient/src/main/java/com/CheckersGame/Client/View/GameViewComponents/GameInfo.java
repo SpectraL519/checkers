@@ -1,5 +1,8 @@
 package com.CheckersGame.Client.View.GameViewComponents;
 
+import com.CheckersGame.Client.GameController;
+import com.CheckersGame.Client.View.GameView;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,16 +26,22 @@ public class GameInfo extends VBox {
     private int horizontalSpace;
     private int verticalSpace;
     private String colorOfPawns;
+    private GameController gameController;
+    private GameView gameView;
+    private String gameLog;
 
-    public GameInfo (String colorOfPawns) {
+    public GameInfo (String colorOfPawns, GameController gameController, GameView gameView, String gameLog) {
         super();
         this.horizontalSpace = 374;
         this.verticalSpace = 650;
         this.colorOfPawns = colorOfPawns;
+        this.gameController = gameController;
+        this.gameView = gameView;
+        this.gameLog = gameLog;
     }
 
     public void render() {
-        this.getChildren().addAll(new PlayerLabel(horizontalSpace, colorOfPawns), new GameHistoryLabel(horizontalSpace), new GameLogLabel(horizontalSpace));
+        this.getChildren().addAll(new PlayerLabel(horizontalSpace, colorOfPawns), new GameHistoryLabel(horizontalSpace, gameLog), new MoveButtonFrame(horizontalSpace, this.gameController, this.gameView));
     }
 
 
@@ -49,8 +58,8 @@ public class GameInfo extends VBox {
     }
 
     class GameHistoryLabel extends Label {
-        public GameHistoryLabel (int horizontalSpace) {
-            super("1.  23-45   12-65\n2.  41-45   34-28\n3.  45x14");
+        public GameHistoryLabel (int horizontalSpace, String gameLog) {
+            super(gameLog);
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(500);
@@ -59,8 +68,8 @@ public class GameInfo extends VBox {
         }
     }
 
-    class GameLogLabel extends VBox {
-        public GameLogLabel (int horizontalSpace) {
+    class MoveButtonFrame extends VBox {
+        public MoveButtonFrame (int horizontalSpace, GameController gameController, GameView gameView) {
             super();
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
@@ -68,12 +77,12 @@ public class GameInfo extends VBox {
             this.setMaxHeight(100);
             this.setPadding(new Insets(5, 5, 5, 5));
             this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            this.getChildren().addAll(new MoveButton());
+            this.getChildren().addAll(new MoveButton(gameController, gameView));
         }
     }
 
     class MoveButton extends Button {
-        public MoveButton () {
+        public MoveButton (GameController gameController, GameView gameView) {
             super("MOVE!");
             this.setMinHeight(88);
             this.setMaxHeight(88);
@@ -83,7 +92,10 @@ public class GameInfo extends VBox {
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                  System.out.println("Move pawn");
+                    if(gameController.isAstive()) {
+                        int[] coordinatres = gameView.board.controller.makeMove();
+                        gameController.movePawn(coordinatres[0], coordinatres[1], coordinatres[2], coordinatres[3]);
+                    }
                 }
             });
         }

@@ -239,7 +239,7 @@ final class CommandLine {
         this.output.println(message);
 
         if (this.game.getBoard() == null) {
-            System.out.println("Null board");
+            System.out.println("board: null");
             this.output.println("");
             return;
         }

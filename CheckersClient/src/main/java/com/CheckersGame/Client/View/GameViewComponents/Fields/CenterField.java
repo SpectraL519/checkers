@@ -68,4 +68,12 @@ public class CenterField extends Field {
         this.blackPawn.setVisible(b);
     }
 
+    public void showWhitePawnQueen(boolean b){
+        this.whitePawnQueen.setVisible(b);
+    }
+
+    public void showBlackPawnQueen(boolean b){
+        this.blackPawnQueen.setVisible(b);
+    }
+
 }

@@ -1,5 +1,8 @@
 package com.CheckersGame.Client.View.GameViewComponents;
 
+import com.CheckersGame.Client.GameController;
+import com.CheckersGame.Client.View.GameView;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,8 +17,13 @@ import javafx.scene.paint.Color;
 
 public class Toolbar extends HBox {
 
-    public Toolbar() {
+    private GameController gameController;
+    private String colorOfPawns;
+
+    public Toolbar(GameController gameController, String colorOfPawns) {
         super();
+        this.gameController = gameController;
+        this.colorOfPawns = colorOfPawns;
     }
 
     public void render() {
@@ -23,36 +31,36 @@ public class Toolbar extends HBox {
         this.setSpacing(10);
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
-        this.getChildren().addAll(new ExitButton(), new RestartButton(), new MockSituation());
+        this.getChildren().addAll(new ExitButton(this.gameController), new RestartButton(this.gameController), new MockSituation(this.gameController));
     }
 
     class ExitButton extends Button {
-        public ExitButton() {
+        public ExitButton(GameController gameController) {
             super("Exit game");
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     System.out.println("Good Bye!");
-                    Platform.exit();
+                    gameController.closeApplication(0);
                 }
             });
         }
     }
 
     class RestartButton extends Button {
-        public RestartButton() {
+        public RestartButton(GameController gameController) {
             super("Restart game");
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("Restarting...");
+                    gameController.restartGame();
                 }
             });
         }
     }
 
     class MockSituation extends SplitMenuButton {
-        public MockSituation() {
+        public MockSituation(GameController gameController) {
             super();
             this.setText("Mocks");
 
@@ -63,21 +71,27 @@ public class Toolbar extends HBox {
             choice1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("Option 1 selected");
+                    if(gameController.isAstive()) {
+                        gameController.mock("simple", colorOfPawns);
+                    }
                 }
             });
 
             choice2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("Option 2 selected");
+                    if(gameController.isAstive()) {
+                        gameController.mock("queen", colorOfPawns);
+                    }
                 }
             });
 
             choice3.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("Option 3 selected");
+                    if(gameController.isAstive()) {
+                        gameController.mock("convert", colorOfPawns);
+                    }
                 }
             });
 
