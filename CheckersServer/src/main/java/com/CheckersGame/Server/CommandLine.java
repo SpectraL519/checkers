@@ -26,10 +26,14 @@ final class CommandLine {
      * @param input
      * @param output
      */
-    public CommandLine (Game game, BufferedReader input, PrintWriter output) {
-        this.game = game;
+    public CommandLine (BufferedReader input, PrintWriter output) {
+        this.game = null;
         this.input = input;
         this.output = output;
+    }
+
+    public void setGame (Game game) {
+        this.game = game;
     }
 
 
@@ -236,6 +240,7 @@ final class CommandLine {
      * @throws IOException
      */
     public void sendMessage (String message) throws IOException {
+        
         this.output.println(message);
 
         if (this.game.getBoard() == null) {
@@ -245,5 +250,6 @@ final class CommandLine {
         }
 
         this.output.println(this.game.getBoardDescription());
+        
     }
 }

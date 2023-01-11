@@ -45,11 +45,13 @@ public class GameClient {
      * Tries to connect to the server
      */
     private void listen () {
+        this.controller.displayWaitScreen("opponentAwaiting");
         try {
+            System.out.println("listen");
             this.socket = new Socket("localhost", 4444);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
-            this.controller.displayWaitScreen("opponentAwaiting");
+            
         } 
         catch (UnknownHostException e) {
             System.err.println("Unknown host: localhost");
@@ -67,8 +69,10 @@ public class GameClient {
      * Handles the initial message recieved from the client
      */
     private void getInit () {
+        System.out.println("before player");
         try {
             String player = this.input.readLine();
+            System.out.println("player: " + player);
             this.controller.setPlayer(player);
 
             switch (player) {
@@ -89,7 +93,8 @@ public class GameClient {
             }
         }
         catch (IOException e) {
-            this.controller.updateLog("I/O error");
+            System.err.println("I/O error");
+            //this.controller.updateLog("I/O error");
             this.controller.closeApplication(1);
         }
     }
@@ -102,9 +107,6 @@ public class GameClient {
             
             if (message.startsWith("cmd:")) {
                 this.controller.setActive(true);
-            }
-            else if (message.startsWith("(white)") || message.startsWith("(black)")) {
-                this.controller.updateLog(message);
             }
             else if (message.startsWith("board:")) {
                 this.controller.renderBoard(message);

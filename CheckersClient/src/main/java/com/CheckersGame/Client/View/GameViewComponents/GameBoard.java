@@ -98,13 +98,13 @@ public class GameBoard extends GridPane {
             int pawnType = Integer.parseInt(pawnDescription[2]);
 
             if(pawnType == 1){
-                board[column][row].showWhitePawn(true);
+                board[column+1][row+1].showWhitePawn(true);
             }else if(pawnType == 2){
-                board[column][row].showBlackPawn(true);
+                board[column+1][row+1].showBlackPawn(true);
             }else if(pawnType == 10){
-                board[column][row].showWhitePawnQueen(true);
+                board[column+1][row+1].showWhitePawnQueen(true);
             }else if(pawnType == 20){
-                board[column][row].showBlackPawnQueen(true);
+                board[column+1][row+1].showBlackPawnQueen(true);
             }else{
                 System.out.println("Error: Invalid type of pawn!");
             }

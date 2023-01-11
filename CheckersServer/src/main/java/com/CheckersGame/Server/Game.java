@@ -40,9 +40,13 @@ public class Game implements Runnable {
      * @param playerWhite
      * @param playerBlack
      */
-    public Game (Socket playerWhite, Socket playerBlack) {
+    public Game (Socket playerWhite, CommandLine cmdWhite, Socket playerBlack, CommandLine cmdBlack) {
         this.playerWhite = playerWhite;
         this.playerBlack = playerBlack;
+        this.cmdWhite = cmdWhite;
+        this.cmdBlack = cmdBlack;
+        this.cmdWhite.setGame(this);
+        this.cmdBlack.setGame(this);
     }
 
 
@@ -53,13 +57,7 @@ public class Game implements Runnable {
     @Override
     public void run () {
         try {
-            BufferedReader inWhite = new BufferedReader(new InputStreamReader(this.playerWhite.getInputStream()));
-            PrintWriter outWhite = new PrintWriter(this.playerWhite.getOutputStream(), true);
-            this.cmdWhite = new CommandLine(this, inWhite, outWhite);
             
-            BufferedReader inBlack = new BufferedReader(new InputStreamReader(this.playerBlack.getInputStream()));
-            PrintWriter outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
-            this.cmdBlack = new CommandLine(this, inBlack, outBlack);
 
             this.cmdWhite.sendInit("white");
             this.cmdBlack.sendInit("black");

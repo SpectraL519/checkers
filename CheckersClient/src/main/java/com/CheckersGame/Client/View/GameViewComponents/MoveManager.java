@@ -28,7 +28,7 @@ public class MoveManager {
             } else {
                 newColumn = column;
                 newRow = row;
-                makeMove();
+                //makeMove();
             }
     }
 

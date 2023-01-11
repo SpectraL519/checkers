@@ -26,10 +26,22 @@ public class GameServer {
                 System.out.println("First player connected");
                 System.out.println("Waiting for the second player");
 
+                BufferedReader inWhite = new BufferedReader(new InputStreamReader(playerWhite.getInputStream()));
+                PrintWriter outWhite = new PrintWriter(playerWhite.getOutputStream(), true);
+                CommandLine cmdWhite = new CommandLine(inWhite, outWhite);
+
+                cmdWhite.sendInit("white");
+
                 Socket playerBlack = serverSocket.accept();
                 System.out.println("Second player connected");
 
-                Thread gameThread = new Thread(new Game(playerWhite, playerBlack));
+                BufferedReader inBlack = new BufferedReader(new InputStreamReader(playerBlack.getInputStream()));
+                PrintWriter outBlack = new PrintWriter(playerBlack.getOutputStream(), true);
+                CommandLine cmdBlack = new CommandLine(inBlack, outBlack);
+
+                cmdBlack.sendInit("black");
+
+                Thread gameThread = new Thread(new Game(playerWhite, cmdWhite, playerBlack, cmdBlack));
                 gameThread.start();
             }
         } 

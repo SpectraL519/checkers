@@ -15,7 +15,7 @@ public class AppView extends BorderPane {
 
     private GameView gameView;
     private StartMenu startMenu;
-    private WelcomeMenu welcomeMenu;
+    public WelcomeMenu welcomeMenu;
     private WaitPlayerMenu waitPlayerMenu;
     private WaitSelectionMenu waitSelectionMenu;
     public String colorOfPawns;
@@ -26,6 +26,11 @@ public class AppView extends BorderPane {
         this.setPrefSize(1024, 720);
         this.gameController = gameController;
         this.gameLog = "";
+        this.gameView = null;
+        this.startMenu = new StartMenu(this.gameController);
+        this.welcomeMenu = new WelcomeMenu(this.gameController);
+        this.waitPlayerMenu = new WaitPlayerMenu();
+        this.waitSelectionMenu = new WaitSelectionMenu();
     }
 
     /*
@@ -49,32 +54,36 @@ public class AppView extends BorderPane {
     */
 
     public void renderWelcomeMenu() {
-        this.welcomeMenu = new WelcomeMenu(this.gameController);
+        //this.welcomeMenu = new WelcomeMenu(this.gameController);
         this.welcomeMenu.render();
         this.setCenter(this.welcomeMenu);
     }
 
     public void renderWaitPlayerMenu() {
-        this.waitPlayerMenu = new WaitPlayerMenu();
+        //this.waitPlayerMenu = new WaitPlayerMenu();
         this.waitPlayerMenu.render();
+        this.setCenter(null);
         this.setCenter(this.waitPlayerMenu);
     }
 
     public void renderWaitSelectionMenu() {
-        this.waitSelectionMenu = new WaitSelectionMenu();
+        //this.waitSelectionMenu = new WaitSelectionMenu();
         this.waitSelectionMenu.render();
+        this.setCenter(null);
         this.setCenter(this.waitSelectionMenu);
     }
 
     public void renderStartMenu() {
-        this.startMenu = new StartMenu(this.gameController);
+        //this.startMenu = new StartMenu(this.gameController);
         this.startMenu.render();
+        this.setCenter(null);
         this.setCenter(this.startMenu);
     }
 
     public void renderGameView(String description) {
         this.gameView = new GameView(description, colorOfPawns, this.gameController, this.gameLog);
         this.gameView.render();
+        this.setCenter(null);
         this.setCenter(this.gameView);
     }
 

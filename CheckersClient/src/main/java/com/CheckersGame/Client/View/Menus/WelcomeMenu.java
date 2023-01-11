@@ -37,6 +37,11 @@ public class WelcomeMenu extends VBox {
         this.getChildren().addAll(new WelcomeText(), new StartButton(this.gameController));
     }
 
+    //TEST_ROZPACZY
+    public void changeColor (Color color) {
+        this.setBackground(new Background(new BackgroundFill(color, null, null)));
+    }
+
     class WelcomeText extends Label {
         public WelcomeText () {
             super("Welcome in Checkers Game!");

@@ -56,10 +56,7 @@ public class GameController {
 
     public void startModel () {
         this.model.start();
-
-        while (true) {
-            this.model.getMessage();
-        }
+        this.model.getMessage();
     }
 
 
@@ -98,6 +95,7 @@ public class GameController {
      * Model -> view
      */
     public void displayWaitScreen (String type) {
+        System.out.println("displayWaitScreen " + type);
         switch (type) {
             case "opponentAwaiting": {
                 this.view.renderWaitPlayerMenu();
@@ -113,6 +111,7 @@ public class GameController {
                 System.err.println("Invalid waitscreen type info");
                 this.closeApplication(1);
             }
+            break;
         }
     }
 
@@ -135,6 +134,7 @@ public class GameController {
         this.setActive(false);
         this.model.getMessage(); // Game start status
         this.model.getMessage(); // Board description
+        this.model.getMessage();
     }
 
 
@@ -147,6 +147,7 @@ public class GameController {
         this.setActive(false);
         this.model.getMessage(); // Game restart status
         this.model.getMessage(); // Board description
+        this.model.getMessage();
     }
 
 
@@ -156,6 +157,7 @@ public class GameController {
         this.setActive(false);
         this.model.getMessage(); // Game end status
         this.chooseGameMode();
+        this.model.getMessage();
     }
 
 
@@ -172,6 +174,7 @@ public class GameController {
         this.setActive(false);
         this.model.getMessage(); // Move status
         this.model.getMessage(); // Board description
+        this.model.getMessage();
     }
 
 
@@ -191,13 +194,13 @@ public class GameController {
 
             case "queen": {
                 this.model.sendMessage("mockQueenEndgame" + player);
-                this.setActive(false);
+                this.setActive(false);               
                 break;
             }
 
             case "convert": {
                 this.model.sendMessage("mockPawnToQueen " + player);
-                this.setActive(false);
+                this.setActive(false);                
                 break;
             }
 
@@ -210,6 +213,7 @@ public class GameController {
 
         this.model.getMessage(); // Move status
         this.model.getMessage(); // Board description
+        this.model.getMessage();
     }
 
 
