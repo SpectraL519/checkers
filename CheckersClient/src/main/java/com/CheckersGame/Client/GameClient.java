@@ -2,7 +2,7 @@ package com.CheckersGame.Client;
 
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
+
 
 
 
@@ -49,14 +49,14 @@ public class GameClient {
             this.socket = new Socket("localhost", 4444);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
-            this.controller.displayMessage("Waiting for the oponnent to connect...");
+            this.controller.displayWaitScreen("opponentAwaiting");
         } 
         catch (UnknownHostException e) {
-            this.controller.displayMessage("Unknown host: localhost");
+            System.err.println("Unknown host: localhost");
             this.controller.closeApplication(1);
         } 
         catch (IOException e) {
-            this.controller.displayMessage("I/O error");
+            System.err.println("I/O error");
             this.controller.closeApplication(1);
         }
     }
@@ -71,15 +71,20 @@ public class GameClient {
             String player = this.input.readLine();
             this.controller.setPlayer(player);
 
-            switch(player) {
+            switch (player) {
                 case "white": {
                     this.controller.chooseGameMode();
                     break;
                 }
 
                 case "black": {
-                    this.controller.displayWaitScreen();
+                    this.controller.displayWaitScreen("modeSelection");
                     break;
+                }
+
+                default: {
+                    System.err.println("Invalid player info");
+                    this.controller.closeApplication(1);
                 }
             }
         }
@@ -105,7 +110,7 @@ public class GameClient {
                 this.controller.renderBoard(message);
             }
             else {
-                this.controller.displayErrorMessage(message);
+                this.controller.displayMessage(message);
             }
         }
         catch (IOException e) {
