@@ -47,7 +47,7 @@ public class GameController {
 
 
     public void startView () {
-        this.view.renderWelcomeMenu();
+        this.view.renderGameView();
     }
 
 
@@ -63,7 +63,7 @@ public class GameController {
      * @param message
      */
     public void updateLog (String message) {
-        this.view.updateLog(message);
+        //this.view.updateLog(message);
     }
 
 
@@ -73,7 +73,7 @@ public class GameController {
      * @param player
      */
     public void setPlayer (String player) {
-        this.view.setPlayer(player);
+        //this.view.setPlayer(player);
     }
 
 
@@ -82,7 +82,7 @@ public class GameController {
      * Model -> view
      */
     public void chooseGameMode () {
-        this.view.renderStartMenu();
+        //this.view.renderStartMenu();
     }
 
 
@@ -94,12 +94,12 @@ public class GameController {
         System.out.println("displayWaitScreen " + type + " -> connector");
         switch (type) {
             case "opponentAwaiting": {
-                this.view.renderWaitPlayerMenu();
+                //this.view.renderWaitPlayerMenu();
                 break;
             }
 
             case "modeSelection": {
-                this.view.renderWaitSelectionMenu();
+                //this.view.renderWaitSelectionMenu();
                 break;
             }
 
@@ -115,7 +115,7 @@ public class GameController {
 
     public void renderBoard (String boardDescription) {
         if (!boardDescription.endsWith("null")) {
-            this.view.renderGameView(boardDescription);
+            //this.view.renderGameView(boardDescription);
         }
     }
 
@@ -201,7 +201,7 @@ public class GameController {
             }
 
             default: {
-                this.view.updateLog("Error: Invalid mock");
+                //this.view.updateLog("Error: Invalid mock");
                 this.setActive(false);
                 return;
             }

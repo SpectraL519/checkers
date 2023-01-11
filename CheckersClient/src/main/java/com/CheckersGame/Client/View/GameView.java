@@ -22,13 +22,13 @@ public class GameView extends BorderPane {
 
 
     //public GameView (int boardSize, int rowOfPawns, String colorOfPawns)
-    public GameView (String description, String colorOfPawns, GameController gameController, String gameLog) {
+    public GameView (String colorOfPawns, GameController gameController, String gameLog) {
         this.gameController = gameController;
         this.colorOfPawns = colorOfPawns;
         this.gameLog = gameLog;
         this.toolbar = new Toolbar(this.gameController, this.colorOfPawns);
         this.creditsbar = new Creditsbar();
-        this.board = new GameBoard(description, this.gameController);
+        this.board = new GameBoard("board:8;2,0,1", this.gameController);
         this.gameinfo = new GameInfo(this.colorOfPawns, this.gameController, this, this.gameLog);
         
         

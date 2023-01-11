@@ -31,31 +31,48 @@ public class Toolbar extends HBox {
         this.setSpacing(10);
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
-        this.getChildren().addAll(new ExitButton(this.gameController), new RestartButton(this.gameController), new MockSituation(this.gameController));
+        this.getChildren().addAll(new GameType(this.gameController), new MockSituation(this.gameController), new RestartButton(this.gameController), new ExitButton(this.gameController));
     }
 
-    class ExitButton extends Button {
-        public ExitButton(GameController gameController) {
-            super("Exit game");
-            this.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    System.out.println("Good Bye!");
-                    gameController.closeApplication(0);
-                }
-            });
-        }
-    }
+    class GameType extends SplitMenuButton {
+        public GameType(GameController gameController) {
+            super();
+            this.setText("New game");
 
-    class RestartButton extends Button {
-        public RestartButton(GameController gameController) {
-            super("Restart game");
-            this.setOnAction(new EventHandler<ActionEvent>() {
+            MenuItem choice1 = new MenuItem("Russian");
+            MenuItem choice2 = new MenuItem("Polish");
+            MenuItem choice3 = new MenuItem("Canadian");
+
+            choice1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    gameController.restartGame();
+                    if(gameController.isAstive()) {
+                        gameController.mock("simple", colorOfPawns);
+                    }
                 }
             });
+
+            choice2.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if(gameController.isAstive()) {
+                        gameController.mock("queen", colorOfPawns);
+                    }
+                }
+            });
+
+            choice3.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if(gameController.isAstive()) {
+                        gameController.mock("convert", colorOfPawns);
+                    }
+                }
+            });
+
+            this.getItems().addAll(choice1, choice2, choice3);
+
+
         }
     }
 
@@ -100,4 +117,31 @@ public class Toolbar extends HBox {
 
         }
     }
+
+    
+    class RestartButton extends Button {
+        public RestartButton(GameController gameController) {
+            super("Restart game");
+            this.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    gameController.restartGame();
+                }
+            });
+        }
+    }
+
+    class ExitButton extends Button {
+        public ExitButton(GameController gameController) {
+            super("Exit game");
+            this.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("Good Bye!");
+                    gameController.closeApplication(0);
+                }
+            });
+        }
+    }
+
 }
