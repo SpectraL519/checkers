@@ -205,12 +205,12 @@ final class CommandLine {
     
     /** 
      * Sends a initial message to a client.
-     * @param message
+     * @param player
      * @throws IOException
      */
-    public void sendInit (String message) throws IOException {
-        System.out.println("Sending: " + message);
-        this.output.println("init: " + message);
+    public void sendInit (String player) throws IOException {
+        System.out.println("Sending: " + player);
+        this.output.println("init: " + player);
     }
 
 

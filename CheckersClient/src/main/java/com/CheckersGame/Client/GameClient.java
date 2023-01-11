@@ -3,6 +3,8 @@ package com.CheckersGame.Client;
 import java.io.*;
 import java.net.*;
 
+import javafx.application.Platform;
+
 
 
 
@@ -12,7 +14,7 @@ import java.net.*;
  * @version 1.0
  * Class handling the client thread
  */
-public class GameClient {
+public class GameClient implements Runnable {
     private Socket socket; /** A socket for the client to connect to the server */
 
     private BufferedReader input; /** The client's input stream handling masseges sent from a server */
@@ -34,12 +36,13 @@ public class GameClient {
     /**
      * Starts the client thread
      */
-    public void start () {
+    @Override
+    public void run () {
         this.listen();
 
-        // while (true) {
-        //     this.getMessage();
-        // }
+        while (true) {
+            this.getMessage();
+        }
     }
 
 
@@ -54,7 +57,9 @@ public class GameClient {
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
             System.out.println("Success!");
-            this.controller.updateGameLog("Server connection successful!");
+            Platform.runLater(() -> {
+                this.controller.updateGameLog("Server connection successful!");
+            });
         } 
         catch (UnknownHostException e) {
             System.err.println("Unknown host: localhost");
@@ -67,18 +72,23 @@ public class GameClient {
     }
 
 
-
     private void getMessage() {
-        try{
+        System.out.println("Trying to recieve a message from the server...");
+        try {
             String message = this.input.readLine();
             System.out.println("Recieved: " + message);
 
             if (message.startsWith("init:")) {
+                System.out.println("Setting player...");
                 if (message.endsWith("white")) {
-                    this.controller.setPlayer("white");
+                    Platform.runLater(() -> {
+                        this.controller.setPlayer("white");
+                    });
                 }
                 else if (message.endsWith("black")) {
-                    this.controller.setPlayer("black");
+                    Platform.runLater(() -> {
+                        this.controller.setPlayer("black");
+                    });
                 }
                 else {
                     System.err.println("Error: invalid init message");
@@ -89,10 +99,14 @@ public class GameClient {
                 this.controller.setActive(true);
             }
             else if (message.startsWith("board:")) {
-                this.controller.renderBoard(message);
+                Platform.runLater(() -> {
+                    this.controller.renderBoard(message);
+                });
             }
             else {
-                this.controller.updateGameLog(message);
+                Platform.runLater(() -> {
+                    this.controller.updateGameLog(message);
+                });
             }
         }
         catch (IOException e) {

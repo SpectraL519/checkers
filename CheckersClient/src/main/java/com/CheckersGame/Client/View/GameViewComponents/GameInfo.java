@@ -27,7 +27,6 @@ import javafx.scene.text.Font;
 public class GameInfo extends VBox {
     private int horizontalSpace;
 
-    private String player;
     private GameController gameController;
     private GameView gameView;
 
@@ -37,12 +36,11 @@ public class GameInfo extends VBox {
 
 
 
-    public GameInfo (String player, GameController gameController, GameView gameView) {
+    public GameInfo (GameController gameController, GameView gameView) {
         super();
 
         this.horizontalSpace = 374;
 
-        this.player = player;
         this.gameController = gameController;
         this.gameView = gameView;
     }
@@ -50,9 +48,9 @@ public class GameInfo extends VBox {
 
 
     public void render () {
-        this.setBackground(new Background(new BackgroundFill(Color.CORNSILK, null, getInsets())));
+        this.setBackground(new Background(new BackgroundFill(Color.CORNSILK, null, null)));
 
-        this.playerInfo = new PlayerInfo(horizontalSpace, player);
+        this.playerInfo = new PlayerInfo(horizontalSpace, null);
         this.log = new GameLog(horizontalSpace);
         this.moveFrame = new MoveButtonFrame(horizontalSpace, this.gameController, this.gameView);
 
@@ -62,7 +60,7 @@ public class GameInfo extends VBox {
 
 
     public void setPlayer (String player) {
-        this.player = player;
+        this.playerInfo.setPlayer(player);
     }
 
 
@@ -84,6 +82,10 @@ public class GameInfo extends VBox {
             this.setAlignment(Pos.CENTER);
             this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         }
+
+        public void setPlayer (String player) {
+            this.setText("You're playing as: " + player);
+        }
     }
 
 
@@ -91,7 +93,7 @@ public class GameInfo extends VBox {
     class GameLog extends Label {
         public GameLog (int horizontalSpace) {
             super("Game log:");
-            this.setFont(Font.font("Monospace", 20));
+            this.setFont(Font.font("Monospace", 10));
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(500);

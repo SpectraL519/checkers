@@ -19,14 +19,14 @@ import javafx.scene.paint.Color;
 
 public class Toolbar extends HBox {
     private GameController gameController;
-    private String colorOfPawns;
+    private String player;
 
 
 
-    public Toolbar(GameController gameController, String colorOfPawns) {
+    public Toolbar(GameController gameController, String player) {
         super();
         this.gameController = gameController;
-        this.colorOfPawns = colorOfPawns;
+        this.player = player;
     }
 
 
@@ -94,7 +94,7 @@ public class Toolbar extends HBox {
                 @Override
                 public void handle(ActionEvent event) {
                     if(gameController.isAstive()) {
-                        gameController.mock("simple", colorOfPawns);
+                        gameController.mock("simple", player);
                     }
                 }
             });
@@ -103,7 +103,7 @@ public class Toolbar extends HBox {
                 @Override
                 public void handle(ActionEvent event) {
                     if(gameController.isAstive()) {
-                        gameController.mock("queen", colorOfPawns);
+                        gameController.mock("queen", player);
                     }
                 }
             });
@@ -112,7 +112,7 @@ public class Toolbar extends HBox {
                 @Override
                 public void handle(ActionEvent event) {
                     if(gameController.isAstive()) {
-                        gameController.mock("convert", colorOfPawns);
+                        gameController.mock("convert", player);
                     }
                 }
             });

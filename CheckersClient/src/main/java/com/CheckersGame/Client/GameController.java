@@ -2,11 +2,14 @@ package com.CheckersGame.Client;
 
 import com.CheckersGame.Client.View.GameView;
 
+import javafx.application.Platform;
+
 
 
 
 
 public class GameController {
+    private Thread gameThread;
     private GameClient model;
     private GameView view;
     private Boolean active;
@@ -52,7 +55,8 @@ public class GameController {
 
 
     public void startModel () {
-        this.model.start();
+        this.gameThread = new Thread(this.model);
+        this.gameThread.start();
     }
 
 
@@ -182,6 +186,8 @@ public class GameController {
 
 
     public void closeApplication (int status) {
-        System.exit(status);
+        // System.exit(status);
+        System.out.println("Program ended with return status: " + status);
+        Platform.exit();
     }
 }

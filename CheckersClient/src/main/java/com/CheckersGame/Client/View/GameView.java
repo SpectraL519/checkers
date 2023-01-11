@@ -57,7 +57,7 @@ public class GameView extends BorderPane {
 
 
     private void renderGameInfo () {
-        this.gameInfo = new GameInfo(this.player, this.gameController, this);
+        this.gameInfo = new GameInfo(this.gameController, this);
         this.gameInfo.render();
     }
 
