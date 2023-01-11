@@ -2,6 +2,7 @@ package com.CheckersGame.Client.View.Menus;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -17,25 +18,33 @@ import javafx.scene.control.Label;
 
 
 
-public class StartMenu extends VBox {
+public class StartMenu extends BorderPane {
 
     private String checkedGame;
     private GameController gameController;
+    private VBox menu;
 
     public StartMenu (GameController gameController) {
         super();
+        System.out.println("StartMenu: checkpoint 1");
         this.gameController = gameController;
         this.checkedGame = null;
+        this.menu = null;
+        System.out.println("StartMenu: checkpoint 2");
     }
 
     public  void render(){
-        this.setBackground(new Background(new BackgroundFill(Color.CORAL, null, null)));
-        this.setPadding(new Insets(10, 10, 10, 10));
-        this.setSpacing(10);
-        this.setAlignment(Pos.CENTER);
-        this.setMinWidth(250);
-        this.setMaxWidth(250);
-        this.getChildren().addAll(new WelcomeText(), new RussianButton(this), new PolishButton(this), new CanadianButton(this), new StartButton(this, this.gameController));
+        System.out.println("StartMenu: checkpoint 3");
+        this.menu = new VBox();
+        this.menu.setBackground(new Background(new BackgroundFill(Color.CORAL, null, null)));
+        this.menu.setPadding(new Insets(10, 10, 10, 10));
+        this.menu.setSpacing(10);
+        this.menu.setAlignment(Pos.CENTER);
+        this.menu.setMinWidth(250);
+        this.menu.setMaxWidth(250);
+        this.menu.getChildren().addAll(new WelcomeText(), new RussianButton(this), new PolishButton(this), new CanadianButton(this), new StartButton(this, this.gameController));
+        this.setCenter(this.menu);
+        System.out.println("StartMenu: checkpoint 4");
     }
 
     class WelcomeText extends Label {

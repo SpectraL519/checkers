@@ -22,7 +22,6 @@ public class App extends Application {
     public static void main (String args[]) {
         Application.launch(args);
     }
-
     
 
     /** 
@@ -31,22 +30,15 @@ public class App extends Application {
      */
     @Override
     public void start (Stage primaryStage) {
-
         GameController controller = new GameController();
 
         GameClient model = new GameClient(controller);
-        AppView view = new AppView(controller);
 
-        Scene scene = new Scene(view);
-        primaryStage.setTitle("Checkers Game");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.show();
-
+        // SceneController sceneController = new SceneController(primaryStage, "Checkers Game");
+        AppView view = new AppView(primaryStage, controller);
+        
         controller.setModel(model);
         controller.setView(view);
         controller.startView();
-
-        
     }
 }

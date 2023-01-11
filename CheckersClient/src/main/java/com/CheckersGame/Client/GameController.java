@@ -3,8 +3,6 @@ package com.CheckersGame.Client;
 import com.CheckersGame.Client.View.AppView;
 import com.CheckersGame.Client.View.GameView;
 
-import java.io.*;
-
 
 
 
@@ -56,7 +54,7 @@ public class GameController {
 
     public void startModel () {
         this.model.start();
-        this.model.getMessage();
+        // this.model.getMessage();
     }
 
 
@@ -65,9 +63,7 @@ public class GameController {
      * @param message
      */
     public void updateLog (String message) {
-        if (this.view.getCenterNode() instanceof GameView) {
-            this.view.updateLog(message);
-        }
+        this.view.updateLog(message);
     }
 
 
@@ -95,7 +91,7 @@ public class GameController {
      * Model -> view
      */
     public void displayWaitScreen (String type) {
-        System.out.println("displayWaitScreen " + type);
+        System.out.println("displayWaitScreen " + type + " -> connector");
         switch (type) {
             case "opponentAwaiting": {
                 this.view.renderWaitPlayerMenu();
@@ -110,8 +106,8 @@ public class GameController {
             default: {
                 System.err.println("Invalid waitscreen type info");
                 this.closeApplication(1);
+                break;
             }
-            break;
         }
     }
 
@@ -132,9 +128,9 @@ public class GameController {
     public void newGame (String version) {
         this.model.sendMessage("newGame " + version);
         this.setActive(false);
-        this.model.getMessage(); // Game start status
-        this.model.getMessage(); // Board description
-        this.model.getMessage();
+        // this.model.getMessage(); // Game start status
+        // this.model.getMessage(); // Board description
+        // this.model.getMessage();
     }
 
 
@@ -145,9 +141,9 @@ public class GameController {
     public void restartGame () {
         this.model.sendMessage("restartGame");
         this.setActive(false);
-        this.model.getMessage(); // Game restart status
-        this.model.getMessage(); // Board description
-        this.model.getMessage();
+        // this.model.getMessage(); // Game restart status
+        // this.model.getMessage(); // Board description
+        // this.model.getMessage();
     }
 
 
@@ -155,9 +151,9 @@ public class GameController {
     public void endGame () {
         this.model.sendMessage("endGame");
         this.setActive(false);
-        this.model.getMessage(); // Game end status
+        // this.model.getMessage(); // Game end status
         this.chooseGameMode();
-        this.model.getMessage();
+        // this.model.getMessage();
     }
 
 
@@ -172,9 +168,9 @@ public class GameController {
     public void movePawn (int rCurr, int cCurr, int rMov, int cMov) {
         this.model.sendMessage(String.format("movePawn %d %d %d %d", rCurr, cCurr, rMov, cMov));
         this.setActive(false);
-        this.model.getMessage(); // Move status
-        this.model.getMessage(); // Board description
-        this.model.getMessage();
+        // this.model.getMessage(); // Move status
+        // this.model.getMessage(); // Board description
+        // this.model.getMessage();
     }
 
 
@@ -211,9 +207,9 @@ public class GameController {
             }
         }
 
-        this.model.getMessage(); // Move status
-        this.model.getMessage(); // Board description
-        this.model.getMessage();
+        // this.model.getMessage(); // Move status
+        // this.model.getMessage(); // Board description
+        // this.model.getMessage();
     }
 
 

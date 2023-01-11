@@ -7,11 +7,18 @@ import com.CheckersGame.Client.View.Menus.WelcomeMenu;
 import com.CheckersGame.Client.GameController;
 
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import javafx.application.Platform;
 
 
 
-public class AppView extends BorderPane {
+public class AppView {
+    private Stage stage;
+    public final static int WIDTH = 1024;
+    public final static int HEIGHT = 720;
+
 
     private GameView gameView;
     private StartMenu startMenu;
@@ -22,15 +29,24 @@ public class AppView extends BorderPane {
     public GameController gameController;
     private String gameLog;
 
-    public AppView(GameController gameController) {
-        this.setPrefSize(1024, 720);
+    public AppView(Stage stage, GameController gameController) {
+        this.stage = stage;
         this.gameController = gameController;
-        this.gameLog = "";
+
+        System.out.println("AppView: checkpoint 1");
+
+        final Scene scene = new Scene(new BorderPane(), AppView.WIDTH, AppView.HEIGHT);
+        this.stage.setOnCloseRequest(e -> Platform.exit());
+        this.stage.setTitle("Checkers client");
+        this.stage.setScene(scene);
+        this.stage.show();
+
+        System.out.println("AppView: checkpoint 2");
+
+        this.waitPlayerMenu = null;
+        this.waitSelectionMenu = null;
         this.gameView = null;
-        this.startMenu = new StartMenu(this.gameController);
-        this.welcomeMenu = new WelcomeMenu(this.gameController);
-        this.waitPlayerMenu = new WaitPlayerMenu();
-        this.waitSelectionMenu = new WaitSelectionMenu();
+        this.gameLog = "";
     }
 
     /*
@@ -54,49 +70,53 @@ public class AppView extends BorderPane {
     */
 
     public void renderWelcomeMenu() {
-        //this.welcomeMenu = new WelcomeMenu(this.gameController);
+        System.out.println("AppView: checkpoint 3");
+        this.welcomeMenu = new WelcomeMenu(this, this.gameController);
         this.welcomeMenu.render();
-        this.setCenter(this.welcomeMenu);
+        // Scene scene = this.stage.getScene();
+        // scene.setRoot(this.welcomeMenu);
+        this.stage.setScene(new Scene(this.welcomeMenu));
+        System.out.println("AppView: checkpoint 4");
     }
 
     public void renderWaitPlayerMenu() {
-        //this.waitPlayerMenu = new WaitPlayerMenu();
+        System.out.println("AppView: checkpoint 5");
+        this.waitPlayerMenu = new WaitPlayerMenu();
         this.waitPlayerMenu.render();
-        this.setCenter(null);
-        this.setCenter(this.waitPlayerMenu);
+        this.stage.setScene(new Scene(this.waitPlayerMenu));
+        System.out.println("AppView: checkpoint 6");
     }
 
     public void renderWaitSelectionMenu() {
-        //this.waitSelectionMenu = new WaitSelectionMenu();
+        System.out.println("AppView: checkpoint 7");
+        this.waitSelectionMenu = new WaitSelectionMenu();
         this.waitSelectionMenu.render();
-        this.setCenter(null);
-        this.setCenter(this.waitSelectionMenu);
+        this.stage.setScene(new Scene(this.waitSelectionMenu));
+        System.out.println("AppView: checkpoint 8");
     }
 
     public void renderStartMenu() {
-        //this.startMenu = new StartMenu(this.gameController);
+        System.out.println("AppView: checkpoint 9");
+        this.startMenu = new StartMenu(this.gameController);
         this.startMenu.render();
-        this.setCenter(null);
-        this.setCenter(this.startMenu);
+        this.stage.setScene(new Scene(this.startMenu));
+        System.out.println("AppView: checkpoint 10");
     }
 
     public void renderGameView(String description) {
+        System.out.println("AppView: checkpoint 11");
         this.gameView = new GameView(description, colorOfPawns, this.gameController, this.gameLog);
         this.gameView.render();
-        this.setCenter(null);
-        this.setCenter(this.gameView);
+        this.stage.setScene(new Scene(this.gameView));
+        System.out.println("AppView: checkpoint 12");
     }
 
     public void setPlayer(String color) {
         this.colorOfPawns = color;
     }
 
-    public Node getCenterNode () {
-        return this.getCenter();
-    }
-
     public void updateLog (String message) {
-        if(this.getCenter() instanceof GameView) {
+        if(this.stage.getScene().getRoot() instanceof GameView) {
             this.gameLog = this.gameLog + "\n" + message;
         }
     }

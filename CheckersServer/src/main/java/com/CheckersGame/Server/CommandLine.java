@@ -1,7 +1,5 @@
 package com.CheckersGame.Server;
 
-import com.CheckersGame.Server.Boards.Board;
-
 import java.io.*;
 
 
@@ -26,14 +24,10 @@ final class CommandLine {
      * @param input
      * @param output
      */
-    public CommandLine (BufferedReader input, PrintWriter output) {
-        this.game = null;
+    public CommandLine (Game game, BufferedReader input, PrintWriter output) {
+        this.game = game;
         this.input = input;
         this.output = output;
-    }
-
-    public void setGame (Game game) {
-        this.game = game;
     }
 
 
@@ -49,27 +43,13 @@ final class CommandLine {
         this.output.println("cmd: ");
 
         String command =  this.input.readLine();
+        System.out.println("Recieved: " + command);
         String[] args = command.trim().replaceAll(" +", " ").split(" ");
         String message = null;
         
         switch (args[0]) {
-            case "help": {
-                message = "Checkers console app commands:"
-                    + "\n\t- newGame <version> : Starts a new game in the <version> version\n\t\t<version> can be: 'russian', 'polish' or 'canadian'"
-                    + "\n\t- movePawn <current_row> <current_column> <new_row> <new_column> : Moves a pawn from the current to the new position (if it's possible)"
-                    + "\n\t- restartGame : Rargsestarts the game in the current versio"
-                    + "\n\t- endGame : Ends the current game"
-                    + "\n\t- mockEndgame <player> : Mocks an endgame situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'"
-                    + "\n\t- mockQueenEndgame <player> : Mocks a queen endgame situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'"
-                    + "\n\t- mockPawnToQueen <player> : Mocks a pawn to queen situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'"
-                    + "\n\t- longestMove <row> <column> : Calculates the longest move that can be performed from a position (<row>,<column>)"
-                    + "\n\t- exit : Exits the program";
-
-                break;
-            }
-
             case "newGame": {
-                if (this.game.getVersion() != null) {
+                if (this.game.getBoard() != null) {
                     message = "Error: Cannot start a new game - the game has already started!";
                     break;
                 }
@@ -229,7 +209,8 @@ final class CommandLine {
      * @throws IOException
      */
     public void sendInit (String message) throws IOException {
-        this.output.println(message);
+        System.out.println("Sending: " + message);
+        this.output.println("init: " + message);
     }
 
 
@@ -240,16 +221,9 @@ final class CommandLine {
      * @throws IOException
      */
     public void sendMessage (String message) throws IOException {
-        
-        this.output.println(message);
-
-        if (this.game.getBoard() == null) {
-            System.out.println("board: null");
-            this.output.println("");
-            return;
-        }
-
+        System.out.println("Sending: " + this.game.getBoardDescription());
         this.output.println(this.game.getBoardDescription());
-        
+        System.out.println("Sending: " + message);
+        this.output.println(message);
     }
 }

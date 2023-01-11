@@ -40,13 +40,9 @@ public class Game implements Runnable {
      * @param playerWhite
      * @param playerBlack
      */
-    public Game (Socket playerWhite, CommandLine cmdWhite, Socket playerBlack, CommandLine cmdBlack) {
+    public Game (Socket playerWhite, Socket playerBlack) {
         this.playerWhite = playerWhite;
         this.playerBlack = playerBlack;
-        this.cmdWhite = cmdWhite;
-        this.cmdBlack = cmdBlack;
-        this.cmdWhite.setGame(this);
-        this.cmdBlack.setGame(this);
     }
 
 
@@ -57,12 +53,16 @@ public class Game implements Runnable {
     @Override
     public void run () {
         try {
+            BufferedReader inWhite = new BufferedReader(new InputStreamReader(this.playerWhite.getInputStream()));
+            PrintWriter outWhite = new PrintWriter(this.playerWhite.getOutputStream(), true);
+            this.cmdWhite = new CommandLine(this, inWhite, outWhite);
             
-
+            BufferedReader inBlack = new BufferedReader(new InputStreamReader(this.playerBlack.getInputStream()));
+            PrintWriter outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
+            this.cmdBlack = new CommandLine(this, inBlack, outBlack);
+            
             this.cmdWhite.sendInit("white");
             this.cmdBlack.sendInit("black");
-
-
 
             while (true) {
                 if (this.board == null) {
@@ -73,7 +73,7 @@ public class Game implements Runnable {
                         String message = this.cmdWhite.execCommand();
                         System.out.println("(white) " + message);
 
-                        if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                        if (message.startsWith("Error")) {
                             this.cmdWhite.sendMessage(message);
                         }
                         else {
@@ -94,7 +94,7 @@ public class Game implements Runnable {
                             if (this.board != null) {
                                 System.out.println("(white) " + message);
 
-                                if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                                if (message.startsWith("Error")) {
                                     this.cmdWhite.sendMessage(message);
                                 }
                                 else {
@@ -170,7 +170,7 @@ public class Game implements Runnable {
      */
     public String getBoardDescription () {
         if (this.board == null) {
-            return null;
+            return "board: null";
         }
 
         return this.board.getDescription();

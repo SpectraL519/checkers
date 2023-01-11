@@ -36,7 +36,11 @@ public class GameClient {
      */
     public void start () {
         this.listen();
-        this.getInit();
+        // this.getInit();
+
+        while (true) {
+            this.getMessage();
+        }
     }
 
 
@@ -45,13 +49,13 @@ public class GameClient {
      * Tries to connect to the server
      */
     private void listen () {
-        this.controller.displayWaitScreen("opponentAwaiting");
         try {
             System.out.println("listen");
             this.socket = new Socket("localhost", 4444);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
-            
+            System.out.println("displayWaitScreen -> client");
+            this.controller.displayWaitScreen("opponentAwaiting");
         } 
         catch (UnknownHostException e) {
             System.err.println("Unknown host: localhost");
@@ -69,7 +73,7 @@ public class GameClient {
      * Handles the initial message recieved from the client
      */
     private void getInit () {
-        System.out.println("before player");
+        System.out.println("Recieving: init");
         try {
             String player = this.input.readLine();
             System.out.println("player: " + player);
@@ -101,11 +105,25 @@ public class GameClient {
 
 
 
-    public void getMessage() {
+    private void getMessage() {
         try{
             String message = this.input.readLine();
-            
-            if (message.startsWith("cmd:")) {
+            System.out.println("Recieved: " + message);
+
+            if (message.startsWith("init:")) {
+                if (message.endsWith("white")) {
+                    System.out.println("displayGameModeSelection -> client");
+                    this.controller.chooseGameMode();
+                }
+                else if (message.endsWith("black")) {
+                    this.controller.displayWaitScreen("modeSelection");
+                }
+                else {
+                    System.err.println("Error: invalid init message");
+                    this.controller.closeApplication(1);
+                }
+            }
+            else if (message.startsWith("cmd:")) {
                 this.controller.setActive(true);
             }
             else if (message.startsWith("board:")) {
@@ -124,6 +142,7 @@ public class GameClient {
 
 
     public void sendMessage(String message) {
+        System.out.println("Sending: " + message);
         this.output.println(message);   
     }
 }
