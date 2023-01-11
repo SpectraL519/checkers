@@ -86,10 +86,10 @@ public class GameView extends BorderPane {
 
 
     public void renderBoard (String description) {
-        this.setCenter(this.renderingLabel);
+        this.setLeft(this.renderingLabel);
         this.board = new GameBoard(description, this.gameController);
         this.board.render();
-        this.setCenter(this.board);
+        this.setLeft(this.board);
     }
 
 
@@ -109,7 +109,7 @@ public class GameView extends BorderPane {
   
         this.setTop(this.toolbar);
         this.setBottom(this.creditsbar);
-        this.setCenter(this.welcomeLabel);
+        this.setLeft(this.welcomeLabel);
         this.setRight(this.gameInfo);
     }
 
