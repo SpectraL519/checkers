@@ -25,7 +25,7 @@ public class MoveManager {
 
     public void askController(int row, int column) {
             if (oldColumn == -1 && oldRow == -1) {
-                if (board.board[column][row].whitePawn.isVisible() || board.board[column][row].blackPawn.isVisible()) {
+                if (board.board[column][row].whitePawn.isVisible() || board.board[column][row].blackPawn.isVisible() || board.board[column][row].whitePawnQueen.isVisible() || board.board[column][row].blackPawnQueen.isVisible()) {
                     oldColumn = column;
                     oldRow = row;
                     this.board.board[column][row].setBackground(new Background(new BackgroundFill(Color.GOLDENROD, null, null)));
