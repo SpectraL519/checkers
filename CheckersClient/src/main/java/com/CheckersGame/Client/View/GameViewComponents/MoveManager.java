@@ -1,5 +1,9 @@
 package com.CheckersGame.Client.View.GameViewComponents;
 
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
+
 public class MoveManager {
 
     public int oldRow;
@@ -13,39 +17,32 @@ public class MoveManager {
     public MoveManager(GameBoard board) {
         this.board = board;
 
-        this.oldColumn = 0;
-        this.oldRow = 0;
-        this.newColumn = 0;
-        this.newRow = 0;
+        this.oldColumn = -1;
+        this.oldRow = -1;
+        this.newColumn = -1;
+        this.newRow = -1;
     }
 
     public void askController(int row, int column) {
-            if (oldColumn == 0 && oldRow == 0) {
-                if (board.board[column][row].whitePawn.isVisible() || board.board[column][row].blackPawn.isVisible()) {
-                oldColumn = column;
-                oldRow = row;
+            if (oldColumn == -1 && oldRow == -1) {
+                if (board.board[column][row].whitePawn.isVisible() || board.board[column][row].blackPawn.isVisible() || board.board[column][row].whitePawnQueen.isVisible() || board.board[column][row].blackPawnQueen.isVisible()) {
+                    oldColumn = column;
+                    oldRow = row;
+                    this.board.board[column][row].setBackground(new Background(new BackgroundFill(Color.GOLDENROD, null, null)));
                 }
             } else {
                 newColumn = column;
                 newRow = row;
-                makeMove();
+                this.board.board[column][row].setBackground(new Background(new BackgroundFill(Color.GOLDENROD, null, null)));
             }
     }
 
-    private void makeMove() {
-        if(board.board[oldColumn][oldRow].whitePawn.isVisible()){
-            board.board[oldColumn][oldRow].whitePawn.setVisible(false);
-            board.board[newColumn][newRow].whitePawn.setVisible(true);
-            board.board[newColumn][newRow].blackPawn.setVisible(false);
-        }
-        else{
-            board.board[oldColumn][oldRow].blackPawn.setVisible(false);
-            board.board[newColumn][newRow].blackPawn.setVisible(true);
-            board.board[newColumn][newRow].whitePawn.setVisible(false);
-        }
-        this.oldColumn = 0;
-        this.oldRow = 0;
-        this.newColumn = 0;
-        this.newRow = 0;
+    public int[] makeMove() {
+        int[] coordinatres = new int[] {this.oldRow - 1, this.oldColumn - 1 , this.newRow - 1, this.newColumn - 1};
+        this.oldColumn = -1;
+        this.oldRow = -1;
+        this.newColumn = -1;
+        this.newRow = -1;
+        return coordinatres;
     }
 }

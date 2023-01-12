@@ -26,8 +26,6 @@ public class Game implements Runnable {
     private GameVersion version; /** A game board factory class object */
     private Board board; /** The game board */
 
-    private boolean active; /** Game activity status */
-
 
 
     /**
@@ -45,8 +43,6 @@ public class Game implements Runnable {
     public Game (Socket playerWhite, Socket playerBlack) {
         this.playerWhite = playerWhite;
         this.playerBlack = playerBlack;
-
-        this.active = false;
     }
 
 
@@ -59,16 +55,14 @@ public class Game implements Runnable {
         try {
             BufferedReader inWhite = new BufferedReader(new InputStreamReader(this.playerWhite.getInputStream()));
             PrintWriter outWhite = new PrintWriter(this.playerWhite.getOutputStream(), true);
-            this.cmdWhite = new CommandLine(this, inWhite, outWhite);
+            this.cmdWhite = new CommandLine(this, inWhite, outWhite, "white");
             
             BufferedReader inBlack = new BufferedReader(new InputStreamReader(this.playerBlack.getInputStream()));
             PrintWriter outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
-            this.cmdBlack = new CommandLine(this, inBlack, outBlack);
-
-            this.cmdWhite.sendInit("Playing as white!\nTo start enter `newGame <version>`");
-            this.cmdBlack.sendInit("Playing as black!\nWaiting for the game to start...");
-
-
+            this.cmdBlack = new CommandLine(this, inBlack, outBlack, "black");
+            
+            this.cmdWhite.sendInit("white");
+            this.cmdBlack.sendInit("black");
 
             while (true) {
                 if (this.board == null) {
@@ -79,7 +73,7 @@ public class Game implements Runnable {
                         String message = this.cmdWhite.execCommand();
                         System.out.println("(white) " + message);
 
-                        if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                        if (message.startsWith("Error")) {
                             this.cmdWhite.sendMessage(message);
                         }
                         else {
@@ -100,7 +94,7 @@ public class Game implements Runnable {
                             if (this.board != null) {
                                 System.out.println("(white) " + message);
 
-                                if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                                if (message.startsWith("Error")) {
                                     this.cmdWhite.sendMessage(message);
                                 }
                                 else {
@@ -148,34 +142,6 @@ public class Game implements Runnable {
     }
 
 
-
-    /**
-     * Checks if there is an active game in the thread
-     * @return boolean
-     */
-    public boolean isActive () {
-        return this.active;
-    }
-
-
-
-    /**
-     * Activates a game
-     */
-    public void activate () {
-        this.active = true;
-    }
-
-
-
-    /**
-     * Deactivates the game
-     */
-    public void deactivate () {
-        this.active = false;
-    }
-
-
     
     /** 
      * Returns the current game version
@@ -204,7 +170,7 @@ public class Game implements Runnable {
      */
     public String getBoardDescription () {
         if (this.board == null) {
-            return null;
+            return "board: null";
         }
 
         return this.board.getDescription();
@@ -249,7 +215,6 @@ public class Game implements Runnable {
                 this.version = new PolishVersion();
                 this.board = this.version.getBoard();
                 this.board.init();
-                this.activate();
                 break;
             }
 
@@ -257,7 +222,6 @@ public class Game implements Runnable {
                 this.version = new RussianVersion();
                 this.board = this.version.getBoard();
                 this.board.init();
-                this.activate();
                 break;
             }
 
@@ -265,7 +229,6 @@ public class Game implements Runnable {
                 this.version = new CanadianVersion();
                 this.board = this.version.getBoard();
                 this.board.init();
-                this.activate();
                 break;
             }
 
@@ -363,7 +326,6 @@ public class Game implements Runnable {
 
         this.version.resetBoard();
         this.board = this.version.getBoard();
-        this.activate();
     }
 
 

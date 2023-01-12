@@ -52,7 +52,7 @@ public class CenterField extends Field {
         this.setOnMouseClicked(new EventHandler<Event>() {
             @Override
             public void handle(Event e) {
-                System.out.println("row: " + row + "column: " + column);
+                System.out.println(String.format("(row,column): (%d,%d)", row, column));
                 board.controller.askController(row, column);
             }
         });
@@ -66,6 +66,14 @@ public class CenterField extends Field {
 
     public void showBlackPawn(boolean b){
         this.blackPawn.setVisible(b);
+    }
+
+    public void showWhitePawnQueen(boolean b){
+        this.whitePawnQueen.setVisible(b);
+    }
+
+    public void showBlackPawnQueen(boolean b){
+        this.blackPawnQueen.setVisible(b);
     }
 
 }

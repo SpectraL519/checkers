@@ -2,7 +2,9 @@ package com.CheckersGame.Client;
 
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
+
+import javafx.application.Platform;
+
 
 
 
@@ -12,20 +14,21 @@ import java.util.Scanner;
  * @version 1.0
  * Class handling the client thread
  */
-public class GameClient {
+public class GameClient implements Runnable {
     private Socket socket; /** A socket for the client to connect to the server */
 
     private BufferedReader input; /** The client's input stream handling masseges sent from a server */
     private PrintWriter output; /** The clients's output stream handling sending messages to a server */
-    private Scanner stdInScanner; /** Handles client's input from the terminal */
+
+    private GameController controller; /** MVC::Controller class instance */
 
 
 
     /**
      * GameClient class constructor
      */
-    public GameClient () {
-        this.stdInScanner = new Scanner(System.in);
+    public GameClient (GameController controller) {
+        this.controller = controller;
     }
 
 
@@ -33,49 +36,12 @@ public class GameClient {
     /**
      * Starts the client thread
      */
-    public void start () {
+    @Override
+    public void run () {
         this.listen();
-        this.getInit();
 
         while (true) {
-            try{
-                String line = this.input.readLine();
-                
-                if (line.startsWith("cmd:")) {
-                    System.out.print(line);
-
-                    String command = this.stdInScanner.nextLine();
-
-                    if (command.equals("exit")) {
-                        System.exit(0);
-                    }
-                    
-                    this.output.println(command); // send command (args)
-
-                    String message = this.input.readLine();
-                    if (command.equals("endGame") || message.startsWith("Error")) {
-                        System.out.println(message);
-                        this.input.readLine(); // board description
-                    }
-                    else {
-                        System.out.println(message);
-                        this.displayBoard(this.input.readLine());
-                    }
-                }
-                else if (line.startsWith("(white)") || line.startsWith("(black)")) {
-                    System.out.println(line);
-                }
-                else if (line.startsWith("board:")) {
-                    this.displayBoard(line);
-                }
-                else {
-                    System.out.println();
-                }
-            }
-            catch (IOException e) {
-                System.err.println("IOError: " + e.getMessage());
-                e.printStackTrace();
-            }
+            this.getMessage();
         }
     }
 
@@ -86,79 +52,74 @@ public class GameClient {
      */
     private void listen () {
         try {
+            System.out.println("Connecting to server...");
             this.socket = new Socket("localhost", 4444);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
-            System.out.println("Waiting for the oponnent to connect...");
+            System.out.println("Success!");
+            Platform.runLater(() -> {
+                this.controller.updateGameLog("Server connection successful!");
+            });
         } 
         catch (UnknownHostException e) {
-            System.out.println("Unknown host: localhost");
-            System.exit(1);
+            System.err.println("Unknown host: localhost");
+            this.controller.closeApplication(1);
         } 
         catch (IOException e) {
-            System.out.println("I/O error");
-            System.exit(1);
+            System.err.println("I/O error");
+            this.controller.closeApplication(1);
         }
     }
 
 
-
-    /**
-     * Handles the initial message recieved from the client
-     */
-    private void getInit () {
+    private void getMessage() {
+        System.out.println("Trying to recieve a message from the server...");
         try {
-            System.out.println(this.input.readLine());
-            System.out.println(this.input.readLine());
+            String message = this.input.readLine();
+
+            if (message.startsWith("init:")) {
+                System.out.println("Recieved: init");
+                if (message.endsWith("white")) {
+                    Platform.runLater(() -> {
+                        this.controller.setPlayer("white");
+                    });
+                }
+                else if (message.endsWith("black")) {
+                    Platform.runLater(() -> {
+                        this.controller.setPlayer("black");
+                    });
+                }
+                else {
+                    System.err.println("Error: invalid init message");
+                    this.controller.closeApplication(1);
+                }
+            }
+            else if (message.startsWith("cmd:")) {
+                System.out.println("Recieved: prompt");
+                this.controller.setActive(true);
+            }
+            else if (message.startsWith("board:")) {
+                System.out.println("Recieved: board");
+                Platform.runLater(() -> {
+                    this.controller.renderBoard(message);
+                });
+            }
+            else {
+                Platform.runLater(() -> {
+                    this.controller.updateGameLog(message);
+                });
+            }
         }
         catch (IOException e) {
-            System.out.println("I/O error");
-            System.exit(1);
+            this.controller.updateGameLog("IOError: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
 
 
-    
-    /** 
-     * Displays the board on the client's terminal
-     * @param boardDescription
-     */
-    private void displayBoard (String boardDescription) {
-        if (!boardDescription.startsWith("board:")) {
-            System.out.println("Error: Invalid board description");
-            return;
-        }
-
-        boardDescription = boardDescription.replace("board:", "");
-
-        String[] descriptionArray = boardDescription.split(";");
-        int length = descriptionArray.length;
-
-        int boardSize = Integer.parseInt(descriptionArray[0]);
-        int board[][] = new int[boardSize][boardSize];
-
-        for (int i = 1; i < length; i++) {
-            String pawnDescription[] = descriptionArray[i].split(",");
-
-            int row = Integer.parseInt(pawnDescription[0]);
-            int column = Integer.parseInt(pawnDescription[1]);
-            int pawnType = Integer.parseInt(pawnDescription[2]);
-
-            board[row][column] = pawnType;
-        }
-
-        for (int r = 0; r < boardSize; r++) {
-            System.out.printf("%d: ", r);
-            for (int c = 0; c < boardSize; c++) {
-                System.out.printf("%d ", board[r][c]);
-            }
-            System.out.printf("\n");
-        }
-        System.out.printf("\n  ");
-        for (int c = 0; c < boardSize; c++) {
-            System.out.printf(" %d", c);
-        }
-        System.out.println("\n");
+    public void sendMessage(String message) {
+        System.out.println("Sending: " + message);
+        this.output.println(message);   
     }
 }
