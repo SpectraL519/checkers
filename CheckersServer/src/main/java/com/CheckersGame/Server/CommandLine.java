@@ -87,7 +87,7 @@ final class CommandLine {
                     int status = this.game.movePawn(rCurr, cCurr, rMov, cMov);
 
                     if (status > 0) {
-                        message = this.game.getMoveMessage(status) + String.format(" ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
+                        message = this.game.getMoveMessage(status);
                     }
                     else {
                         message = this.game.getMoveMessage(status);
