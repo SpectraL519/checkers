@@ -59,7 +59,7 @@ public class Game implements Runnable {
             
             BufferedReader inBlack = new BufferedReader(new InputStreamReader(this.playerBlack.getInputStream()));
             PrintWriter outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
-            this.cmdBlack = new CommandLine(this, inBlack, outBlack, "white");
+            this.cmdBlack = new CommandLine(this, inBlack, outBlack, "black");
             
             this.cmdWhite.sendInit("white");
             this.cmdBlack.sendInit("black");

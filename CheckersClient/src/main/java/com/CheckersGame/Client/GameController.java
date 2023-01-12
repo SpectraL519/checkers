@@ -162,6 +162,8 @@ public class GameController {
     public void closeApplication (int status) {
         // System.exit(status);
         System.out.println("Program ended with return status: " + status);
+        this.gameThread.interrupt();
+        Platform.exit();
         System.exit(status);
     }
 }

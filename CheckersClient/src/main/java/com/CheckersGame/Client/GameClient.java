@@ -76,10 +76,9 @@ public class GameClient implements Runnable {
         System.out.println("Trying to recieve a message from the server...");
         try {
             String message = this.input.readLine();
-            System.out.println("Recieved: " + message);
 
             if (message.startsWith("init:")) {
-                System.out.println("Setting player...");
+                System.out.println("Recieved: init");
                 if (message.endsWith("white")) {
                     Platform.runLater(() -> {
                         this.controller.setPlayer("white");
@@ -96,9 +95,11 @@ public class GameClient implements Runnable {
                 }
             }
             else if (message.startsWith("cmd:")) {
+                System.out.println("Recieved: prompt");
                 this.controller.setActive(true);
             }
             else if (message.startsWith("board:")) {
+                System.out.println("Recieved: board");
                 Platform.runLater(() -> {
                     this.controller.renderBoard(message);
                 });

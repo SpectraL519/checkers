@@ -130,13 +130,8 @@ final class CommandLine {
                     break;
                 }
 
-                try {
-                    this.game.mockEndgame(this.player);
-                    message = "Mocking an endgame situation for player " + args[1] + "...";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
+                this.game.mockEndgame(this.player);
+                message = "Mocking an endgame situation for player " + player + "...";
 
                 break;
             }
@@ -147,13 +142,8 @@ final class CommandLine {
                     break;
                 }
                 
-                try {
-                    this.game.mockQueenEndgame(this.player);
-                    message = "Mocking a queen endgame situation for player " + args[1] + "...";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
+                this.game.mockQueenEndgame(this.player);
+                message = "Mocking a queen endgame situation for player " + player + "...";
 
                 break;
             }
@@ -164,13 +154,9 @@ final class CommandLine {
                     break;
                 }
                 
-                try {
-                    this.game.mockPawnToQueen(this.player);
-                    message = "Mocking a pawn to queen situation for player " + args[1] + "...";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
+                this.game.mockPawnToQueen(this.player);
+                message = "Mocking a pawn to queen situation for player " + player + "...";
+
 
                 break;
             }
@@ -225,7 +211,6 @@ final class CommandLine {
     public void sendMessage (String message) throws IOException {
         System.out.println("Sending: " + this.game.getBoardDescription());
         this.output.println(this.game.getBoardDescription());
-        System.out.println("Sending: " + message);
         this.output.println(message);
     }
 }

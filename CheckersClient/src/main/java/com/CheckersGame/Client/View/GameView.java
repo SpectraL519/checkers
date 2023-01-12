@@ -41,7 +41,7 @@ public class GameView extends BorderPane {
         this.stage = stage;
         this.gameController = gameController;
 
-        this.stage.setOnCloseRequest(e -> Platform.exit());
+        this.stage.setOnCloseRequest(e -> gameController.closeApplication(0));
         this.stage.setTitle("Checkers client");
         this.stage.show();
     }

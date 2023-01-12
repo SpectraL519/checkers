@@ -52,7 +52,7 @@ public class CenterField extends Field {
         this.setOnMouseClicked(new EventHandler<Event>() {
             @Override
             public void handle(Event e) {
-                System.out.println("row: " + row + "column: " + column);
+                System.out.println(String.format("(row,column): (%d,%d)", row, column));
                 board.controller.askController(row, column);
             }
         });

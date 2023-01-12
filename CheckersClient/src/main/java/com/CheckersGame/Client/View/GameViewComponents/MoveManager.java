@@ -1,5 +1,9 @@
 package com.CheckersGame.Client.View.GameViewComponents;
 
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
+
 public class MoveManager {
 
     public int oldRow;
@@ -22,13 +26,14 @@ public class MoveManager {
     public void askController(int row, int column) {
             if (oldColumn == -1 && oldRow == -1) {
                 if (board.board[column][row].whitePawn.isVisible() || board.board[column][row].blackPawn.isVisible()) {
-                oldColumn = column;
-                oldRow = row;
+                    oldColumn = column;
+                    oldRow = row;
+                    this.board.board[column][row].setBackground(new Background(new BackgroundFill(Color.GOLDENROD, null, null)));
                 }
             } else {
                 newColumn = column;
                 newRow = row;
-                //makeMove();
+                this.board.board[column][row].setBackground(new Background(new BackgroundFill(Color.GOLDENROD, null, null)));
             }
     }
 

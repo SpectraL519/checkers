@@ -141,7 +141,9 @@ public class Toolbar extends HBox {
             this.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    gameController.restartGame();
+                    if (gameController.isAstive()) {
+                        gameController.restartGame();
+                    }
                 }
             });
         }
