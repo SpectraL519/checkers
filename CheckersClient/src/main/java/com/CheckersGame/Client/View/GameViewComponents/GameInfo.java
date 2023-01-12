@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -23,7 +24,12 @@ import javafx.scene.text.Font;
 
 
 
-
+/**
+ * @author Krzysztof Dobrucki
+ * @author Jakub Musiał
+ * @version 1.0
+ * GameInfo class
+ */
 public class GameInfo extends VBox {
     private int horizontalSpace;
 
@@ -31,11 +37,15 @@ public class GameInfo extends VBox {
     private GameView gameView;
 
     private PlayerInfo playerInfo;
-    private GameLog log;
+    private GameLog gameLog;
     private MoveButtonFrame moveFrame;
 
 
 
+
+    /**
+     * GameInfo class constructor
+     */
     public GameInfo (GameController gameController, GameView gameView) {
         super();
 
@@ -47,30 +57,43 @@ public class GameInfo extends VBox {
 
 
 
+    /**
+     * Shows Game info
+     */
     public void render () {
         this.setBackground(new Background(new BackgroundFill(Color.CORNSILK, null, null)));
 
         this.playerInfo = new PlayerInfo(horizontalSpace, null);
-        this.log = new GameLog(horizontalSpace);
+        this.gameLog = new GameLog(horizontalSpace);
         this.moveFrame = new MoveButtonFrame(horizontalSpace, this.gameController, this.gameView);
 
-        this.getChildren().addAll(this.playerInfo, this.log, this.moveFrame);
+        this.getChildren().addAll(this.playerInfo, this.gameLog, this.moveFrame);
     }
 
 
-
+    /**
+     * Sets player
+     * @param player
+     */
     public void setPlayer (String player) {
         this.playerInfo.setPlayer(player);
     }
 
 
 
+    /**
+     * Updates Log
+     * @param newLog
+     */
     public void updateLog (String newLog) {
-        this.log.setText(this.log.getText() + "\n" + newLog);
+        this.gameLog.updateLog(newLog);
     }
 
 
 
+    /**
+     * PlayerInfo class contains player info
+     */
     class PlayerInfo extends Label {
         public PlayerInfo (int horizontalSpace, String player) {
             super("You're playing as: " + player);
@@ -89,22 +112,37 @@ public class GameInfo extends VBox {
     }
 
 
+    /**
+     * GameLog class contains game log
+     */
+    class GameLog extends ScrollPane {
+        private Label log;
 
-    class GameLog extends Label {
         public GameLog (int horizontalSpace) {
-            super("Game log:");
-            this.setFont(Font.font("Monospace", 12));
-            this.setWrapText(true);
+            super();
+
+            this.log = new Label("Game log:");
+            this.log.setFont(Font.font("Monospace", 12));
+            this.log.setWrapText(true);
+
             this.setMinWidth(horizontalSpace);
             this.setMaxWidth(horizontalSpace);
             this.setMinHeight(500);
             this.setMaxHeight(500);
             this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            this.setContent(this.log);
+        }
+
+        public void updateLog (String newLog) {
+            this.log.setText(this.log.getText() + "\n" + newLog);
         }
     }
 
 
 
+    /**
+     * MoveButtonFrame class is a frame for move button
+     */
     class MoveButtonFrame extends VBox {
         public MoveButtonFrame (int horizontalSpace, GameController gameController, GameView gameView) {
             super();
@@ -120,6 +158,9 @@ public class GameInfo extends VBox {
 
 
 
+    /**
+     * MoveButton class contains move button
+     */
     class MoveButton extends Button {
         public MoveButton (GameController gameController, GameView gameView) {
             super("MOVE!");

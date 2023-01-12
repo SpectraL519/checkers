@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
  */
 public class RussianGameTest {
     @Test
-    public void shouldAnswerWithTrue () {
+    public void gameFunctionalityTest () {
         Game game = new Game();
 
         // End game

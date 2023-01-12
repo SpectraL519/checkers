@@ -56,19 +56,12 @@ java -cp target/CheckersServer-1.0-SNAPSHOT.jar com.CheckersGame.Server.GameServ
 ```
 
 <br />
-<br />
 
 
 2. Run the client application:
 
 ```
 cd <project_directory>
-```
-
-<br />
-
-* The GUI application:
-```
 cd CheckersClient
 mvn package
 mvn clean javafx:run

@@ -17,7 +17,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
  */
 public class GameVersionTest {
     @Test
-    public void shouldAnswerWithTrue () {
+    public void versionTest () {
         Game game = new Game();
 
         game.newGame("polish");

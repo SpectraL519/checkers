@@ -20,7 +20,12 @@ import javafx.stage.Stage;
 
 
 
-
+/**
+ * @author Krzysztof Dobrucki
+ * @author Jakub Musiał
+ * @version 1.0
+ * Game view application main class
+ */
 public class GameView extends BorderPane {
     private Stage stage;
     private GameController gameController;
@@ -36,7 +41,9 @@ public class GameView extends BorderPane {
     private Label renderingLabel;
 
 
-
+    /**
+     * GameView class constructor
+     */
     public GameView (Stage stage, GameController gameController) {
         this.stage = stage;
         this.gameController = gameController;
@@ -47,28 +54,36 @@ public class GameView extends BorderPane {
     }
 
     
-
+    /**
+     * Renders Toolbar
+     */
     private void renderToolbar () {
         this.toolbar = new Toolbar(this.gameController);
         this.toolbar.render();
     }
 
 
-
+    /**
+     * Renders GameInfo
+     */
     private void renderGameInfo () {
         this.gameInfo = new GameInfo(this.gameController, this);
         this.gameInfo.render();
     }
 
 
-
+    /**
+     * Renders Creditsbar
+     */
     private void renderCreditsbar () {
         this.creditsbar = new Creditsbar();
         this.creditsbar.render();
     }
 
 
-
+    /**
+     * Renders WelcomeLabel
+     */
     private void renderWelcomeLabel () {
         this.welcomeLabel = new Label("Welcome to the Checkers Game!");
         this.welcomeLabel.setFont(Font.font("Monospace", 36));
@@ -76,7 +91,9 @@ public class GameView extends BorderPane {
     }
 
 
-
+    /**
+     * Renders RenderingLabel
+     */
     private void renderRenderingLabel () {
         this.renderingLabel = new Label("Waiting for board render...");
         this.renderingLabel.setFont(Font.font("Monospace", 36));
@@ -84,7 +101,9 @@ public class GameView extends BorderPane {
     }
 
 
-
+    /**
+     * Renders Board
+     */
     public void renderBoard (String description) {
         this.setLeft(this.renderingLabel);
         this.board = new GameBoard(description, this.gameController);
@@ -93,7 +112,9 @@ public class GameView extends BorderPane {
     }
 
 
-
+    /**
+     * Starts renders and adds to stage
+     */
     public void render () {
         this.stage.setScene(new Scene(this));
         this.stage.setHeight(HEIGHT);
@@ -114,13 +135,17 @@ public class GameView extends BorderPane {
     }
 
 
-
+    /**
+     * Updates GameLog
+     */
     public void updateGameLog (String log) {
         this.gameInfo.updateLog(log);
     }
 
 
-
+    /**
+     * Sets Player
+     */
     public void setPlayer (String player) {
         this.gameInfo.setPlayer(player);
     }

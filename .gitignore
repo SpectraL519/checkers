@@ -1,3 +1,6 @@
 CheckersServer/target/
 CheckersClient/target/
+.idea/
+CheckersClient/CheckersClient.iml
+CheckersServer/CheckersServer.iml
 tp-lab4.pdf
