@@ -17,6 +17,7 @@ final class CommandLine {
     private BufferedReader input; /** The server's input stream handling masseges sent from a client */
     private PrintWriter output; /** The server's output stream handling sending messages to a client */
 
+    private String player;
 
     /**
      * CommandLine class constructor
@@ -24,10 +25,11 @@ final class CommandLine {
      * @param input
      * @param output
      */
-    public CommandLine (Game game, BufferedReader input, PrintWriter output) {
+    public CommandLine (Game game, BufferedReader input, PrintWriter output, String player) {
         this.game = game;
         this.input = input;
         this.output = output;
+        this.player = player;
     }
 
 
@@ -40,31 +42,16 @@ final class CommandLine {
      * @throws IOException
      */
     public String execCommand () throws IOException {
-        // TODO: add playAgain funcionality
         this.output.println("cmd: ");
 
         String command =  this.input.readLine();
+        System.out.println("Recieved: " + command);
         String[] args = command.trim().replaceAll(" +", " ").split(" ");
         String message = null;
         
         switch (args[0]) {
-            case "help": {
-                message = "Checkers console app commands:"
-                    + "\n\t- newGame <version> : Starts a new game in the <version> version\n\t\t<version> can be: 'russian', 'polish' or 'canadian'"
-                    + "\n\t- movePawn <current_row> <current_column> <new_row> <new_column> : Moves a pawn from the current to the new position (if it's possible)"
-                    + "\n\t- restartGame : Rargsestarts the game in the current versio"
-                    + "\n\t- endGame : Ends the current game"
-                    + "\n\t- mockEndgame <player> : Mocks an endgame situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'"
-                    + "\n\t- mockQueenEndgame <player> : Mocks a queen endgame situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'"
-                    + "\n\t- mockPawnToQueen <player> : Mocks a pawn to queen situation with the next move of the <player> player\n\t\t<player> can be: 'white' or 'black'"
-                    + "\n\t- longestMove <row> <column> : Calculates the longest move that can be performed from a position (<row>,<column>)"
-                    + "\n\t- exit : Exits the program";
-
-                break;
-            }
-
             case "newGame": {
-                if (this.game.getVersion() != null) {
+                if (this.game.getBoard() != null) {
                     message = "Error: Cannot start a new game - the game has already started!";
                     break;
                 }
@@ -86,7 +73,7 @@ final class CommandLine {
             }
 
             case "movePawn": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot move a pawn - the game hasn't started yet!";
                     break;
                 }
@@ -98,7 +85,7 @@ final class CommandLine {
                     int cMov = Integer.parseInt(args[4]);
     
                     int status = this.game.movePawn(rCurr, cCurr, rMov, cMov);
-    
+
                     if (status > 0) {
                         message = this.game.getMoveMessage(status) + String.format(" ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
                     }
@@ -115,7 +102,7 @@ final class CommandLine {
 
             case "restartGame": {
                 if (this.game.getVersion() == null) {
-                    message = "Error: Cannot restart a game - the game hasn't started yet!";
+                    message = "Error: Cannot restart a game - game mode not specified!";
                     break;
                 }
 
@@ -126,7 +113,7 @@ final class CommandLine {
             }
 
             case "endGame": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot end a game - the game hasn't started yet!";
                     break;
                 }
@@ -138,58 +125,44 @@ final class CommandLine {
             }
 
             case "mockEndgame": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot mock an endgame situation - the game hasn't started yet!";
                     break;
                 }
 
-                try {
-                    this.game.mockEndgame(args[1]);
-                    message = "Mocking an endgame situation for player " + args[1] + "...";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
+                this.game.mockEndgame(this.player);
+                message = "Mocking an endgame situation for player " + player + "...";
 
                 break;
             }
 
             case "mockQueenEndgame": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot mock a queen endgame situation - the game hasn't started yet!";
                     break;
                 }
                 
-                try {
-                    this.game.mockQueenEndgame(args[1]);
-                    message = "Mocking a queen endgame situation for player " + args[1] + "...";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
+                this.game.mockQueenEndgame(this.player);
+                message = "Mocking a queen endgame situation for player " + player + "...";
 
                 break;
             }
 
             case "mockPawnToQueen": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot mock a pawn to queen situation - the game hasn't started yet!";
                     break;
                 }
                 
-                try {
-                    this.game.mockPawnToQueen(args[1]);
-                    message = "Mocking a pawn to queen situation for player " + args[1] + "...";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
+                this.game.mockPawnToQueen(this.player);
+                message = "Mocking a pawn to queen situation for player " + player + "...";
+
 
                 break;
             }
 
             case "longestMove": {
-                if (this.game.getVersion() == null) {
+                if (this.game.getBoard() == null) {
                     message = "Error: Cannot calculate the longest move - the game hasn't started yet!";
                     break;
                 }
@@ -205,7 +178,7 @@ final class CommandLine {
             }
 
             default: {
-                message = "Error: Invalid command - To get a commands' overview type 'help'";
+                message = "Error: Invalid operation";
             }
         }
 
@@ -220,11 +193,12 @@ final class CommandLine {
     
     /** 
      * Sends a initial message to a client.
-     * @param message
+     * @param player
      * @throws IOException
      */
-    public void sendInit (String message) throws IOException {
-        this.output.println(message);
+    public void sendInit (String player) throws IOException {
+        System.out.println("Sending: " + player);
+        this.output.println("init: " + player);
     }
 
 
@@ -235,14 +209,8 @@ final class CommandLine {
      * @throws IOException
      */
     public void sendMessage (String message) throws IOException {
-        this.output.println(message);
-
-        if (this.game.getBoard() == null) {
-            System.out.println("Null board");
-            this.output.println("");
-            return;
-        }
-        
+        System.out.println("Sending: " + this.game.getBoardDescription());
         this.output.println(this.game.getBoardDescription());
+        this.output.println(message);
     }
 }

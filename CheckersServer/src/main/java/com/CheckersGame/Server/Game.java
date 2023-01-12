@@ -24,7 +24,7 @@ public class Game implements Runnable {
     private CommandLine cmdBlack; /** A CommandLine class instance handling communication with the player BLACK */
 
     private GameVersion version; /** A game board factory class object */
-    private Board board;
+    private Board board; /** The game board */
 
 
 
@@ -55,19 +55,17 @@ public class Game implements Runnable {
         try {
             BufferedReader inWhite = new BufferedReader(new InputStreamReader(this.playerWhite.getInputStream()));
             PrintWriter outWhite = new PrintWriter(this.playerWhite.getOutputStream(), true);
-            this.cmdWhite = new CommandLine(this, inWhite, outWhite);
+            this.cmdWhite = new CommandLine(this, inWhite, outWhite, "white");
             
             BufferedReader inBlack = new BufferedReader(new InputStreamReader(this.playerBlack.getInputStream()));
             PrintWriter outBlack = new PrintWriter(this.playerBlack.getOutputStream(), true);
-            this.cmdBlack = new CommandLine(this, inBlack, outBlack);
-
-            this.cmdWhite.sendInit("Playing as white!\nTo start enter `newGame <version>`");
-            this.cmdBlack.sendInit("Playing as black!\nWaiting for the game to start...");
-
-
+            this.cmdBlack = new CommandLine(this, inBlack, outBlack, "black");
+            
+            this.cmdWhite.sendInit("white");
+            this.cmdBlack.sendInit("black");
 
             while (true) {
-                if (this.version == null) {
+                if (this.board == null) {
                     // white selects the game mode
                     System.out.println("Waiting for player WHITE to select game mode...");
                     
@@ -75,7 +73,7 @@ public class Game implements Runnable {
                         String message = this.cmdWhite.execCommand();
                         System.out.println("(white) " + message);
 
-                        if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                        if (message.startsWith("Error")) {
                             this.cmdWhite.sendMessage(message);
                         }
                         else {
@@ -93,14 +91,16 @@ public class Game implements Runnable {
                     if (state == GameState.WHITE) {
                         try {
                             String message = this.cmdWhite.execCommand();
-                            System.out.println("(white) " + message);
-    
-                            if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
-                                this.cmdWhite.sendMessage(message);
-                            }
-                            else {
-                                this.cmdWhite.sendMessage(message);
-                                this.cmdBlack.sendMessage("(white) " + message);
+                            if (this.board != null) {
+                                System.out.println("(white) " + message);
+
+                                if (message.startsWith("Error")) {
+                                    this.cmdWhite.sendMessage(message);
+                                }
+                                else {
+                                    this.cmdWhite.sendMessage(message);
+                                    this.cmdBlack.sendMessage("(white) " + message);
+                                }
                             }
                         }
                         catch (IOException e) {
@@ -111,14 +111,16 @@ public class Game implements Runnable {
                     else if (state == GameState.BLACK) {
                         try {
                             String message = this.cmdBlack.execCommand();
-                            System.out.println("(black) " + message);
-    
-                            if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
-                                this.cmdBlack.sendMessage(message);
-                            }
-                            else {
-                                this.cmdWhite.sendMessage(("(black) ") + message);
-                                this.cmdBlack.sendMessage(message);
+                            if (this.board != null) {
+                                System.out.println("(black) " + message);
+
+                                if (message.startsWith("Error") || message.startsWith("Checkers console app commands:")) {
+                                    this.cmdBlack.sendMessage(message);
+                                }
+                                else {
+                                    this.cmdWhite.sendMessage(("(black) ") + message);
+                                    this.cmdBlack.sendMessage(message);
+                                }
                             }
                         }
                         catch (IOException e) {
@@ -168,7 +170,7 @@ public class Game implements Runnable {
      */
     public String getBoardDescription () {
         if (this.board == null) {
-            return null;
+            return "board: null";
         }
 
         return this.board.getDescription();
@@ -248,14 +250,41 @@ public class Game implements Runnable {
      * @return int
      */
     public int movePawn (int rCurr, int cCurr, int rMov, int cMov) {
-        if (this.version == null) {
+        if (this.board == null) {
             return Board.UNKNOWN_ERROR;
         }
 
         int status = this.board.movePawn(rCurr, cCurr, rMov, cMov);
         
-        if (status == Board.WHITE_WINS || status == Board.BLACK_WINS) {
-            this.board = null;
+        if (status == Board.WHITE_WINS) {
+            try {
+                String message = String.format("Game ended: WHITE wins ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
+    
+                this.cmdWhite.sendMessage(message);
+                this.cmdBlack.sendMessage("(white) " + message);
+            }
+            catch (IOException e) {
+                System.err.println("IOError: " + e.getMessage());
+                e.printStackTrace();
+            }
+            catch (NullPointerException e) {}
+
+            this.end();
+        }
+        else if (status == Board.BLACK_WINS) {
+            try {
+                String message = String.format("Game ended: BLACK wins ==> Pawn moved: (%d,%d) -> (%d,%d)", rCurr, cCurr, rMov, cMov);
+    
+                this.cmdWhite.sendMessage("(black) " + message);
+                this.cmdBlack.sendMessage(message);
+            }
+            catch (IOException e) {
+                System.err.println("IOError: " + e.getMessage());
+                e.printStackTrace();
+            }
+            catch (NullPointerException e) {}
+
+            this.end();
         }
 
         return status;
@@ -283,7 +312,6 @@ public class Game implements Runnable {
      */
     public void end () {
         this.board = null;
-        this.version = null;
     }
 
 
@@ -323,7 +351,7 @@ public class Game implements Runnable {
      * @param player
      */
     public void mockEndgame (String player) {
-        if (this.version == null) {
+        if (this.board == null) {
             return;
         }
 
@@ -338,7 +366,7 @@ public class Game implements Runnable {
      * @param player
      */
     public void mockQueenEndgame (String player) {
-        if (this.version == null) {
+        if (this.board == null) {
             return;
         }
 
@@ -353,7 +381,7 @@ public class Game implements Runnable {
      * @param player
      */
     public void mockPawnToQueen (String player) {
-        if (this.version == null) {
+        if (this.board == null) {
             return;
         }
 
