@@ -7,7 +7,11 @@ import javafx.application.Platform;
 
 
 
-
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Game Controller application main class
+ */
 public class GameController {
     private Thread gameThread;
     private GameClient model;
@@ -15,7 +19,9 @@ public class GameController {
     private Boolean active;
 
 
-
+    /**
+     * GameController class constructor
+     */
     public GameController () {
         this.model = null;
         this.view = null;
@@ -23,37 +29,52 @@ public class GameController {
     }
 
 
-
+    /**
+     * View -> model
+     * @param model
+     */
     public void setModel (GameClient model) {
         this.model = model;
     }
 
 
-
+    /**
+     * View -> model
+     * @param view
+     */
     public void setView (GameView view) {
         this.view = view;
     }
 
 
-
+    /**
+     * View -> model
+     * @param active
+     */
     public void setActive (boolean active) {
         this.active = active;
     }
 
 
-
+    /**
+     * View -> model
+     */
     public boolean isAstive () {
         return this.active;
     }
 
 
-
+    /**
+     * Model -> view
+     */
     public void startView () {
         this.view.render();
     }
 
 
-
+    /**
+     * View -> model
+     */
     public void startModel () {
         this.gameThread = new Thread(this.model);
         this.gameThread.start();
@@ -158,9 +179,11 @@ public class GameController {
 
 
 
-
+    /**
+     * closes app
+     * @param status
+     */
     public void closeApplication (int status) {
-        // System.exit(status);
         System.out.println("Program ended with return status: " + status);
         this.gameThread.interrupt();
         Platform.exit();

@@ -23,7 +23,12 @@ import javafx.scene.text.Font;
 
 
 
-
+/**
+ * @author Krzysztof Dobrucki
+ * @author Jakub Musiał
+ * @version 1.0
+ * GameInfo class
+ */
 public class GameInfo extends VBox {
     private int horizontalSpace;
 
@@ -36,6 +41,10 @@ public class GameInfo extends VBox {
 
 
 
+
+    /**
+     * GameInfo class constructor
+     */
     public GameInfo (GameController gameController, GameView gameView) {
         super();
 
@@ -47,6 +56,9 @@ public class GameInfo extends VBox {
 
 
 
+    /**
+     * Shows Game info
+     */
     public void render () {
         this.setBackground(new Background(new BackgroundFill(Color.CORNSILK, null, null)));
 
@@ -58,19 +70,29 @@ public class GameInfo extends VBox {
     }
 
 
-
+    /**
+     * Sets player
+     * @param player
+     */
     public void setPlayer (String player) {
         this.playerInfo.setPlayer(player);
     }
 
 
 
+    /**
+     * Updates Log
+     * @param newLog
+     */
     public void updateLog (String newLog) {
         this.log.setText(this.log.getText() + "\n" + newLog);
     }
 
 
 
+    /**
+     * PlayerInfo class contains player info
+     */
     class PlayerInfo extends Label {
         public PlayerInfo (int horizontalSpace, String player) {
             super("You're playing as: " + player);
@@ -89,7 +111,9 @@ public class GameInfo extends VBox {
     }
 
 
-
+    /**
+     * GameLog class contains game log
+     */
     class GameLog extends Label {
         public GameLog (int horizontalSpace) {
             super("Game log:");
@@ -105,6 +129,9 @@ public class GameInfo extends VBox {
 
 
 
+    /**
+     * MoveButtonFrame class is a frame for move button
+     */
     class MoveButtonFrame extends VBox {
         public MoveButtonFrame (int horizontalSpace, GameController gameController, GameView gameView) {
             super();
@@ -120,6 +147,9 @@ public class GameInfo extends VBox {
 
 
 
+    /**
+     * MoveButton class contains move button
+     */
     class MoveButton extends Button {
         public MoveButton (GameController gameController, GameView gameView) {
             super("MOVE!");

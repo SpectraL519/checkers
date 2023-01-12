@@ -71,7 +71,9 @@ public class GameClient implements Runnable {
         }
     }
 
-
+    /**
+     * Gets messeages from server
+     */
     private void getMessage() {
         System.out.println("Trying to recieve a message from the server...");
         try {
@@ -117,7 +119,9 @@ public class GameClient implements Runnable {
     }
 
 
-
+    /**
+     * Shows messages
+     */
     public void sendMessage(String message) {
         System.out.println("Sending: " + message);
         this.output.println(message);   

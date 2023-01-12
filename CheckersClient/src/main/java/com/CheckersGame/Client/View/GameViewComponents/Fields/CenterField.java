@@ -10,12 +10,29 @@ import javafx.event.EventHandler;
 
 
 
+
+/**
+ * @author Krzysztof Dobrucki
+ * @version 1.0
+ * CenterField class
+ */
 public class CenterField extends Field {
 
     public final int row;
     public final int column;
     public final Color color;
 
+
+
+    /**
+     * CenterField class constructor
+     * @param color
+     * @param pixelSizeV
+     * @param pixelSizeH
+     * @param row
+     * @param column
+     * @param board
+     */
     public CenterField (final Color color, int pixelSizeV, int pixelSizeH, final int row, final int column, final GameBoard board) {
 
         super(color, pixelSizeV, pixelSizeH);
@@ -60,18 +77,30 @@ public class CenterField extends Field {
 
     }
 
+    /**
+     * Shows White Pawn
+     */
     public void showWhitePawn(boolean b){
         this.whitePawn.setVisible(b);
     }
 
+    /**
+     * Shows Black Pawn
+     */
     public void showBlackPawn(boolean b){
         this.blackPawn.setVisible(b);
     }
 
+    /**
+     * Shows White Pawn Queen
+     */
     public void showWhitePawnQueen(boolean b){
         this.whitePawnQueen.setVisible(b);
     }
 
+    /**
+     * Shows Black Pawn Queen
+     */
     public void showBlackPawnQueen(boolean b){
         this.blackPawnQueen.setVisible(b);
     }

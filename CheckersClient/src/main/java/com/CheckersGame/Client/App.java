@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 /**
  * @author Jakub Musiał
+ * @author Krzysztof Dobrucki
  * @version 1.0
  * Checkers client application main class
  */
