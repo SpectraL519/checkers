@@ -16,7 +16,11 @@ import javafx.scene.paint.Color;
 
 
 
-
+/**
+ * @author Krzysztof Dobrucki
+ * @version 1.0
+ * Toolbar class
+ */
 public class Toolbar extends HBox {
     private GameController gameController;
 
@@ -26,14 +30,18 @@ public class Toolbar extends HBox {
     private ExitButton exitButton;
 
 
-
+    /**
+     * Toolbar class constructor
+     */
     public Toolbar(GameController gameController) {
         super();
         this.gameController = gameController;
     }
 
 
-
+    /**
+     * Renders Toolbar
+     */
     public void render() {
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, getInsets())));
 
@@ -50,7 +58,9 @@ public class Toolbar extends HBox {
     }
 
 
-
+    /**
+     * GameType class contains game types
+     */
     class GameType extends SplitMenuButton {
         public GameType(GameController gameController) {
             super();
@@ -88,7 +98,9 @@ public class Toolbar extends HBox {
     }
 
 
-
+    /**
+     * MockSituation class contains mock types
+     */
     class MockSituation extends SplitMenuButton {
         private MenuItem simple;
         private MenuItem queen;
@@ -134,7 +146,9 @@ public class Toolbar extends HBox {
     }
 
     
-
+    /**
+     * RestartButton class restarts game
+     */
     class RestartButton extends Button {
         public RestartButton(GameController gameController) {
             super("Restart game");
@@ -150,7 +164,9 @@ public class Toolbar extends HBox {
     }
 
 
-
+    /**
+     * ExitButton class closes app
+     */
     class ExitButton extends Button {
         public ExitButton(GameController gameController) {
             super("Exit game");

@@ -6,8 +6,20 @@ import javafx.scene.shape.StrokeType;
 
 
 
+
+/**
+ * @author Krzysztof Dobrucki
+ * @version 1.0
+ * Pawn class
+ */
 public class Pawn extends Circle {
 
+    /**
+     * Pawn class constructor
+     * @param r
+     * @param color
+     * @param stroke
+     */
     public Pawn(int r, Color color, Color stroke) {
         super(r, color);
         this.setStrokeWidth(3);

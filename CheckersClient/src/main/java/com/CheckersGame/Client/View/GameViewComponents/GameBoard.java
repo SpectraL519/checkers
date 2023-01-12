@@ -11,6 +11,13 @@ import javafx.scene.paint.Color;
 
 
 
+
+
+/**
+ * @author Krzysztof Dobrucki
+ * @version 1.0
+ * GameBoard class
+ */
 public class GameBoard extends GridPane {
 
     private int boardSize;
@@ -20,7 +27,11 @@ public class GameBoard extends GridPane {
     public String[] descriptionArray;
     
 
-    //public GameBoard (int boardSize, int pixelSize, int rowOfPawns) {
+    /**
+     * GameBoard class constructor
+     * @param boardDescription
+     * @param gameController
+     */
     public GameBoard (String boardDescription, GameController gameController) {
         super();
 
@@ -34,7 +45,6 @@ public class GameBoard extends GridPane {
         this.descriptionArray = boardDescription.split(";");
         this.boardSize = Integer.parseInt(descriptionArray[0]);
 
-        //STARY KOD
         this.pixelSize = 600;
         this.controller = new MoveManager(this);
         this.board = new Field[this.boardSize+2][this.boardSize+2];
@@ -46,7 +56,9 @@ public class GameBoard extends GridPane {
     }
 
 
-
+    /**
+     * Shows game board
+     */
     public void render () {
         
         Color colorsCenter[] = {Color.BEIGE, Color.DARKGREEN};

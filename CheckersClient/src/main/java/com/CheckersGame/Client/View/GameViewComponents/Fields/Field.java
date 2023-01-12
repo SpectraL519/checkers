@@ -7,6 +7,12 @@ import javafx.scene.paint.Color;
 
 
 
+
+/**
+ * @author Krzysztof Dobrucki
+ * @version 1.0
+ * Field class
+ */
 public class Field extends Pane {
 
     public Pawn whitePawn;
@@ -14,6 +20,14 @@ public class Field extends Pane {
     public Pawn whitePawnQueen;
     public Pawn blackPawnQueen;
 
+
+
+    /**
+     * Pawn class constructor
+     * @param color
+     * @param pixelSizeV
+     * @param pixelSizeH
+     */
     public Field (Color color, int pixelSizeV, int pixelSizeH) {
         super();
         this.setMinWidth(pixelSizeH);

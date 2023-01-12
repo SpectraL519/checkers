@@ -9,13 +9,29 @@ import javafx.scene.paint.Color;
 
 
 
+
+/**
+ * @author Krzysztof Dobrucki
+ * @version 1.0
+ * Creditsbar class
+ */
 public class Creditsbar extends HBox {
     
+
+
+    /**
+     * Creditsbar class constructor
+     */
     public Creditsbar () {
         super();
     }
 
 
+
+
+    /**
+     * Shows creditsbar
+     */
     public void render() {
         this.setPadding(new Insets(7, 7, 7, 7));
         this.setSpacing(10);
@@ -25,6 +41,10 @@ public class Creditsbar extends HBox {
     }
 
 
+
+    /**
+     * CreditsLabel class contains footer
+     */
     class CreditsLabel extends Label {
         public CreditsLabel () {
             super("CHECKERS 2022 (C)");
