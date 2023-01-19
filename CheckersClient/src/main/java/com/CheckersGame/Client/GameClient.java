@@ -50,10 +50,11 @@ public class GameClient implements Runnable {
     /**
      * Tries to connect to the server
      */
+    // TODO: connect to 4444 - single player; 8888 - multiplayer
     private void listen () {
         try {
             System.out.println("Connecting to server...");
-            this.socket = new Socket("localhost", 4444);
+            this.socket = new Socket("localhost", 888);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
             System.out.println("Success!");
