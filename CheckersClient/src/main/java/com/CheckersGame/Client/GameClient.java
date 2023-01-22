@@ -15,12 +15,14 @@ import javafx.application.Platform;
  * Class handling the client thread
  */
 public class GameClient implements Runnable {
+    protected int port;
+
     private Socket socket; /** A socket for the client to connect to the server */
 
     private BufferedReader input; /** The client's input stream handling masseges sent from a server */
     private PrintWriter output; /** The clients's output stream handling sending messages to a server */
 
-    private GameController controller; /** MVC::Controller class instance */
+    protected GameController controller; /** MVC::Controller class instance */
 
 
 
@@ -50,11 +52,10 @@ public class GameClient implements Runnable {
     /**
      * Tries to connect to the server
      */
-    // TODO: connect to 4444 - single player; 8888 - multiplayer
     private void listen () {
         try {
             System.out.println("Connecting to server...");
-            this.socket = new Socket("localhost", 888);
+            this.socket = new Socket("localhost", this.port);
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.output = new PrintWriter(this.socket.getOutputStream(), true);
             System.out.println("Success!");
@@ -71,6 +72,8 @@ public class GameClient implements Runnable {
             this.controller.closeApplication(1);
         }
     }
+
+
 
     /**
      * Gets messeages from server
@@ -120,6 +123,7 @@ public class GameClient implements Runnable {
     }
 
 
+    
     /**
      * Shows messages
      */

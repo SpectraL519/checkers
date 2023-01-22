@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 public class Toolbar extends HBox {
     private GameController gameController;
 
+    private GameMode gameModeButton;
     private GameType newGameButton;
     private MockSituation mockMenu;
     private RestartButton restartButton;
@@ -49,12 +50,41 @@ public class Toolbar extends HBox {
         this.setSpacing(10);
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
+        this.gameModeButton = new GameMode(this.gameController);
         this.newGameButton = new GameType(this.gameController);
         this.mockMenu = new MockSituation(this.gameController);
         this.restartButton = new RestartButton(this.gameController);
         this.exitButton = new ExitButton(this.gameController);
 
-        this.getChildren().addAll(this.newGameButton, this.mockMenu, this.restartButton, this.exitButton);
+        this.getChildren().addAll(this.gameModeButton, this.newGameButton, this.mockMenu, this.restartButton, this.exitButton);
+    }
+
+
+
+    class GameMode extends SplitMenuButton {
+        public GameMode (GameController gameController) {
+            super();
+
+            this.setText("Game mode");
+            
+            MenuItem singlePlayer = new MenuItem("Single player");
+            singlePlayer.setOnAction(new EventHandler <ActionEvent> () {
+                @Override
+                public void handle (ActionEvent event) {
+                    gameController.startModel("singleplayer");
+                }
+            });
+
+            MenuItem multiPlayer = new MenuItem("Multi player");
+            multiPlayer.setOnAction(new EventHandler <ActionEvent> () {
+                @Override
+                public void handle (ActionEvent event) {
+                    gameController.startModel("multiplayer");
+                }
+            });
+
+            this.getItems().addAll(singlePlayer, multiPlayer);
+        }
     }
 
 
@@ -92,8 +122,6 @@ public class Toolbar extends HBox {
             });
 
             this.getItems().addAll(choice1, choice2, choice3);
-
-
         }
     }
 

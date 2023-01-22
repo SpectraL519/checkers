@@ -75,7 +75,26 @@ public class GameController {
     /**
      * View -> model
      */
-    public void startModel () {
+    public void startModel (String gameMode) {
+        switch (gameMode) {
+            case "singleplayer": {
+                this.model = new SinglePlayerClient(this);
+                this.model.start();
+                break;
+            }
+
+            case "multiplayer": {
+                this.model = new MultiPlayerClient(this);
+                this.model.start();
+                break;
+            }
+
+            default: {
+                System.out.println("Error: Invalid game mode specified!");
+                break;
+            }
+        }
+
         this.gameThread = new Thread(this.model);
         this.gameThread.start();
     }
