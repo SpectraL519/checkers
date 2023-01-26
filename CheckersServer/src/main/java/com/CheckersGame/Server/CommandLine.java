@@ -160,22 +160,6 @@ final class CommandLine {
                 break;
             }
 
-            case "longestMove": {
-                if (this.game.getBoard() == null) {
-                    message = "Error: Cannot calculate the longest move - the game hasn't started yet!";
-                    break;
-                }
-
-                try {
-                    message = "Longest move: " + this.game.longestMove(Integer.parseInt(args[1]), Integer.parseInt(args[2])) + "\n";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
-
-                break;
-            }
-
             default: {
                 message = "Error: Invalid operation";
             }

@@ -207,16 +207,6 @@ public abstract class Board {
                         this.pawnTake(rCurr, cCurr, rMov, cMov);
                     }
 
-                    if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
-                        this.state = this.state.endGame();
-                        return Board.WHITE_WINS;
-                    }
-
-                    if (this.getState() == GameState.BLACK && this.whitePawns == 0) {
-                        this.state = this.state.endGame();
-                        return Board.BLACK_WINS;
-                    }
-
                     this.rPrevTake = rMov;
                     this.cPrevTake = cMov;
 
@@ -239,22 +229,22 @@ public abstract class Board {
     public int botMovement (String bot) {
         System.out.println("bot: checkpoint 1");
         if (this.state.getState().getName().equals(bot)) {
-            int longestMove = 0;
-            Pair <Integer, Integer> curr = null;
-            Pair <Integer, Integer> mov = null;
+            System.out.println("bot: checkpoint 2");
+            
+            Pair <Integer, Pair <Pair <Integer, Integer>, Pair <Integer, Integer>>> longestTake = this.longestTake();
+            int takeLength = longestTake.getKey();
+            Pair <Integer, Integer> curr = longestTake.getValue().getKey();
+            Pair <Integer, Integer> mov = longestTake.getValue().getValue();
 
-            for (int r = 0; r < this.size; r++) {
-                for (int c = 0; c < this.size; c++) {
-                    Pair <Integer, Pair <Integer, Integer>> move = this.longestMove(r, c);
-                    if (move.getKey() > longestMove) {
-                        longestMove = move.getKey();
-                        curr = new Pair <> (r, c);
-                        mov = move.getValue();
-                    }
-                }
-            }
+            System.out.printf("botMovement: longestTake = %d\n", takeLength);
+            if (curr != null)
+                System.out.printf("botMovement: LT.curr: (%d,%d)\n", curr.getKey(), curr.getValue());
+            if (mov != null)
+                System.out.printf("botMovement: LT.mov: (%d,%d)\n", mov.getKey(), mov.getValue());
 
-            if (mov == null) {
+            System.out.println("bot: checkpoint 3");
+            if (takeLength == 0) {
+                System.out.println("bot: checkpoint 4");
                 for (int r = 0; r < this.size; r++) {
                     for (int c = 0; c < this.size; c++) {
                         int move = this.movePawn(r, c, r + 1, c + 1);
@@ -280,9 +270,11 @@ public abstract class Board {
                 }
             }
             
+            System.out.println("bot: checkpoint 5");
             return this.movePawn(curr.getKey(), curr.getValue(), mov.getKey(), mov.getValue());
         }
 
+        System.out.println("bot: checkpoint 6 (error)");
         return Board.UNKNOWN_ERROR;
     }
 
@@ -930,7 +922,7 @@ public abstract class Board {
                 int length = 1 + bc.longestQueenTake(r + rStep, c + cStep).getKey();
                 if (length > moveLengths[3]) {
                     moveLengths[3] = length;
-                    moveCoordinates[3] = new Pair<>(r + rStep, c + cStep);
+                    moveCoordinates[3] = new Pair <> (r + rStep, c + cStep);
                 }
             }
             
@@ -959,10 +951,11 @@ public abstract class Board {
      * Calculates the longest possible take on the board for the current player
      * @return int
      */
-    protected Pair <Integer, Pair <Integer, Integer>> longestTake () {
+    protected Pair <Integer, Pair <Pair <Integer, Integer>, Pair <Integer, Integer>>> longestTake () {
         try {
             int longestTake = 0;
-            Pair <Integer, Integer> coordinates = null;
+            Pair <Integer, Integer> curr = null;
+            Pair <Integer, Integer> mov = null;
 
             for (int r = 0; r < this.size; r++) {
                 for (int c = 0; c < this.size; c++) {
@@ -982,12 +975,13 @@ public abstract class Board {
 
                     if (takeLength > longestTake) {
                         longestTake = takeLength;
-                        coordinates = take.getValue();
+                        curr = new Pair <> (r, c);
+                        mov = take.getValue();
                     }
                 }
             }
 
-            return new Pair <> (longestTake, coordinates);
+            return new Pair <> (longestTake, new Pair <> (curr, mov));
         }
         catch (CloneNotSupportedException e) {
             System.out.println("Clone error!");
@@ -997,47 +991,8 @@ public abstract class Board {
 
 
 
-    
-    /** 
-     * Calculates the longest move on the board for the current player
-     * @param r
-     * @param c
-     * @return int
-     */
-    public Pair <Integer, Pair <Integer, Integer>> longestMove (int r, int c) {
-        if (!this.checkPlayer(r, c)) {
-            return new Pair <> (-1, null);
-        }
+
         
-        try {
-            if (this.isQueen(r, c)) {
-                Pair <Integer, Pair <Integer, Integer>> lqt = this.longestQueenTake(r, c);
-                if (lqt.getKey() > 0) {
-                    return lqt;
-                }
-
-                return new Pair <> (1, null);
-            }
-            
-            Pair <Integer, Pair <Integer, Integer>> lpt = this.longestPawnTake(r, c);
-            if (lpt.getKey() > 0) {
-                return lpt;
-            }
-
-            return new Pair <> (1, null);
-        }
-        catch (CloneNotSupportedException e) {
-            System.out.println("Clone error!");
-        }
-
-        return new Pair <> (0, null);
-    }
-
-
-
-
-    
-    
     /** 
      * Mocks a simple endgame situation where the next (winning) move belongs to the specified `player`  
      * This method are of functionality verification purposes only

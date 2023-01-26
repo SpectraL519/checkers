@@ -71,14 +71,15 @@ public class SinglePlayerGame extends Game implements Runnable {
                     }
                 }
                 else {
-                    if (this.getState().getName().equals(player)) {
+                    String name = this.getState().getName();
+                    if (name.equals(player)) {
                         String message = this.cmd.execCommand();
                         if (this.board != null) {
                             System.out.println("(" + player + ") " + message);
                             this.cmd.sendMessage(message);
                         }
                     }
-                    else if (this.getState().getName().equals(bot)) {
+                    else if (name.equals(bot)) {
                         String botMessage = this.getBoard().getMoveMessage(this.getBoard().botMovement(bot));
                         this.cmd.sendMessage("(" + bot + ") " + botMessage);
                     }

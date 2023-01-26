@@ -152,22 +152,6 @@ public abstract class Game {
     }
 
 
-
-    /** 
-     * Returns the longest possible move a player can make by moving a pawn on the position (`r`, `c`)
-     * @param r
-     * @param c
-     * @return int
-     */
-    public int longestMove (int r, int c) {
-        if (this.board == null) {
-            return -1;
-        }
-
-        return this.board.longestMove(r, c).getKey();
-    }
-
-
     
     /**
      * Mocks a simple endgame situation where the next (winning) move belongs to the specified `player`  
