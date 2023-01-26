@@ -18,7 +18,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 public class GameVersionTest {
     @Test
     public void versionTest () {
-        Game game = new Game();
+        Game game = new MultiPlayerGame();
 
         game.newGame("polish");
         assertThat(game.getVersion(), instanceOf(PolishVersion.class));

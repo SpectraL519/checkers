@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 public class RussianGameTest {
     @Test
     public void gameFunctionalityTest () {
-        Game game = new Game();
+        Game game = new MultiPlayerGame();
 
         // End game
         game.newGame("russian");

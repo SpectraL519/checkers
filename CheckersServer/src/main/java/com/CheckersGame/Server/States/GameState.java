@@ -14,7 +14,7 @@ public enum GameState {
      * RESTING state (no player's turn)
      * @see getStateBehaviour
      */
-    RESTING {
+    RESTING ("resting") {
         /**
          * Returns RESTING state's behaviour
          * @return RestingState
@@ -30,7 +30,7 @@ public enum GameState {
      * WHITE player's turn (state)
      * @see getStateBehaviour
      */
-    WHITE {
+    WHITE ("white") {
         /**
          * Returns WHITE state's behaviour
          * @return WhiteState
@@ -46,7 +46,7 @@ public enum GameState {
      * BLACK player's turn (state)
      * @see getStateBehaviour
      */
-    BLACK {
+    BLACK ("black") {
         /**
          * Returns BLACK state's behaviour
          * @return BlackState
@@ -55,6 +55,18 @@ public enum GameState {
             return new BlackState();
         }
     };
+
+
+
+    private final String name;
+
+    private GameState (String name) {
+        this.name = name;
+    }
+
+    public String getName () {
+        return this.name;
+    }
 
 
 

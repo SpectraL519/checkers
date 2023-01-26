@@ -3,6 +3,8 @@ package com.CheckersGame.Server;
 import java.io.*;
 import java.net.*;
 
+import com.CheckersGame.Server.States.GameState;
+
 
 
 
@@ -16,22 +18,23 @@ public class GameServer {
     /** 
      * @param args
      */
-    // https://stackoverflow.com/questions/38868774/how-to-run-two-instances-of-java-socket-servers-listenening-on-two-different-por
     public static void main(String[] args) {
 
         Thread singlePlayerThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ServerSocket serverSocket = null;
-
                 while (true) {
+                    ServerSocket serverSocket = null;
+                    
                     try {
                         serverSocket = new ServerSocket(4444);
+                        System.out.println("Server listening (singleplayer): 4444");
 
                         Socket playerSocket = serverSocket.accept();
-                        // TODO: start a single player thread
-                        playerSocket.close();
-
+                        System.out.println("Player connected");
+                        Thread gameThread = new Thread(new SinglePlayerGame(playerSocket));
+                        gameThread.start();
+                        serverSocket.close();
                     } 
                     catch (IOException e) {
                         e.printStackTrace();
@@ -50,12 +53,13 @@ public class GameServer {
 
         Thread multiPlayerThread = new Thread(new Runnable() {
             @Override
-            public void run() {
-                ServerSocket serverSocket = null;
-
+            public void run() { 
                 while (true) {
+                    ServerSocket serverSocket = null;
+
                     try {
                         serverSocket = new ServerSocket(8888);
+                        System.out.println("Server listening (multiplayer): 8888");
 
                         Socket playerWhite = serverSocket.accept();
                         System.out.println("First player connected");
@@ -64,7 +68,7 @@ public class GameServer {
                         Socket playerBlack = serverSocket.accept();
                         System.out.println("Second player connected");
 
-                        Thread gameThread = new Thread(new Game(playerWhite, playerBlack));
+                        Thread gameThread = new Thread(new MultiPlayerGame(playerWhite, playerBlack));
                         gameThread.start();
                         serverSocket.close();
                     } 

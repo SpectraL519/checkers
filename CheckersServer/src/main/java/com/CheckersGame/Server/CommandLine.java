@@ -157,7 +157,6 @@ final class CommandLine {
                 this.game.mockPawnToQueen(this.player);
                 message = "Mocking a pawn to queen situation for player " + player + "...";
 
-
                 break;
             }
 
@@ -196,9 +195,9 @@ final class CommandLine {
      * @param player
      * @throws IOException
      */
-    public void sendInit (String player) throws IOException {
-        System.out.println("Sending: " + player);
-        this.output.println("init: " + player);
+    public void sendInit () throws IOException {
+        System.out.println("Sending init: " + this.player);
+        this.output.println("init: " + this.player);
     }
 
 
@@ -209,7 +208,6 @@ final class CommandLine {
      * @throws IOException
      */
     public void sendMessage (String message) throws IOException {
-        System.out.println("Sending: " + this.game.getBoardDescription());
         this.output.println(this.game.getBoardDescription());
         this.output.println(message);
     }

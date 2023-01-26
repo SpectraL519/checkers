@@ -1,5 +1,6 @@
 package com.CheckersGame.Client;
 
+import com.CheckersGame.Client.Model.*;
 import com.CheckersGame.Client.View.GameView;
 
 import javafx.application.Platform;
@@ -79,13 +80,15 @@ public class GameController {
         switch (gameMode) {
             case "singleplayer": {
                 this.model = new SinglePlayerClient(this);
-                this.model.start();
+                this.gameThread = new Thread(this.model);
+                this.gameThread.start();
                 break;
             }
 
             case "multiplayer": {
                 this.model = new MultiPlayerClient(this);
-                this.model.start();
+                this.gameThread = new Thread(this.model);
+                this.gameThread.start();
                 break;
             }
 
@@ -94,9 +97,6 @@ public class GameController {
                 break;
             }
         }
-
-        this.gameThread = new Thread(this.model);
-        this.gameThread.start();
     }
 
 

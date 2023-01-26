@@ -1,7 +1,9 @@
-package com.CheckersGame.Client;
+package com.CheckersGame.Client.Model;
 
 import java.io.*;
 import java.net.*;
+
+import com.CheckersGame.Client.GameController;
 
 import javafx.application.Platform;
 
@@ -14,7 +16,7 @@ import javafx.application.Platform;
  * @version 1.0
  * Class handling the client thread
  */
-public class GameClient implements Runnable {
+public abstract class GameClient implements Runnable {
     protected int port;
 
     private Socket socket; /** A socket for the client to connect to the server */
