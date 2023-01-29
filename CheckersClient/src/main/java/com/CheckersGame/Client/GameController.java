@@ -120,6 +120,11 @@ public class GameController {
 
 
 
+
+    /**
+     * Renders the gam board view
+     * @param boardDescription
+     */
     public void renderBoard (String boardDescription) {
         if (!boardDescription.endsWith("null")) {
             this.view.renderBoard(boardDescription);
@@ -199,7 +204,7 @@ public class GameController {
 
 
     /**
-     * closes app
+     * Closes the application
      * @param status
      */
     public void closeApplication (int status) {

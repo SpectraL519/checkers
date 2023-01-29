@@ -3,7 +3,8 @@ package com.CheckersGame.Server;
 import java.io.*;
 import java.net.*;
 
-import com.CheckersGame.Server.States.GameState;
+import com.CheckersGame.Server.GameThreadHandlers.MultiPlayerGame;
+import com.CheckersGame.Server.GameThreadHandlers.SinglePlayerGame;
 
 
 
@@ -11,7 +12,7 @@ import com.CheckersGame.Server.States.GameState;
 
 /**
  * @author Jakub Musiał
- * @version 1.0
+ * @version 2.0
  * Checkers server application main class
  */
 public class GameServer {    

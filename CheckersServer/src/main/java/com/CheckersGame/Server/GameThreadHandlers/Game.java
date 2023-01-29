@@ -1,4 +1,4 @@
-package com.CheckersGame.Server;
+package com.CheckersGame.Server.GameThreadHandlers;
 
 import com.CheckersGame.Server.Boards.Board;
 import com.CheckersGame.Server.States.GameState;
@@ -10,8 +10,8 @@ import com.CheckersGame.Server.Versions.*;
 
 /**
  * @author Jakub Musiał
- * @version 1.0
- * Game thread abstract class
+ * @version 2.0
+ * Game thread handelr (abstract)
  */
 public abstract class Game {
     protected GameVersion version; /** A game board factory class object */
@@ -26,6 +26,14 @@ public abstract class Game {
 
 
 
+    /**
+     * Pawn movement handling method (abstract)
+     * @param rCurr
+     * @param cCurr
+     * @param rMov
+     * @param cMov
+     * @return int
+     */
     public abstract int movePawn (int rCurr, int cCurr, int rMov, int cMov);
 
 

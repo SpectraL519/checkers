@@ -1,4 +1,4 @@
-package com.CheckersGame.Server;
+package com.CheckersGame.Server.GameThreadHandlers;
 
 import java.io.*;
 

@@ -1,6 +1,8 @@
 package com.CheckersGame.Server;
 
 import com.CheckersGame.Server.Boards.*;
+import com.CheckersGame.Server.GameThreadHandlers.Game;
+import com.CheckersGame.Server.GameThreadHandlers.MultiPlayerGame;
 import com.CheckersGame.Server.Versions.*;
 
 import org.junit.Test;

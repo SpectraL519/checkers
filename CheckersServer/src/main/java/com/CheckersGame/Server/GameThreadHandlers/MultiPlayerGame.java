@@ -1,4 +1,4 @@
-package com.CheckersGame.Server;
+package com.CheckersGame.Server.GameThreadHandlers;
 
 import com.CheckersGame.Server.Boards.Board;
 import com.CheckersGame.Server.States.GameState;
@@ -10,6 +10,11 @@ import java.net.Socket;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Multiplayer game thread handler
+ */
 public class MultiPlayerGame extends Game implements Runnable {
     private Socket playerWhite; /** A socket for the player WHITE */
     private CommandLine cmdWhite; /** A CommandLine class instance handling communication with the player WHITE */

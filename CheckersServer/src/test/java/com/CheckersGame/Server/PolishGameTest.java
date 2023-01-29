@@ -3,6 +3,8 @@ package com.CheckersGame.Server;
 import com.CheckersGame.Server.States.GameState;
 import com.CheckersGame.Server.Versions.PolishVersion;
 import com.CheckersGame.Server.Boards.PolishBoard;
+import com.CheckersGame.Server.GameThreadHandlers.Game;
+import com.CheckersGame.Server.GameThreadHandlers.MultiPlayerGame;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -135,7 +137,7 @@ public class PolishGameTest {
         game.mockPawnToQueen("white");
         assertEquals(game.movePawn(1, 8, 0, 7), 1);
         assertEquals(game.movePawn(1, 6, 2, 5), 1);
-        // assertEquals(game.movePawn(0, 7, 4, 3), 10); // white wins
+        assertEquals(game.movePawn(0, 7, 4, 3), 10); // white wins
     
         // Mocking a pawn to queen situation
         System.out.println();
@@ -144,6 +146,6 @@ public class PolishGameTest {
         game.mockPawnToQueen("black");
         assertEquals(game.movePawn(8, 1, 9, 2), 1);
         assertEquals(game.movePawn(8, 3, 7, 4), 1);
-        // assertEquals(game.movePawn(9, 2, 5, 6), 20); // white wins
+        assertEquals(game.movePawn(9, 2, 5, 6), 20); // white wins
     }
 }

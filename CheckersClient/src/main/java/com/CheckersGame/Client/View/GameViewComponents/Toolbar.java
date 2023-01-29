@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 
 /**
  * @author Krzysztof Dobrucki
+ * @author Jakub Musiał
  * @version 1.0
  * Toolbar class
  */
@@ -35,6 +36,8 @@ public class Toolbar extends HBox {
 
     /**
      * Toolbar class constructor
+     * @param view
+     * @param gameController
      */
     public Toolbar(GameView view, GameController gameController) {
         super();
@@ -64,7 +67,15 @@ public class Toolbar extends HBox {
 
 
 
+    /**
+     * Game mode selection menu
+     */
     class GameMode extends SplitMenuButton {
+        /**
+         * GameMode class constructor
+         * @param view
+         * @param gameController
+         */
         public GameMode (GameView view, GameController gameController) {
             super();
 

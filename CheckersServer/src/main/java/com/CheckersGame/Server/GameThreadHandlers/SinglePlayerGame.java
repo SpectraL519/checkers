@@ -1,4 +1,4 @@
-package com.CheckersGame.Server;
+package com.CheckersGame.Server.GameThreadHandlers;
 
 import com.CheckersGame.Server.Boards.Board;
 
@@ -10,6 +10,11 @@ import java.util.*;
 
 
 
+/**
+ * @author Jakub Musiał
+ * @version 1.0
+ * Singleplayer game thread handler
+ */
 public class SinglePlayerGame extends Game implements Runnable {
     private Socket playerSocket; /** A socket for the player */
     private CommandLine cmd; /** A CommandLine class instance handling communication with the player */
@@ -121,6 +126,10 @@ public class SinglePlayerGame extends Game implements Runnable {
 
 
 
+    /**
+     * Game end checking method
+     * @param status
+     */
     private void checkGameEnd (int status) {
         if (status == Board.WHITE_WINS) {
             try {
