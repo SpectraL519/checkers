@@ -80,8 +80,10 @@ public class SinglePlayerGame extends Game implements Runnable {
                         }
                     }
                     else if (name.equals(bot)) {
-                        String botMessage = this.getBoard().getMoveMessage(this.getBoard().botMovement(bot));
+                        int botMovementStatus = this.getBoard().botMovement(bot);
+                        String botMessage = this.getBoard().getMoveMessage(botMovementStatus);
                         this.cmd.sendMessage("(" + bot + ") " + botMessage);
+                        this.checkGameEnd(botMovementStatus);
                     }
                     else {
                         this.cmd.sendMessage("Error: Invalid game state!");
@@ -112,11 +114,19 @@ public class SinglePlayerGame extends Game implements Runnable {
         }
 
         int status = this.board.movePawn(rCurr, cCurr, rMov, cMov);
-        
+        this.checkGameEnd(status);
+
+        return status;
+    }
+
+
+
+    private void checkGameEnd (int status) {
         if (status == Board.WHITE_WINS) {
             try {
                 String message = String.format("Game ended: WHITE wins");
                 this.cmd.sendMessage(message);
+                this.board = null;
             }
             catch (IOException e) {
                 System.err.println("IOError: " + e.getMessage());
@@ -130,6 +140,7 @@ public class SinglePlayerGame extends Game implements Runnable {
             try {
                 String message = String.format("Game ended: BLACK wins");
                 this.cmd.sendMessage(message);
+                this.board = null;
             }
             catch (IOException e) {
                 System.err.println("IOError: " + e.getMessage());
@@ -139,7 +150,5 @@ public class SinglePlayerGame extends Game implements Runnable {
 
             this.end();
         }
-
-        return status;
     }
 }

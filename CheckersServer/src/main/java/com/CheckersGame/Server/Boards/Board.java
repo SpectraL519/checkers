@@ -26,23 +26,23 @@ public abstract class Board {
 
     protected GameStateBahaviour state; /** Handles the current game state */
 
-    protected final static int MOVE_ALLOWED = 1; /** Pawn move return code: given move is allowed */
-    protected final static int TAKE_ALLOWED = 2; /** Pawn move return code: given move is allowed and an enemy pawn can be taken */
-    protected final static int SEQUENTIAL_TAKE_ALLOWED = 3; /** Pawn move return code: given move is allowed and multiple enemy pawns can be taken */
-    public final static int WHITE_WINS = 10; /** Pawn move return code: player WHITE wins */
-    public final static int BLACK_WINS = 20; /** Pawn move return code: player BLACK wins */
+    protected final static int MOVE_ALLOWED = 1; /** Pawn movement return code: given move is allowed */
+    protected final static int TAKE_ALLOWED = 2; /** Pawn movement return code: given move is allowed and an enemy pawn can be taken */
+    protected final static int SEQUENTIAL_TAKE_ALLOWED = 3; /** Pawn movement return code: given move is allowed and multiple enemy pawns can be taken */
+    public final static int WHITE_WINS = 10; /** Pawn movement return code: player WHITE wins */
+    public final static int BLACK_WINS = 20; /** Pawn movement return code: player BLACK wins */
 
-    protected final static int NOT_OPTIMAL_TAKE = 0; /** Pawn move return code: Not optimal take error */
-    protected final static int GAME_NOT_STARED = -1; /** Pawn move return code: Game not started error */
-    protected final static int CURR_NOT_ON_BOARD = -2; /** Pawn move return code: Position `current` is not on board */
-    protected final static int MOV_NOT_ON_BOARD = -3; /** Pawn move return code: Position `movement` is not on board */
-    protected final static int INVALID_PLAYER = -4; /** Pawn move return code: The position `current` is invalid for the current player */
-    protected final static int PAWN_ON_MOV = -5; /** Pawn move return code: There is already a pawn on the position `movement` */
-    protected final static int INVALID_STEP = -6; /** Pawn move return code: Invalid move step */
-    protected final static int FORCED_TAKE_ERROR = -7; /** Pawn move return code: Not taking an enemy pawn when it's possible */
-    protected final static int SEQUENTIAL_TAKE_ERROR = -8; /** Pawn move return code: Player tries to take enemy pawns sequentially with different pawns */
-    protected final static int CLONE_ERROR = -9; /** Pawn move return code: Clone error */
-    public final static int UNKNOWN_ERROR = -10; /** Pawn move return code: Unknown error */
+    protected final static int NOT_OPTIMAL_TAKE = 0; /** Pawn movement return code: Not optimal take error */
+    protected final static int GAME_NOT_STARED = -1; /** Pawn movement return code: Game not started error */
+    protected final static int CURR_NOT_ON_BOARD = -2; /** Pawn movement return code: Position `current` is not on board */
+    protected final static int MOV_NOT_ON_BOARD = -3; /** Pawn movement return code: Position `movement` is not on board */
+    protected final static int INVALID_PLAYER = -4; /** Pawn movement return code: The position `current` is invalid for the current player */
+    protected final static int PAWN_ON_MOV = -5; /** Pawn movement return code: There is already a pawn on the position `movement` */
+    protected final static int INVALID_STEP = -6; /** Pawn movement return code: Invalid move step */
+    protected final static int FORCED_TAKE_ERROR = -7; /** Pawn movement return code: Not taking an enemy pawn when it's possible */
+    protected final static int SEQUENTIAL_TAKE_ERROR = -8; /** Pawn movement return code: Player tries to take enemy pawns sequentially with different pawns */
+    protected final static int CLONE_ERROR = -9; /** Pawn movement return code: Clone error */
+    public final static int UNKNOWN_ERROR = -10; /** Pawn movement return code: Unknown error */
 
 
 
@@ -147,8 +147,7 @@ public abstract class Board {
                     this.fields[rMov][cMov] = this.fields[rCurr][cCurr];
                     this.fields[rCurr][cCurr] = 0;
 
-                    if (this.pawnToQueen(rCurr, cCurr, rMov, cMov)) {
-                        System.out.println("Pawn changed to queen");
+                    if (this.toQueen(rMov, cMov)) {
                         this.fields[rMov][cMov] *= 10;
                     }
 
@@ -169,13 +168,8 @@ public abstract class Board {
                         this.pawnTake(rCurr, cCurr, rMov, cMov);
                     }
 
-                    try {
-                        if (this.pawnToQueen(rCurr, cCurr, rMov, cMov) && this.longestPawnTake(rMov, cMov).getKey() == 0) {
-                            this.fields[rMov][cMov] *= 10;
-                        }
-                    }
-                    catch (CloneNotSupportedException e) {
-                        return Board.CLONE_ERROR;
+                    if (this.toQueen(rMov, cMov)) {
+                        this.fields[rMov][cMov] *= 10;
                     }
 
                     if (this.getState() == GameState.WHITE && this.blackPawns == 0) {
@@ -209,7 +203,6 @@ public abstract class Board {
 
                     this.rPrevTake = rMov;
                     this.cPrevTake = cMov;
-
                     break;
                 }
 
@@ -641,23 +634,21 @@ public abstract class Board {
 
     
     /** 
-     * Checks for a pawn to queen conversion
-     * @param rCurr
-     * @param cCurr
+     * Checks for a pawn to queen conversion (after pawn movement has been performed)
      * @param rMov
      * @param cMov
      * @return boolean
      */
-    protected boolean pawnToQueen (int rCurr, int cCurr, int rMov, int cMov) {
-        if (isQueen(rCurr, cCurr)) {
+    protected boolean toQueen (int rMov, int cMov) {
+        if (this.isQueen(rMov, cMov)) {
             return false;
         }
 
-        if (this.getState() == GameState.WHITE && rMov == 0) {
+        if (this.isWhite(rMov, cMov) && rMov == 0) {
             return true;
         }
 
-        if (this.getState() == GameState.BLACK && rMov == this.size - 1) {
+        if (this.isBlack(rMov, cMov) && rMov == this.size - 1) {
             return true;
         }
 
@@ -669,12 +660,12 @@ public abstract class Board {
     
     /** 
      * Returns true if the pawn on the given position is a queen
-     * @param rCurr
-     * @param cCurr
+     * @param r
+     * @param c
      * @return boolean
      */
-    protected boolean isQueen (int rCurr, int cCurr) {
-        if ((this.fields[rCurr][cCurr] / 10) == 0) {
+    protected boolean isQueen (int r, int c) {
+        if ((this.fields[r][c] / 10) == 0) {
             return false;
         }
 
