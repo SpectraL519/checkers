@@ -1,5 +1,6 @@
 package com.CheckersGame.Client.View.GameViewComponents;
 
+import com.CheckersGame.Client.View.GameView;
 import com.CheckersGame.Client.GameController;
 
 import javafx.event.ActionEvent;
@@ -22,6 +23,7 @@ import javafx.scene.paint.Color;
  * Toolbar class
  */
 public class Toolbar extends HBox {
+    private GameView view;
     private GameController gameController;
 
     private GameMode gameModeButton;
@@ -34,8 +36,9 @@ public class Toolbar extends HBox {
     /**
      * Toolbar class constructor
      */
-    public Toolbar(GameController gameController) {
+    public Toolbar(GameView view, GameController gameController) {
         super();
+        this.view = view;
         this.gameController = gameController;
     }
 
@@ -50,7 +53,7 @@ public class Toolbar extends HBox {
         this.setSpacing(10);
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
-        this.gameModeButton = new GameMode(this.gameController);
+        this.gameModeButton = new GameMode(this.view, this.gameController);
         this.newGameButton = new GameType(this.gameController);
         this.mockMenu = new MockSituation(this.gameController);
         this.restartButton = new RestartButton(this.gameController);
@@ -62,7 +65,7 @@ public class Toolbar extends HBox {
 
 
     class GameMode extends SplitMenuButton {
-        public GameMode (GameController gameController) {
+        public GameMode (GameView view, GameController gameController) {
             super();
 
             this.setText("Game mode");
@@ -71,6 +74,7 @@ public class Toolbar extends HBox {
             singlePlayer.setOnAction(new EventHandler <ActionEvent> () {
                 @Override
                 public void handle (ActionEvent event) {
+                    view.renderWelcomeLabel();
                     gameController.startModel("singleplayer");
                 }
             });
@@ -79,6 +83,7 @@ public class Toolbar extends HBox {
             multiPlayer.setOnAction(new EventHandler <ActionEvent> () {
                 @Override
                 public void handle (ActionEvent event) {
+                    view.renderWelcomeLabel();
                     gameController.startModel("multiplayer");
                 }
             });
