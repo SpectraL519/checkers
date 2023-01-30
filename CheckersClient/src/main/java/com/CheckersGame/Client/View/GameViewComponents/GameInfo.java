@@ -45,6 +45,8 @@ public class GameInfo extends VBox {
 
     /**
      * GameInfo class constructor
+     * @param gameController
+     * @param gameView
      */
     public GameInfo (GameController gameController, GameView gameView) {
         super();

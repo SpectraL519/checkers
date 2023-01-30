@@ -86,13 +86,12 @@ public class CanadianBoard extends Board implements Cloneable {
 
         // Check if there is a pawn on Mov
         if (this.fields[rMov][cMov] > 0) {
-            System.out.println("Pawn on mov");
             return Board.PAWN_ON_MOV;
         }
 
 
         boolean queen = this.isQueen(rCurr, cCurr);
-        int lt = this.longestTake();
+        int lt = this.longestTake().getKey();
 
         if (queen) {
             int[] queenStep = this.checkQueenStep(rCurr, cCurr, rMov, cMov);
@@ -103,19 +102,19 @@ public class CanadianBoard extends Board implements Cloneable {
             if (this.checkQueenTake(rCurr, cCurr, queenStep[0], queenStep[1])) {
                 try {
                     // Check for the optimal take
-                    if (this.longestQueenTake(rCurr, cCurr) < lt) {
+                    if (this.longestQueenTake(rCurr, cCurr).getKey() < lt) {
                         return Board.NOT_OPTIMAL_TAKE;
                     }
 
                     Board bc = this.clone();
                     bc.queenTake(rCurr, cCurr, rMov, cMov);
-                    int lqtMov = bc.longestQueenTake(rMov, cMov);
+                    int lqtMov = bc.longestQueenTake(rMov, cMov).getKey();
                     if (1 + lqtMov < lt) {
                         return Board.NOT_OPTIMAL_TAKE;
                     }
 
                     // Check for further movement possibilities
-                    if (bc.longestQueenTake(rMov, cMov) > 0) {
+                    if (bc.longestQueenTake(rMov, cMov).getKey() > 0) {
                         return Board.SEQUENTIAL_TAKE_ALLOWED;
                     }
 
@@ -146,20 +145,20 @@ public class CanadianBoard extends Board implements Cloneable {
         if (this.checkPawnTake(rCurr, cCurr, pawnStep[0], pawnStep[1])) {
             try {
                 // Check for the optimal take
-                if (this.longestPawnTake(rCurr, cCurr) < lt) {
+                if (this.longestPawnTake(rCurr, cCurr).getKey() < lt) {
                     return Board.NOT_OPTIMAL_TAKE;
                 }
                 
                 // Check for further movement possibilities
                 Board bc = this.clone();
                 bc.pawnTake(rCurr, cCurr, rMov, cMov);
-                int lptMov = bc.longestPawnTake(rMov, cMov);
+                int lptMov = bc.longestPawnTake(rMov, cMov).getKey();
                 if (1 + lptMov < lt) {
                     return Board.NOT_OPTIMAL_TAKE;
                 }
                 
                 // Check for further movement possibilities
-                if (bc.longestQueenTake(rMov, cMov) > 0) {
+                if (bc.longestQueenTake(rMov, cMov).getKey() > 0) {
                     return Board.SEQUENTIAL_TAKE_ALLOWED;
                 }
 
