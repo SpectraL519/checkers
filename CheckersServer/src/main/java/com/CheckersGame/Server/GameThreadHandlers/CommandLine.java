@@ -1,4 +1,4 @@
-package com.CheckersGame.Server;
+package com.CheckersGame.Server.GameThreadHandlers;
 
 import java.io.*;
 
@@ -157,23 +157,6 @@ final class CommandLine {
                 this.game.mockPawnToQueen(this.player);
                 message = "Mocking a pawn to queen situation for player " + player + "...";
 
-
-                break;
-            }
-
-            case "longestMove": {
-                if (this.game.getBoard() == null) {
-                    message = "Error: Cannot calculate the longest move - the game hasn't started yet!";
-                    break;
-                }
-
-                try {
-                    message = "Longest move: " + this.game.longestMove(Integer.parseInt(args[1]), Integer.parseInt(args[2])) + "\n";
-                }
-                catch (IndexOutOfBoundsException e) {
-                    message = "Error: Invalid number of arguments!";
-                }
-
                 break;
             }
 
@@ -196,9 +179,9 @@ final class CommandLine {
      * @param player
      * @throws IOException
      */
-    public void sendInit (String player) throws IOException {
-        System.out.println("Sending: " + player);
-        this.output.println("init: " + player);
+    public void sendInit () throws IOException {
+        System.out.println("Sending init: " + this.player);
+        this.output.println("init: " + this.player);
     }
 
 
@@ -209,7 +192,6 @@ final class CommandLine {
      * @throws IOException
      */
     public void sendMessage (String message) throws IOException {
-        System.out.println("Sending: " + this.game.getBoardDescription());
         this.output.println(this.game.getBoardDescription());
         this.output.println(message);
     }

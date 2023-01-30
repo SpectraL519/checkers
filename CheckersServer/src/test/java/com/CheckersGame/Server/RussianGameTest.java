@@ -3,6 +3,8 @@ package com.CheckersGame.Server;
 import com.CheckersGame.Server.States.GameState;
 import com.CheckersGame.Server.Versions.RussianVersion;
 import com.CheckersGame.Server.Boards.RussianBoard;
+import com.CheckersGame.Server.GameThreadHandlers.Game;
+import com.CheckersGame.Server.GameThreadHandlers.MultiPlayerGame;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -20,7 +22,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 public class RussianGameTest {
     @Test
     public void gameFunctionalityTest () {
-        Game game = new Game();
+        Game game = new MultiPlayerGame();
 
         // End game
         game.newGame("russian");
@@ -110,7 +112,6 @@ public class RussianGameTest {
         game.newGame("russian");
         System.out.println("Mocking a queen end situation (white wins)...");
         game.mockQueenEndgame("white");
-        assertEquals(game.longestMove(4, 5), 4);
         assertEquals(game.movePawn(4, 5, 2, 7), 3);
         assertEquals(game.movePawn(2, 7, 0, 5), 3);
         assertEquals(game.movePawn(0, 5, 4, 1), 3);
@@ -121,7 +122,6 @@ public class RussianGameTest {
         game.newGame("russian");
         System.out.println("Mocking a queen end situation (black wins)...");
         game.mockQueenEndgame("black");
-        assertEquals(game.longestMove(3, 2), 4);
         assertEquals(game.movePawn(3, 2, 5, 0), 3);
         assertEquals(game.movePawn(5, 0, 7, 2), 3);
         assertEquals(game.movePawn(7, 2, 3, 6), 3);

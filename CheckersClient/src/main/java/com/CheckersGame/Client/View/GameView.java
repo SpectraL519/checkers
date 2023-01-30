@@ -6,7 +6,6 @@ import com.CheckersGame.Client.View.GameViewComponents.GameBoard;
 import com.CheckersGame.Client.View.GameViewComponents.GameInfo;
 import com.CheckersGame.Client.View.GameViewComponents.Toolbar;
 
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -58,8 +57,11 @@ public class GameView extends BorderPane {
      * Renders Toolbar
      */
     private void renderToolbar () {
-        this.toolbar = new Toolbar(this.gameController);
-        this.toolbar.render();
+        if (this.toolbar == null) {
+            this.toolbar = new Toolbar(this, this.gameController);
+            this.toolbar.render();
+        }
+        this.setTop(this.toolbar);
     }
 
 
@@ -67,8 +69,11 @@ public class GameView extends BorderPane {
      * Renders GameInfo
      */
     private void renderGameInfo () {
-        this.gameInfo = new GameInfo(this.gameController, this);
-        this.gameInfo.render();
+        if (this.gameInfo == null) {
+            this.gameInfo = new GameInfo(this.gameController, this);
+            this.gameInfo.render();
+        }
+        this.setRight(this.gameInfo);
     }
 
 
@@ -76,18 +81,24 @@ public class GameView extends BorderPane {
      * Renders Creditsbar
      */
     private void renderCreditsbar () {
-        this.creditsbar = new Creditsbar();
-        this.creditsbar.render();
+        if (this.creditsbar == null) {
+            this.creditsbar = new Creditsbar();
+            this.creditsbar.render();
+        }
+        this.setBottom(this.creditsbar);
     }
 
 
     /**
      * Renders WelcomeLabel
      */
-    private void renderWelcomeLabel () {
-        this.welcomeLabel = new Label("Welcome to the Checkers Game!");
-        this.welcomeLabel.setFont(Font.font("Monospace", 36));
-        this.welcomeLabel.setAlignment(Pos.CENTER);
+    public void renderWelcomeLabel () {
+        if (this.welcomeLabel == null) {
+            this.welcomeLabel = new Label("Welcome to the Checkers Game!");
+            this.welcomeLabel.setFont(Font.font("Monospace", 36));
+            this.welcomeLabel.setAlignment(Pos.CENTER);
+        }
+        this.setLeft(this.welcomeLabel);
     }
 
 
@@ -95,8 +106,10 @@ public class GameView extends BorderPane {
      * Renders RenderingLabel
      */
     private void renderRenderingLabel () {
-        this.renderingLabel = new Label("Waiting for board render...");
-        this.renderingLabel.setFont(Font.font("Monospace", 36));
+        if (this.renderingLabel == null) {
+            this.renderingLabel = new Label("Waiting for board render...");
+            this.renderingLabel.setFont(Font.font("Monospace", 36));
+        }
         this.renderingLabel.setAlignment(Pos.CENTER);
     }
 
@@ -127,11 +140,6 @@ public class GameView extends BorderPane {
         this.renderCreditsbar();
         this.renderGameInfo();
         this.renderRenderingLabel();
-  
-        this.setTop(this.toolbar);
-        this.setBottom(this.creditsbar);
-        this.setLeft(this.welcomeLabel);
-        this.setRight(this.gameInfo);
     }
 
 

@@ -1,5 +1,6 @@
 package com.CheckersGame.Client;
 
+import com.CheckersGame.Client.Model.*;
 import com.CheckersGame.Client.View.GameView;
 
 import javafx.application.Platform;
@@ -75,9 +76,27 @@ public class GameController {
     /**
      * View -> model
      */
-    public void startModel () {
-        this.gameThread = new Thread(this.model);
-        this.gameThread.start();
+    public void startModel (String gameMode) {
+        switch (gameMode) {
+            case "singleplayer": {
+                this.model = new SinglePlayerClient(this);
+                this.gameThread = new Thread(this.model);
+                this.gameThread.start();
+                break;
+            }
+
+            case "multiplayer": {
+                this.model = new MultiPlayerClient(this);
+                this.gameThread = new Thread(this.model);
+                this.gameThread.start();
+                break;
+            }
+
+            default: {
+                System.out.println("Error: Invalid game mode specified!");
+                break;
+            }
+        }
     }
 
 
@@ -101,6 +120,11 @@ public class GameController {
 
 
 
+
+    /**
+     * Renders the gam board view
+     * @param boardDescription
+     */
     public void renderBoard (String boardDescription) {
         if (!boardDescription.endsWith("null")) {
             this.view.renderBoard(boardDescription);
@@ -180,12 +204,13 @@ public class GameController {
 
 
     /**
-     * closes app
+     * Closes the application
      * @param status
      */
     public void closeApplication (int status) {
         System.out.println("Program ended with return status: " + status);
-        this.gameThread.interrupt();
+        if (this.gameThread != null)
+            this.gameThread.interrupt();
         Platform.exit();
         System.exit(status);
     }

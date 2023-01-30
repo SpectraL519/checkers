@@ -1,6 +1,8 @@
 package com.CheckersGame.Server;
 
 import com.CheckersGame.Server.Boards.*;
+import com.CheckersGame.Server.GameThreadHandlers.Game;
+import com.CheckersGame.Server.GameThreadHandlers.MultiPlayerGame;
 import com.CheckersGame.Server.Versions.*;
 
 import org.junit.Test;
@@ -18,7 +20,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 public class GameVersionTest {
     @Test
     public void versionTest () {
-        Game game = new Game();
+        Game game = new MultiPlayerGame();
 
         game.newGame("polish");
         assertThat(game.getVersion(), instanceOf(PolishVersion.class));

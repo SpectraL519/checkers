@@ -31,13 +31,9 @@ public class App extends Application {
     @Override
     public void start (Stage primaryStage) {
         GameController controller = new GameController();
-
-        GameClient model = new GameClient(controller);
         GameView view = new GameView(primaryStage, controller);
 
-        controller.setModel(model);
         controller.setView(view);
         controller.startView();
-        controller.startModel();
     }
 }

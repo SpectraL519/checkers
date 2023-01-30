@@ -1,5 +1,6 @@
 package com.CheckersGame.Client.View.GameViewComponents;
 
+import com.CheckersGame.Client.View.GameView;
 import com.CheckersGame.Client.GameController;
 
 import javafx.event.ActionEvent;
@@ -18,12 +19,15 @@ import javafx.scene.paint.Color;
 
 /**
  * @author Krzysztof Dobrucki
+ * @author Jakub Musiał
  * @version 1.0
  * Toolbar class
  */
 public class Toolbar extends HBox {
+    private GameView view;
     private GameController gameController;
 
+    private GameMode gameModeButton;
     private GameType newGameButton;
     private MockSituation mockMenu;
     private RestartButton restartButton;
@@ -32,9 +36,12 @@ public class Toolbar extends HBox {
 
     /**
      * Toolbar class constructor
+     * @param view
+     * @param gameController
      */
-    public Toolbar(GameController gameController) {
+    public Toolbar(GameView view, GameController gameController) {
         super();
+        this.view = view;
         this.gameController = gameController;
     }
 
@@ -49,12 +56,51 @@ public class Toolbar extends HBox {
         this.setSpacing(10);
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
+        this.gameModeButton = new GameMode(this.view, this.gameController);
         this.newGameButton = new GameType(this.gameController);
         this.mockMenu = new MockSituation(this.gameController);
         this.restartButton = new RestartButton(this.gameController);
         this.exitButton = new ExitButton(this.gameController);
 
-        this.getChildren().addAll(this.newGameButton, this.mockMenu, this.restartButton, this.exitButton);
+        this.getChildren().addAll(this.gameModeButton, this.newGameButton, this.mockMenu, this.restartButton, this.exitButton);
+    }
+
+
+
+    /**
+     * Game mode selection menu
+     */
+    class GameMode extends SplitMenuButton {
+        /**
+         * GameMode class constructor
+         * @param view
+         * @param gameController
+         */
+        public GameMode (GameView view, GameController gameController) {
+            super();
+
+            this.setText("Game mode");
+            
+            MenuItem singlePlayer = new MenuItem("Single player");
+            singlePlayer.setOnAction(new EventHandler <ActionEvent> () {
+                @Override
+                public void handle (ActionEvent event) {
+                    view.renderWelcomeLabel();
+                    gameController.startModel("singleplayer");
+                }
+            });
+
+            MenuItem multiPlayer = new MenuItem("Multi player");
+            multiPlayer.setOnAction(new EventHandler <ActionEvent> () {
+                @Override
+                public void handle (ActionEvent event) {
+                    view.renderWelcomeLabel();
+                    gameController.startModel("multiplayer");
+                }
+            });
+
+            this.getItems().addAll(singlePlayer, multiPlayer);
+        }
     }
 
 
@@ -92,8 +138,6 @@ public class Toolbar extends HBox {
             });
 
             this.getItems().addAll(choice1, choice2, choice3);
-
-
         }
     }
 

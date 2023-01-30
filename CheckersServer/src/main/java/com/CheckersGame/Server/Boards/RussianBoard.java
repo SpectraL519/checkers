@@ -86,7 +86,6 @@ public class RussianBoard extends Board implements Cloneable {
 
         // Check if there is a pawn on Mov
         if (this.fields[rMov][cMov] > 0) {
-            System.out.println("Pawn on mov");
             return Board.PAWN_ON_MOV;
         }
 
@@ -104,7 +103,7 @@ public class RussianBoard extends Board implements Cloneable {
                 try {
                     Board bc = this.clone();
                     bc.queenTake(rCurr, cCurr, rMov, cMov);
-                    if (bc.longestQueenTake(rMov, cMov) > 0) {
+                    if (bc.longestQueenTake(rMov, cMov).getKey() > 0) {
                         return Board.SEQUENTIAL_TAKE_ALLOWED;
                     }
 
@@ -116,7 +115,7 @@ public class RussianBoard extends Board implements Cloneable {
             }
 
             // Check if there is any take possible on the board
-            int lt = this.longestTake();
+            int lt = this.longestTake().getKey();
             if (lt > 0) {
                 return Board.FORCED_TAKE_ERROR; // Not taking an enemy pawn when it's possible
             }
@@ -138,7 +137,7 @@ public class RussianBoard extends Board implements Cloneable {
                 // Check for further movement possibilities
                 Board bc = this.clone();
                 bc.pawnTake(rCurr, cCurr, rMov, cMov);
-                if (bc.longestPawnTake(rMov, cMov) > 0) {
+                if (bc.longestPawnTake(rMov, cMov).getKey() > 0) {
                     return Board.SEQUENTIAL_TAKE_ALLOWED;
                 }
 
@@ -150,7 +149,7 @@ public class RussianBoard extends Board implements Cloneable {
         }
 
         // Check if there is any take possible on the board
-        int lt = this.longestTake();
+        int lt = this.longestTake().getKey();
         if (lt > 0) {
             return Board.FORCED_TAKE_ERROR; // Not taking an enemy pawn when it's possible
         }
