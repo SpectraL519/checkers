@@ -534,7 +534,9 @@ public abstract class Board {
             return false;
         }
 
-        if (this.fields[rCurr + (rStep / 2)][cCurr + (cStep / 2)] == this.fields[rCurr][cCurr]) {
+        boolean bothWhite = (this.isWhite(rCurr, cCurr) && this.isWhite(rCurr + (rStep / 2), cCurr + (cStep / 2)));
+        boolean bothBlack = (this.isBlack(rCurr, cCurr) && this.isBlack(rCurr + (rStep / 2), cCurr + (cStep / 2)));
+        if (bothWhite || bothBlack) {
             return false;
         }
 
